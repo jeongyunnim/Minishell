@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/06 13:03:07 by jeseo             #+#    #+#             */
+/*   Updated: 2022/08/01 16:19:35 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+int	ft_isascii(int c)
 {
-	char	*input;
-
-	while (1)
-	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
-	}
+	if (0 <= c && c <= 127)
+		return (1);
 	return (0);
 }

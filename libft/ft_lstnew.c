@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/15 16:23:58 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/17 21:41:40 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+t_list	*ft_lstnew(void *content)
 {
-	char	*input;
+	t_list	*link;
 
-	while (1)
-	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
-	}
-	return (0);
+	link = (t_list *)malloc(1 * sizeof(t_list));
+	if (link == NULL)
+		return (NULL);
+	link -> content = content;
+	link -> next = NULL;
+	return (link);
 }

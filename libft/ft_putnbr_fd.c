@@ -1,26 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/13 20:25:32 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/31 17:17:51 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+static void	print_nbr(long long n, int fd)
 {
-	char	*input;
+	char	c;
 
-	while (1)
+	if (n < 10)
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		c = n + '0';
+		write(fd, &c, 1);
 	}
-	return (0);
+	else
+	{
+		print_nbr(n / 10, fd);
+		print_nbr(n % 10, fd);
+	}
+}
+
+void	ft_putnbr_fd(int n, int fd)
+{
+	long long	l_n;
+
+	l_n = (long long)n;
+	if (l_n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		l_n *= -1;
+	}
+	print_nbr(l_n, fd);
 }

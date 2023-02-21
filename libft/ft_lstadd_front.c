@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/15 16:40:12 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/17 21:41:22 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	char	*input;
+	t_list	*temp;
 
-	while (1)
+	if (!new || !lst)
+		return ;
+	else if (!*lst)
+		*lst = new;
+	else
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		temp = *lst;
+		*lst = new;
+		new -> next = temp;
 	}
-	return (0);
 }

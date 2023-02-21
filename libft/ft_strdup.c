@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/09 16:58:39 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/13 21:32:19 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+char	*ft_strdup(const char *str)
 {
-	char	*input;
+	int		i;
+	int		str_len;
+	char	*str_dup;
 
-	while (1)
+	i = 0;
+	str_len = ft_strlen(str);
+	str_dup = (char *)malloc(sizeof(char) * (str_len + 1));
+	if (str_dup == NULL)
+		return (NULL);
+	while (i < str_len)
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		str_dup[i] = str[i];
+		i++;
 	}
-	return (0);
+	str_dup[i] = '\0';
+	return (str_dup);
 }

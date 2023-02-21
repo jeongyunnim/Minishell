@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/16 14:18:31 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/17 21:41:44 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+int	ft_lstsize(t_list *lst)
 {
-	char	*input;
+	t_list	*temp;
+	int		i;
 
-	while (1)
+	i = 0;
+	if (!lst)
+		return (0);
+	temp = lst;
+	while (temp)
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		temp = temp -> next;
+		i++;
 	}
-	return (0);
+	return (i);
 }

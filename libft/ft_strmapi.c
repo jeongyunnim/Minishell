@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/13 14:45:19 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/13 21:32:34 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char	*input;
+	size_t		i;
+	char		*ret;
 
-	while (1)
+	i = 0;
+	if (s == 0)
+		return (NULL);
+	ret = (char *)ft_calloc(ft_strlen(s) + 1, sizeof(char));
+	if (ret == NULL)
+		return (NULL);
+	while (s[i] != '\0')
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		ret[i] = f(i, s[i]);
+		i++;
 	}
-	return (0);
+	return (ret);
 }

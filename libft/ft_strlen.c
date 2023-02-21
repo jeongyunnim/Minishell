@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/06 13:03:17 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/14 14:10:49 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+size_t	ft_strlen(const char *str)
 {
-	char	*input;
+	int	len;
 
-	while (1)
-	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
-	}
-	return (0);
+	len = 0;
+	while (str[len] != '\0')
+		len++;
+	return (len);
 }

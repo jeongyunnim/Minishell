@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/06 13:03:14 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/20 14:31:00 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+void	*ft_memset(void *bytes, int value, size_t len)
 {
-	char	*input;
+	unsigned char	*temp;
 
-	while (1)
+	temp = (unsigned char *)bytes;
+	while (len > 0)
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		*temp = value;
+		temp++;
+		len--;
 	}
-	return (0);
+	return (bytes);
 }

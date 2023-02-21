@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/06 13:23:58 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/17 21:37:14 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+char	*ft_strchr(const char *str, int c)
 {
-	char	*input;
-
-	while (1)
+	while (*str != '\0')
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		if (*str == (char) c)
+			return ((char *)str);
+		str++;
 	}
+	if (*str == (char) c)
+		return ((char *)str);
 	return (0);
 }

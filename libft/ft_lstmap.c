@@ -1,26 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/16 18:10:37 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/20 14:43:05 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	char	*input;
+	t_list	*head;
+	t_list	*new_node;
 
-	while (1)
+	head = NULL;
+	new_node = NULL;
+	while (lst)
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		new_node = ft_lstnew(f(lst -> content));
+		if (!new_node)
+		{
+			ft_lstclear(&head, del);
+			return (NULL);
+		}
+		ft_lstadd_back(&head, new_node);
+		lst = lst -> next;
 	}
-	return (0);
+	return (head);
 }

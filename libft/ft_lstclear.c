@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/16 17:48:18 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/17 21:16:39 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	char	*input;
+	t_list	*temp1;
+	t_list	*temp2;
 
-	while (1)
+	if (lst == NULL || del == NULL)
+		return ;
+	temp1 = *lst;
+	while (temp1)
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		temp2 = temp1 -> next;
+		del(temp1 -> content);
+		free(temp1);
+		temp1 = temp2;
 	}
-	return (0);
+	*lst = NULL;
 }

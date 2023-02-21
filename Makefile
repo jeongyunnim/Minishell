@@ -1,30 +1,45 @@
-NAME	=	./minishell
+NAME		=	./minishell
 
-CC		=	cc
-CFLAGS	=	-Wall -Wextra -Werror
+LIBFTDIR	= ./libft
 
-INC		=	./minishell.h
+CC			=	cc
+CFLAGS		=	-Wall -Wextra -Werror
 
-SRC		=	./minishell.c
+INCLUDES 	=	-I ~/goinfre/.brew/opt/readline/include \
+				-I ./libft/ \
+				-I .
 
-OBJ		=	$(SRC:%.c=%.o)
+LIBS		=	-lreadline -L ~/goinfre/.brew/opt/readline/lib/ \
+				-lhistory -L ~/goinfre/.brew/opt/readline/lib/ \
+				-L ./libft/ -lft
 
-RM		=	rm -f
+SRCS			=	./minishell.c \
+					./pasing_command.c \
 
-all		:	$(NAME)
+OBJS			=	$(SRCS:%.c=%.o)
 
-$(NAME) :	$(OBJ)
-	$(CC) $(CFLAGS) $^ -o $@
+AR			=	ar rcs
+RM			=	rm -f
 
-$(OBJ)	:	$(SRC) $(INC)
-	$(CC) $(CFLAGS) -c $^
+all			:	$(NAME)
 
-clean	:
-	$(RM) $(OBJ)
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $^
 
-fclean	:	clean
+$(NAME)	: $(OBJS)
+	make -C $(LIBFTDIR)
+	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) $^ -o $@
+
+all : $(NAME)
+
+clean :
+	make -C $(LIBFTDIR) clean
+	$(RM) $(OBJS)
+
+fclean : clean
+	make -C $(LIBFTDIR) fclean
 	$(RM) $(NAME)
 
-re			:	fclean all
+re : fclean all
 
 .PHONY		:	all clean fclean re

@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/06 17:44:23 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/19 12:38:30 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+int	ft_memcmp(const void *str1, const void *str2, size_t count)
 {
-	char	*input;
+	unsigned char	*s1;
+	unsigned char	*s2;
 
-	while (1)
+	s1 = (unsigned char *)str1;
+	s2 = (unsigned char *)str2;
+	while (count > 0)
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		if (*s1 != *s2)
+			return (*s1 - *s2);
+		s1++;
+		s2++;
+		count--;
 	}
 	return (0);
 }

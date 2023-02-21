@@ -1,26 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/06 19:08:09 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/20 14:31:06 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+char	*ft_strnstr(const char *dest, const char *src, size_t n)
 {
-	char	*input;
+	size_t	s_len;
+	size_t	d_len;
 
-	while (1)
+	s_len = ft_strlen(src);
+	d_len = ft_strlen(dest);
+	if (*src == '\0')
+		return ((char *) dest);
+	while (*dest != '\0' && s_len <= n && n > 0)
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		if (*dest == *src)
+		{
+			if (ft_strncmp((char *)dest, (char *)src, s_len) == 0)
+				return ((char *) dest);
+		}
+		dest++;
+		n--;
 	}
 	return (0);
 }

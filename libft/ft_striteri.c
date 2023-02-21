@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 20:27:37 by jeseo            ###   ########.fr       */
+/*   Created: 2022/07/13 18:44:02 by jeseo             #+#    #+#             */
+/*   Updated: 2022/07/31 16:45:56 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 {
-	char	*input;
+	unsigned int	i;
+	size_t			s_len;
 
-	while (1)
+	i = 0;
+	s_len = ft_strlen(s);
+	if (s == 0)
+		return ;
+	while (i < s_len)
 	{
-		input = readline("Minishell$ ");
-		parse_command(input);
-		free(input);
+		f(i, &s[i]);
+		i++;
 	}
-	return (0);
 }
