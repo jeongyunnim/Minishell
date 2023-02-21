@@ -3,7 +3,8 @@ NAME		=	./minishell
 LIBFTDIR	= ./libft
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	
+#-Wall -Wextra -Werror
 
 INCLUDES 	=	-I ~/goinfre/.brew/opt/readline/include \
 				-I ./libft/ \
@@ -13,8 +14,8 @@ LIBS		=	-lreadline -L ~/goinfre/.brew/opt/readline/lib/ \
 				-lhistory -L ~/goinfre/.brew/opt/readline/lib/ \
 				-L ./libft/ -lft
 
-SRCS			=	./minishell.c \
-					./pasing_command.c \
+SRCS			=	./minishell.c\
+					./parse.c\
 
 OBJS			=	$(SRCS:%.c=%.o)
 

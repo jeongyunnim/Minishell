@@ -1,27 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 21:46:49 by jeseo            ###   ########.fr       */
+/*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
+/*   Updated: 2023/02/21 21:46:38 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(void)
+int	parse(char *input)
 {
-	char	*input;
-
-	kill(-1, SIGKILL);
-	while (1)
-	{
-		input = readline("Minishell$ ");
-		parse(input);
-		free(input);
-	}
+	if (input == '\0')
+		return (0);
 	return (0);
 }
