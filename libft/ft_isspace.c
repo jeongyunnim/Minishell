@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/22 14:57:14 by jeseo            ###   ########.fr       */
+/*   Created: 2023/02/22 16:02:01 by jeseo             #+#    #+#             */
+/*   Updated: 2023/02/22 16:05:23 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+int	ft_isspace(int c)
 {
-	char	*input;
-
-	while (1)
-	{
-		input = readline("Minishell$ ");
-		parse(input);
-		free(input);
-	}
-	return (0);
+	if ((9 <= c && c <= 13) || c == ' ')
+		return (0);
+	else
+		return (1);
 }

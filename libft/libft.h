@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 14:08:50 by jeseo             #+#    #+#             */
-/*   Updated: 2022/08/01 16:21:06 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/22 16:01:53 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int		ft_memcmp(const void *str1, const void *str2, size_t count);
 int		ft_strncmp(const char *str1, const char *str2, size_t n);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
+int		ft_isspace(int c);
 
 int		ft_lstsize(t_list *lst);
 

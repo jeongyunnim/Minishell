@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 21:56:24 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/22 18:07:12 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <readline/readline.h>
 # include <signal.h>
 # include "./libft/libft.h"
+
+# define ERROR -1
+# define INT_MAX 2147483647
 
 typedef struct s_node
 {

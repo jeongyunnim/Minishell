@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 21:49:25 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/21 21:54:53 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/22 16:08:30 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,12 @@ t_deque	*lstnew(char *arg)
 {
 	t_deque	*link;
 
-	link = (t_deque *)malloc(1 * sizeof(t_deque));
+	link = (t_deque *)ft_calloc(1 * sizeof(t_deque));
 	if (link == NULL)
 		return (NULL);
 	link->args = ft_strdup(arg);
 	if (link->args == NULL)
 		return (NULL);
-	link->previous = NULL;
-	link->next = NULL;
 	return (link);
 }
 
