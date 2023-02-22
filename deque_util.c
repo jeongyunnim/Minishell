@@ -6,28 +6,28 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 21:49:25 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/22 16:08:30 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/22 20:23:04 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
-t_deque	*lstnew(char *arg)
+t_node	*lstnew(char *arg)
 {
-	t_deque	*link;
+	t_node	*link;
 
-	link = (t_deque *)ft_calloc(1 * sizeof(t_deque));
+	link = (t_node *)ft_calloc(1, sizeof(t_node));
 	if (link == NULL)
 		return (NULL);
-	link->args = ft_strdup(arg);
-	if (link->args == NULL)
+	link->arg = ft_strdup(arg);
+	if (link->arg == NULL)
 		return (NULL);
 	return (link);
 }
 
-t_deque	*pop_head(t_deque **head)
+t_node	*pop_head(t_node **head)
 {
-	t_deque	*pop;
+	t_node	*pop;
 
 	pop = *head;
 	if (pop == NULL)
@@ -46,9 +46,9 @@ t_deque	*pop_head(t_deque **head)
 	return (pop);
 }
 
-t_deque	*pop_tail(t_deque **tail)
+t_node	*pop_tail(t_node **tail)
 {
-	t_deque	*pop;
+	t_node	*pop;
 
 	pop = *tail;
 	if (pop == NULL)
@@ -67,7 +67,7 @@ t_deque	*pop_tail(t_deque **tail)
 	return (pop);
 }
 
-void	append_head(t_deque **head, t_deque **tail, t_deque *new)
+void	append_head(t_node **head, t_node **tail, t_node *new)
 {
 	if (*head == NULL)
 	{
@@ -83,7 +83,7 @@ void	append_head(t_deque **head, t_deque **tail, t_deque *new)
 	}
 }
 
-void	append_tail(t_deque **head, t_deque **tail, t_deque *new)
+void	append_tail(t_node **head, t_node **tail, t_node *new)
 {
 	if (*tail == NULL)
 	{

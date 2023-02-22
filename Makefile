@@ -3,7 +3,7 @@ NAME		=	./minishell
 LIBFTDIR	= ./libft
 
 CC			=	cc
-CFLAGS		=	
+CFLAGS		=	\
 #-Wall -Wextra -Werror
 
 INCLUDES 	=	-I ~/goinfre/.brew/opt/readline/include \
@@ -16,6 +16,8 @@ LIBS		=	-lreadline -L ~/goinfre/.brew/opt/readline/lib/ \
 
 SRCS			=	./minishell.c\
 					./parse.c\
+					./deque_util.c\
+					./arg_to_deque.c\
 
 OBJS			=	$(SRCS:%.c=%.o)
 

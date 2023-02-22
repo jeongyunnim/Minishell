@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/22 18:16:25 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/22 21:40:49 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,51 +16,92 @@ int	count_arg_len(char *input)
 {
 	unsigned int	cnt;
 	int				quote_flag;
-	int				dquote_flag;
 
-	cnt == 0;
+	cnt = 0;
+	quote_flag = 0; // '(1)는 환경변수를 해석 안 함. "(2)는 환경변수 해석함
 	while (*input != '\0')
 	{
 		if (*input == '\0')
+		{
 			return (cnt);
-		else if (ft_isspace(*input))
+		}
+		else if (quote_flag == 0 && ft_isspace(*input) == 0)
+		{
 			return (cnt);
+		}
+		else if (*input == '\'' && quote_flag == 0)
+		{
+			quote_flag = 1; // 문자로 보겠다.
+		}
+		else if (*input == '\"' && quote_flag == 0)
+		{
+			quote_flag = 2; // 환경변수를 처리하겠다.
+		}
+		else if (*input == '\'' && quote_flag == 1)
+		{
+			quote_flag = 0;
+		}
+		else if (*input == '\"' && quote_flag == 2)
+		{
+			quote_flag = 0;
+		}
+		// 만약 $ 만나면, 환경변수 찾아서 처리해줘야 함. get_env 같은 놈.
 		else
 		{
 			cnt++;
 			if (cnt >= INT_MAX)
 			{
-				wrtie(2, "Minishell: Argument too long\n", 29);
+				write(2, "Minishell: Argument too long\n", 29);
 				return (ERROR);
 			}
 		}
 		input++;
 	}
+	return (cnt);
 }
 
 int	parse(char *input)
 {
 	t_deque	*args;
 	char	*arg;
+	int		arg_len;
 
 	args = (t_deque *)ft_calloc(1, sizeof(t_deque));
 	if (args == NULL)
 		return (ERROR);
 	while (*input != '\0')
 	{
-		while (ft_isspace(*input) == 0)
-			input++;
+		//while (ft_isspace(*input) == 0)
+		//	input++;
 		if (*input != '\0')
-			count_arg_len(input);
-			
+		{
+			arg_len = count_arg_len(input);
+			if (arg_len == -1)
+				return (ERROR);
+			else
+			{
+				arg = (char *)ft_calloc(arg_len + 1, sizeof(char));
+				if (arg == NULL)
+					return (ERROR);
+			}
+			save_arg(&input, arg, arg_len);
+			arg_to_deque(&args, arg);
+		}
 	}
-	printf("%s\n", input);
-	// 모든 화이트 스페이스를 건너 뛰어야 한다.
-	/*
-		1. input 받아온 것 white space 기준으로 모두 스플릿 한다.
-		2. 각각의 인풋을 토큰화하기.
-		3. 따옴표와 쌍따옴표를 체크해야한다.
-		4. |가 문자 파이프인지 구분해야한다.
-	*/
+	
+	/* 잘 담겼는지 확인하기 */
+	t_node *tmp;
+	tmp = args->head;
+	while(tmp != NULL)
+	{
+		printf("%s\n", tmp->arg);
+		tmp = tmp->next;
+	}
+	while(args->head != NULL)
+	{
+		tmp = pop_head(&args->head);
+		free(tmp->arg);
+		free(tmp);
+	}
 	return (0);
 }
