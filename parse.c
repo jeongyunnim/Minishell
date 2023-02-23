@@ -6,36 +6,22 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/23 20:16:18 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/23 21:06:44 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	meet_quote(char *input, unsigned int *i, int *quote_flag)
+int	ft_isspecial(int c)
 {
-	if (input[*i] == '\'' && *quote_flag == 0)
+	if(c == '|' || c == '>' || c == '>' || c == '<')
 	{
-		printf("[%d] %c flag?: %d\n", *i, input[*i], *quote_flag);
-		*quote_flag = 1;
+		return (1);
 	}
-	else if (input[*i] == '\"' && *quote_flag == 0)
+	else
 	{
-		printf("[%d] %c flag?: %d\n", *i, input[*i], *quote_flag);
-		*quote_flag = 2; // 환경변수를 처리해야 함.
+		return (0);
 	}
-	else if (input[*i] == '\'' && *quote_flag == 1)
-	{
-		printf("[%d] %c flag?: %d\n", *i, input[*i], *quote_flag);
-		*quote_flag = 0;
-	}
-	else if (input[*i] == '\"' && *quote_flag == 2)
-	{
-		printf("[%d] %c flag?: %d\n", *i, input[*i], *quote_flag);
-		*quote_flag = 0;
-	}
-	usleep(100 * 1000);
-	return (0);
 }
 
 int	count_arg_len(char *input)
@@ -51,6 +37,7 @@ int	count_arg_len(char *input)
 	{
 		if (input[i] == '\0')
 		{
+			printf("왜 안 돼\n");
 			if (quote_flag != 0)
 				return (ERROR);
 			return (cnt);
@@ -87,7 +74,7 @@ int	count_arg_len(char *input)
 		}
 		else
 		{
-			if (ft_isspace(input[i]) == 0)
+			if (ft_isspace(input[i]) != 0)
 			{
 				if (quote_flag != 0)
 					return (ERROR);
@@ -95,11 +82,15 @@ int	count_arg_len(char *input)
 			}
 			else
 			{
-				if (ft_isspecial(input[i]) == 0)
+				if (ft_isspecial(input[i]) != 0)
 				{
+					i++;
 					//특수문자 처리
 				}
 				else
+				{
+					cnt++;
+				}
 			}
 		}
 		// 특수문자 처리 (만약 $ 만나면, 환경변수 찾아서 처리해줘야 함. get_env 같은 놈)
@@ -125,7 +116,7 @@ int	parse(char *input)
 		return (ERROR);
 	while (*input != '\0')
 	{
-		while (*input != '\0' && ft_isspace(*input) == 0)
+		while (*input != '\0' && ft_isspace(*input) != 0)
 		{
 			input++;
 		}
@@ -150,7 +141,7 @@ int	parse(char *input)
 	tmp = args->head;
 	while(tmp != NULL)
 	{
-		printf("%s\n", tmp->arg);
+		printf("%s %ld\n", tmp->arg, ft_strlen(tmp->arg));
 		tmp = tmp->next;
 	}
 	while(args->head != NULL)

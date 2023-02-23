@@ -17,7 +17,7 @@ LIBS		=	-lreadline -L ~/goinfre/.brew/opt/readline/lib/ \
 SRCS			=	./minishell.c\
 					./parse.c\
 					./deque_util.c\
-					./arg_to_deque.c\
+					./save_parse.c\
 
 OBJS			=	$(SRCS:%.c=%.o)
 

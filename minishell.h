@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/23 16:45:43 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/23 20:58:14 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_deque_edge
 
 /* parse.c */
 int	parse(char *input);
+int	ft_isspecial(int c);
 
 /* deque_util.c */
 t_node	*lstnew(char *arg);
@@ -57,7 +58,7 @@ t_node	*pop_tail(t_node **tail);
 void	append_head(t_node **head, t_node **tail, t_node *new);
 void	append_tail(t_node **head, t_node **tail, t_node *new);
 
-/* arg_to_deque.c */
+/* save_parse.c */
 int		save_arg(char **input, char *arg, int arg_len);
 int		arg_to_deque(t_deque **args, char *arg);
 
