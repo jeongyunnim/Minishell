@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/23 21:35:49 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/23 22:09:31 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	save_arg(char **input, char *arg, int arg_len)
 
 int	arg_to_deque(t_deque **args, char *arg)
 {
-	t_node	*new;
+	t_arg	*new;
 
 	new = lstnew(arg);
 	if (new == NULL)
