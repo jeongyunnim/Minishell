@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/22 20:22:18 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/23 16:45:43 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,22 @@
 # define ERROR -1
 # define INT_MAX 2147483647
 
+typedef enum	e_special
+{
+	NONE,
+	PIPE,
+	REDIRECTION_L,
+	HEREDOC,
+	REDIRECTION_R,
+	APPEND
+}				t_special;
+
 typedef struct s_node
 {
 	struct s_node	*previous;
 	struct s_node	*next;
 	char			*arg;
+	int				special;
 }	t_node;
 
 typedef struct s_deque_edge
@@ -47,7 +58,7 @@ void	append_head(t_node **head, t_node **tail, t_node *new);
 void	append_tail(t_node **head, t_node **tail, t_node *new);
 
 /* arg_to_deque.c */
-void	save_arg(char **input, char *arg, int arg_len);
+int		save_arg(char **input, char *arg, int arg_len);
 int		arg_to_deque(t_deque **args, char *arg);
 
 #endif
