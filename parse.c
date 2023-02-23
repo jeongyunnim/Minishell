@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/23 21:06:44 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/23 21:47:30 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_isspecial(int c)
 {
-	if(c == '|' || c == '>' || c == '>' || c == '<')
+	if(c == '|' || c == '>' || c == '>' || c == '<' || c == '\'' || c == '\"')
 	{
 		return (1);
 	}
@@ -35,13 +35,6 @@ int	count_arg_len(char *input)
 	quote_flag = 0; // '(1)는 환경변수를 해석 안 함. "(2)는 환경변수 해석함
 	while (input[i] != '\0')
 	{
-		if (input[i] == '\0')
-		{
-			printf("왜 안 돼\n");
-			if (quote_flag != 0)
-				return (ERROR);
-			return (cnt);
-		}
 		if (quote_flag != 0)
 		{
 			if (quote_flag == 1)
@@ -84,7 +77,14 @@ int	count_arg_len(char *input)
 			{
 				if (ft_isspecial(input[i]) != 0)
 				{
-					i++;
+					if (input[i] == '\'')
+					{
+						quote_flag = 1;
+					}
+					else if (input[i] == '\"')
+					{
+						quote_flag = 2;
+					}
 					//특수문자 처리
 				}
 				else
@@ -100,6 +100,11 @@ int	count_arg_len(char *input)
 	if (cnt >= INT_MAX)
 	{
 		write(2, "Minishell: Argument too long\n", 29);
+		return (ERROR);
+	}
+	if(quote_flag != 0)
+	{
+		printf("에러인데\n");
 		return (ERROR);
 	}
 	return (cnt);

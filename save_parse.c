@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/23 21:00:50 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/23 21:35:49 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,22 @@ int	save_arg(char **input, char *arg, int arg_len)
 		{
 			if (ft_isspace(**input) != 0)
 			{
-				break ;
+				if (quote_flag != 0)
+					return (ERROR);
+				return (cnt);
 			}
 			else
 			{
 				if (ft_isspecial(**input) != 0)
 				{
-					(*input)++;
+					if (**input == '\'')
+					{
+						quote_flag = 1;
+					}
+					else if (**input == '\"')
+					{
+						quote_flag = 2;
+					}
 					//특수문자 처리
 				}
 				else

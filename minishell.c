@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/23 17:12:05 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/23 21:42:50 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int main(int argc, char *argv[], char *env[])
 		{
 			continue ;// 이자리는 엑싯임
 		}
+		add_history(input);
 		parse(input);
 		free(input);
 	}
