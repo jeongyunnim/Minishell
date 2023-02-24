@@ -3,21 +3,31 @@ NAME		=	./minishell
 LIBFTDIR	= ./libft
 
 CC			=	cc
-CFLAGS		=	\
+CFLAGS		=	-g3 -fsanitize=address\
 #-Wall -Wextra -Werror
 
-INCLUDES 	=	-I ~/goinfre/.brew/opt/readline/include \
-				-I ./libft/ \
-				-I .
+INCLUDES =	-I /opt/homebrew/opt/readline/include \
+			-I ./libft/ \
+			-I .
 
-LIBS		=	-lreadline -L ~/goinfre/.brew/opt/readline/lib/ \
-				-lhistory -L ~/goinfre/.brew/opt/readline/lib/ \
-				-L ./libft/ -lft
+LIBS	 = 	-lreadline -L /opt/homebrew/opt/readline/lib/ \
+			-lhistory -L /opt/homebrew/opt/readline/lib/ \
+			-L ./libft/ -lft
+
+# INCLUDES 	=	-I ~/goinfre/.brew/opt/readline/include \
+# 				-I ./libft/ \
+# 				-I .
+
+# LIBS		=	-lreadline -L ~/goinfre/.brew/opt/readline/lib/ \
+# 				-lhistory -L ~/goinfre/.brew/opt/readline/lib/ \
+# 				-L ./libft/ -lft
 
 SRCS			=	./minishell.c\
 					./parse.c\
-					./deque_util.c\
+					./deque_arg_util.c\
+					./deque_env_util.c\
 					./save_parse.c\
+					./save_env.c\
 
 OBJS			=	$(SRCS:%.c=%.o)
 

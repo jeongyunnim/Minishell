@@ -15,10 +15,8 @@
 char	*ft_strnstr(const char *dest, const char *src, size_t n)
 {
 	size_t	s_len;
-	size_t	d_len;
 
 	s_len = ft_strlen(src);
-	d_len = ft_strlen(dest);
 	if (*src == '\0')
 		return ((char *) dest);
 	while (*dest != '\0' && s_len <= n && n > 0)

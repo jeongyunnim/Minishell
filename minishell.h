@@ -45,20 +45,20 @@ typedef struct s_env
 {
 	struct s_env	*previous;
 	struct s_env	*next;
-	char			*arg;
+	char			*name;
 	char			*value;
 }	t_env;
 
 typedef struct s_arg_deque
 {
-	struct t_arg	*head;
-	struct t_arg	*tail;
+	t_arg	*head;
+	t_arg	*tail;
 }	t_arg_deque;
 
 typedef struct s_env_deque
 {
-	struct t_env	*head;
-	struct t_env	*tail;
+	t_env	*head;
+	t_env	*tail;
 }	t_env_deque;
 
 typedef struct s_info
@@ -68,18 +68,32 @@ typedef struct s_info
 }	t_info;
 
 /* parse.c */
-int	parse(char *input);
-int	ft_isspecial(int c);
+int		parse(char *input);
+int		ft_isspecial(int c);
 
-/* deque_util.c */
-t_arg	*lstnew(char *arg);
-t_arg	*pop_head(t_arg **head);
-t_arg	*pop_tail(t_arg **tail);
-void	append_head(t_arg **head, t_arg **tail, t_arg *new);
-void	append_tail(t_arg **head, t_arg **tail, t_arg *new);
+/* deque_arg_util.c */
+t_arg	*lstnew_arg(char *arg);
+t_arg	*pop_head_arg(t_arg **head);
+t_arg	*pop_tail_arg(t_arg **tail);
+void	append_head_arg(t_arg **head, t_arg **tail, t_arg *new);
+void	append_tail_arg(t_arg **head, t_arg **tail, t_arg *new);
+
+/* deque_env_util.c */
+t_env	*lstnew_env(void);
+t_env	*pop_head_env(t_env **head);
+t_env	*pop_tail_env(t_env **tail);
+void	append_head_env(t_env **head, t_env **tail, t_env *new);
+void	append_tail_env(t_env **head, t_env **tail, t_env *new);
+
 
 /* save_parse.c */
 int		save_arg(char **input, char *arg, int arg_len);
 int		arg_to_deque(t_arg_deque **args, char *arg);
 
+/* save_parse.c */
+t_env_deque	*save_env(char **env);
+
+
 #endif
+
+//ls|cat 작동 함.

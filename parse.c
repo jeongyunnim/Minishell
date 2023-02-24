@@ -104,7 +104,7 @@ int	count_arg_len(char *input)
 	}
 	if(quote_flag != 0)
 	{
-		printf("에러인데\n");
+		printf("syntax error: 쿼트가 닫히지 않음\n");
 		return (ERROR);
 	}
 	return (cnt);
@@ -112,11 +112,11 @@ int	count_arg_len(char *input)
 
 int	parse(char *input)
 {
-	t_deque	*args;
-	char	*arg;
-	int		arg_len;
+	t_arg_deque	*args;
+	char		*arg;
+	int			arg_len;
 
-	args = (t_deque *)ft_calloc(1, sizeof(t_deque));
+	args = (t_arg_deque *)ft_calloc(1, sizeof(t_arg_deque));
 	if (args == NULL)
 		return (ERROR);
 	while (*input != '\0')
@@ -142,7 +142,7 @@ int	parse(char *input)
 	}
 	
 	/* 잘 담겼는지 확인하기 */
-	t_node *tmp;
+	t_arg *tmp;
 	tmp = args->head;
 	while(tmp != NULL)
 	{
@@ -151,7 +151,7 @@ int	parse(char *input)
 	}
 	while(args->head != NULL)
 	{
-		tmp = pop_head(&args->head);
+		tmp = pop_head_arg(&args->head);
 		free(tmp->arg);
 		free(tmp);
 	}

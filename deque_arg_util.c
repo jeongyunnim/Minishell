@@ -12,11 +12,11 @@
 
 #include "./minishell.h"
 
-t_node	*lstnew(char *arg)
+t_arg	*lstnew_arg(char *arg)
 {
-	t_node	*link;
+	t_arg	*link;
 
-	link = (t_node *)ft_calloc(1, sizeof(t_node));
+	link = (t_arg *)ft_calloc(1, sizeof(t_arg));
 	if (link == NULL)
 		return (NULL);
 	link->arg = ft_strdup(arg);
@@ -25,9 +25,9 @@ t_node	*lstnew(char *arg)
 	return (link);
 }
 
-t_node	*pop_head(t_node **head)
+t_arg	*pop_head_arg(t_arg **head)
 {
-	t_node	*pop;
+	t_arg	*pop;
 
 	pop = *head;
 	if (pop == NULL)
@@ -46,9 +46,9 @@ t_node	*pop_head(t_node **head)
 	return (pop);
 }
 
-t_node	*pop_tail(t_node **tail)
+t_arg	*pop_tail_arg(t_arg **tail)
 {
-	t_node	*pop;
+	t_arg	*pop;
 
 	pop = *tail;
 	if (pop == NULL)
@@ -67,7 +67,7 @@ t_node	*pop_tail(t_node **tail)
 	return (pop);
 }
 
-void	append_head(t_node **head, t_node **tail, t_node *new)
+void	append_head_arg(t_arg **head, t_arg **tail, t_arg *new)
 {
 	if (*head == NULL)
 	{
@@ -83,7 +83,7 @@ void	append_head(t_node **head, t_node **tail, t_node *new)
 	}
 }
 
-void	append_tail(t_node **head, t_node **tail, t_node *new)
+void	append_tail_arg(t_arg **head, t_arg **tail, t_arg *new)
 {
 	if (*tail == NULL)
 	{

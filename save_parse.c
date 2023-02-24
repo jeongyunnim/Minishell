@@ -95,7 +95,7 @@ int	save_arg(char **input, char *arg, int arg_len)
 	return (0);
 }
 
-int	arg_to_deque(t_deque **args, char *arg)
+int	arg_to_deque(t_arg_deque **args, char *arg)
 {
 	t_arg	*new;
 
@@ -104,6 +104,6 @@ int	arg_to_deque(t_deque **args, char *arg)
 	{
 		return (ERROR);
 	}
-	append_tail(&(*args)->head, &(*args)->tail, new);
+	append_tail(&((*args)->head), &((*args)->tail), new);
 	return (0);
 }
