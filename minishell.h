@@ -95,7 +95,7 @@ int		ft_isupper(int c);
 
 /* save_env.c */
 t_env_deque	*save_env(char **env);
-int			set_env_len(char *input, int *cnt, t_env_deque *env);
+int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env);
 void		replace_env(char **input, char **arg, t_env_deque *env);
 
 #endif

@@ -24,7 +24,7 @@ int	ft_isspecial(int c)
 	}
 }
 
-int	count_arg_len(char *input, t_env_deque *env)
+int	count_arg_len(char *input, t_env_deque *envs)
 {
 	unsigned int	cnt;
 	unsigned int	i;
@@ -57,6 +57,8 @@ int	count_arg_len(char *input, t_env_deque *env)
 				else if (input[i] == '$')
 				{
 					i++;
+					i += set_env_len(&input[i], &cnt, envs);
+					continue ;
 					//환경변수 가져오기.. + 환경변수 길이만큼 할당할 길이. 달러는 스킵.
 				}
 				else
@@ -85,9 +87,11 @@ int	count_arg_len(char *input, t_env_deque *env)
 					{
 						quote_flag = 2;
 					}
-					if (input[i] == '$')
+					else if (input[i] == '$')
 					{
-						i += set_env_len(&input[i], &cnt, env);
+						i++;
+						i += set_env_len(&input[i], &cnt, envs);
+						continue ;
 					}
 					//특수문자 처리
 				}

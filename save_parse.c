@@ -50,6 +50,8 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 				else if (**input == '$')
 				{
 					(*input)++;
+					replace_env(input, &arg, envs);
+					continue ;
 					//환경변수 가져오기.. + 환경변수 길이만큼 할당할 길이. 달러는 스킵.
 				}
 				else
@@ -78,6 +80,12 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 					else if (**input == '\"')
 					{
 						quote_flag = 2;
+					}
+					else if (**input == '$')
+					{
+						(*input)++;
+						replace_env(input, &arg, envs);
+						continue ;
 					}
 					//특수문자 처리
 				}

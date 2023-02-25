@@ -25,10 +25,13 @@ t_env_deque	*save_env(char *env[])
 			return (NULL);
 		}
 		ft_strlcpy(new->name, env[i], name_len + 1);
-		new->value = ft_strdup(env[i] + name_len + 1);
-		if (new->value == NULL)
+		if (*(env[i] + name_len )!= '\0')
 		{
-			return (NULL);
+			new->value = ft_strdup(env[i] + name_len + 1);
+			if (new->value == NULL)
+			{
+				return (NULL);
+			}
 		}
 		new->name_len = name_len;
 		new->value_len = strlen(env[i] + name_len + 1);
@@ -39,7 +42,7 @@ t_env_deque	*save_env(char *env[])
 	return (envs);
 }
 
-int	set_env_len(char *input, int *cnt, t_env_deque *env)
+int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 {
 	t_env	*temp;
 	unsigned int i;
@@ -62,6 +65,7 @@ int	set_env_len(char *input, int *cnt, t_env_deque *env)
 				i++;
 			}
 		}
+		printf("적합하지 않은 env\n");
 		return (i);
 	}
 	else
@@ -70,10 +74,11 @@ int	set_env_len(char *input, int *cnt, t_env_deque *env)
 		while (temp != NULL)
 		{
 			i = 0;
-			while (i < temp->name_len)
+			while (input[i] != '\0' && i < temp->name_len)
 			{
-				if (ft_isalnum(input[i]))
+				if (ft_isalnum(input[i]) == 0)
 				{
+					printf("알넘이 아님\n");
 					break ;
 				}
 				else if (input[i] != temp->name[i])
@@ -84,12 +89,14 @@ int	set_env_len(char *input, int *cnt, t_env_deque *env)
 				if (i == temp->name_len)
 				{
 					*cnt += temp->value_len;
+					printf("적합한 env\n");
 					return (i);
 				}
 			}
 			temp = temp->next;
 		}
 	}
+	printf("i는 무엇인가? %d\n", i);
 	return (i);
 }
 
@@ -120,9 +127,9 @@ void	replace_env(char **input, char **arg, t_env_deque *env)
 		while (temp != NULL)
 		{
 			i = 0;
-			while (i < temp->name_len)
+			while (*input[i] != '\0' && i < temp->name_len)
 			{
-				if (ft_isalnum(*input[i]))
+				if (ft_isalnum(*input[i]) == 0)
 				{
 					break ;
 				}
