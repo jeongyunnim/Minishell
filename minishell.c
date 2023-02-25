@@ -15,10 +15,11 @@
 int main(int argc, char *argv[], char *env[])
 {
 	char	*input;
+	t_info	info;
 
 	//env에 추가될 수 있으니까 연결리스트로 맵 만들기.
 	//대충 노드 안에 네임이랑 밸류.
-	save_env(env);
+	info.envs = save_env(env);
 	while (1)
 	{
 		input = readline("Minishell$ ");
@@ -27,7 +28,7 @@ int main(int argc, char *argv[], char *env[])
 			continue ;// 이자리는 엑싯임
 		}
 		add_history(input);
-		parse(input);
+		parse(input, &info);
 		free(input);
 	}
 	return (0);

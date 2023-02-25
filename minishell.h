@@ -45,6 +45,8 @@ typedef struct s_env
 {
 	struct s_env	*previous;
 	struct s_env	*next;
+	unsigned int	name_len;
+	unsigned int	value_len;
 	char			*name;
 	char			*value;
 }	t_env;
@@ -63,12 +65,12 @@ typedef struct s_env_deque
 
 typedef struct s_info
 {
-	t_arg_deque	arguments;
-	t_env_deque env;
+	t_arg_deque	*arguments;
+	t_env_deque	*envs;
 }	t_info;
 
 /* parse.c */
-int		parse(char *input);
+int		parse(char *input, t_info *info);
 int		ft_isspecial(int c);
 
 /* deque_arg_util.c */
@@ -87,12 +89,12 @@ void	append_tail_env(t_env **head, t_env **tail, t_env *new);
 
 
 /* save_parse.c */
-int		save_arg(char **input, char *arg, int arg_len);
+int		save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);
 int		arg_to_deque(t_arg_deque **args, char *arg);
+int		replace_env(char **input, t_env_deque *env);
 
-/* save_parse.c */
+/* save_env.c */
 t_env_deque	*save_env(char **env);
-
 
 #endif
 

@@ -14,7 +14,7 @@
 
 int	ft_isspecial(int c)
 {
-	if(c == '|' || c == '>' || c == '>' || c == '<' || c == '\'' || c == '\"')
+	if(c == '|' || c == '>' || c == '>' || c == '<' || c == '\'' || c == '\"' || c == '$')
 	{
 		return (1);
 	}
@@ -24,7 +24,7 @@ int	ft_isspecial(int c)
 	}
 }
 
-int	count_arg_len(char *input)
+int	count_arg_len(char *input, t_env_deque *env)
 {
 	unsigned int	cnt;
 	unsigned int	i;
@@ -85,6 +85,10 @@ int	count_arg_len(char *input)
 					{
 						quote_flag = 2;
 					}
+					if (input[i] == '$')
+					{
+						replace_env(input[i], env);
+					}
 					//특수문자 처리
 				}
 				else
@@ -110,15 +114,24 @@ int	count_arg_len(char *input)
 	return (cnt);
 }
 
-int	parse(char *input)
+int	parse(char *input, t_info *info)
 {
 	t_arg_deque	*args;
 	char		*arg;
 	int			arg_len;
 
+	// t_env	*tmp;
+	// tmp = info->envs->head;
+	// while (tmp != NULL)
+	// {
+	// 	printf("%s=%s\n", tmp->name, tmp->value);
+	// 	tmp = tmp->next;
+	// }
+
 	args = (t_arg_deque *)ft_calloc(1, sizeof(t_arg_deque));
 	if (args == NULL)
 		return (ERROR);
+	info->arguments = args;
 	while (*input != '\0')
 	{
 		while (*input != '\0' && ft_isspace(*input) != 0)
@@ -127,7 +140,7 @@ int	parse(char *input)
 		}
 		if (*input != '\0')
 		{
-			arg_len = count_arg_len(input);
+			arg_len = count_arg_len(input, info->envs);
 			if (arg_len == -1)
 				return (ERROR);
 			else
@@ -136,24 +149,24 @@ int	parse(char *input)
 				if (arg == NULL)
 					return (ERROR);
 			}
-			save_arg(&input, arg, arg_len);
+			save_arg(&input, arg, arg_len, info->envs);
 			arg_to_deque(&args, arg);
 		}
 	}
 	
 	/* 잘 담겼는지 확인하기 */
-	t_arg *tmp;
-	tmp = args->head;
-	while(tmp != NULL)
+	t_arg *tmp_arg;
+	tmp_arg = args->head;
+	while(tmp_arg != NULL)
 	{
-		printf("%s %ld\n", tmp->arg, ft_strlen(tmp->arg));
-		tmp = tmp->next;
+		printf("%s %ld\n", tmp_arg->arg, ft_strlen(tmp_arg->arg));
+		tmp_arg = tmp_arg->next;
 	}
 	while(args->head != NULL)
 	{
-		tmp = pop_head_arg(&args->head);
-		free(tmp->arg);
-		free(tmp);
+		tmp_arg = pop_head_arg(&args->head);
+		free(tmp_arg->arg);
+		free(tmp_arg);
 	}
 	return (0);
 }

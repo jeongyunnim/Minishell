@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	save_arg(char **input, char *arg, int arg_len)
+int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 {
 	unsigned int	cnt;
 	unsigned int	i;
@@ -95,15 +95,49 @@ int	save_arg(char **input, char *arg, int arg_len)
 	return (0);
 }
 
+int	ft_isupper(char c)
+{
+	if ('A' <= c && c <= 'Z')
+	{
+		return (1);
+	}
+	else
+		return (0);
+}
+
+int	replace_env(char **input, unsigned int i, t_env_deque *env)
+{
+	if (ft_isupper(*input[i]) == 0)
+	{
+		if (ft_isdigit(*input[i]) != 0)
+		{
+			i++;
+		}
+		else
+		{
+			while (*input[i] != '\0')
+			{
+				i++;
+			}
+		}
+		return (i);
+	}
+	else
+	{
+		ft_strchr(*input, env->head->name)
+	}
+	return (0);
+}
+
 int	arg_to_deque(t_arg_deque **args, char *arg)
 {
 	t_arg	*new;
 
-	new = lstnew(arg);
+	new = lstnew_arg(arg);
 	if (new == NULL)
 	{
 		return (ERROR);
 	}
-	append_tail(&((*args)->head), &((*args)->tail), new);
+	append_tail_arg(&((*args)->head), &((*args)->tail), new);
 	return (0);
 }
