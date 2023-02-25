@@ -95,7 +95,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 	return (0);
 }
 
-int	ft_isupper(char c)
+int	ft_isupper(int c)
 {
 	if ('A' <= c && c <= 'Z')
 	{
@@ -103,30 +103,6 @@ int	ft_isupper(char c)
 	}
 	else
 		return (0);
-}
-
-int	replace_env(char **input, unsigned int i, t_env_deque *env)
-{
-	if (ft_isupper(*input[i]) == 0)
-	{
-		if (ft_isdigit(*input[i]) != 0)
-		{
-			i++;
-		}
-		else
-		{
-			while (*input[i] != '\0')
-			{
-				i++;
-			}
-		}
-		return (i);
-	}
-	else
-	{
-		ft_strchr(*input, env->head->name)
-	}
-	return (0);
 }
 
 int	arg_to_deque(t_arg_deque **args, char *arg)

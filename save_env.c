@@ -38,3 +38,113 @@ t_env_deque	*save_env(char *env[])
 	}
 	return (envs);
 }
+
+int	set_env_len(char *input, int *cnt, t_env_deque *env)
+{
+	t_env	*temp;
+	unsigned int i;
+
+	i = 0; 
+	if (ft_isupper(input[i]) == 0)
+	{
+		if (ft_isdigit(input[i]) != 0)
+		{
+			i++;
+		}
+		else
+		{
+			while (input[i] != '\0')
+			{
+				if (ft_isalnum(input[i]) == 0)
+				{
+					return (i);
+				}
+				i++;
+			}
+		}
+		return (i);
+	}
+	else
+	{
+		temp = env->head;
+		while (temp != NULL)
+		{
+			i = 0;
+			while (i < temp->name_len)
+			{
+				if (ft_isalnum(input[i]))
+				{
+					break ;
+				}
+				else if (input[i] != temp->name[i])
+				{
+					break ;
+				}
+				i++;
+				if (i == temp->name_len)
+				{
+					*cnt += temp->value_len;
+					return (i);
+				}
+			}
+			temp = temp->next;
+		}
+	}
+	return (i);
+}
+
+void	replace_env(char **input, char **arg, t_env_deque *env)
+{
+	t_env	*temp;
+	unsigned int i;
+
+	i = 0; 
+	if (ft_isupper(*input[i]) == 0)
+	{
+		if (ft_isdigit(*input[i]) != 0)
+		{
+			(*input)++;
+		}
+		else
+		{
+			while (ft_isalnum(*input[i]) != 0)
+			{
+				(*input)++;
+			}
+		}
+		return ;
+	}
+	else
+	{
+		temp = env->head;
+		while (temp != NULL)
+		{
+			i = 0;
+			while (i < temp->name_len)
+			{
+				if (ft_isalnum(*input[i]))
+				{
+					break ;
+				}
+				else if (*input[i] != temp->name[i])
+				{
+					break ;
+				}
+				i++;
+				if (i == temp->name_len)
+				{
+					i = 0;
+					while (i < temp->value_len)
+					{
+						*arg[i] = temp->value[i];
+						i++;
+					}
+					(*input) += temp->name_len;
+					return ;
+				}
+			}
+			temp = temp->next;
+		}
+	}
+	return ;
+}

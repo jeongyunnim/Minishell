@@ -87,7 +87,7 @@ int	count_arg_len(char *input, t_env_deque *env)
 					}
 					if (input[i] == '$')
 					{
-						replace_env(input[i], env);
+						i += set_env_len(&input[i], &cnt, env);
 					}
 					//특수문자 처리
 				}

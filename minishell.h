@@ -91,10 +91,12 @@ void	append_tail_env(t_env **head, t_env **tail, t_env *new);
 /* save_parse.c */
 int		save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);
 int		arg_to_deque(t_arg_deque **args, char *arg);
-int		replace_env(char **input, t_env_deque *env);
+int		ft_isupper(int c);
 
 /* save_env.c */
 t_env_deque	*save_env(char **env);
+int			set_env_len(char *input, int *cnt, t_env_deque *env);
+void		replace_env(char **input, char **arg, t_env_deque *env);
 
 #endif
 
