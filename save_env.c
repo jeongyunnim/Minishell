@@ -27,6 +27,37 @@ int	invalid_env_name(char *input)
 	return (i);
 }
 
+int	valid_env_name(char *input, t_env_deque *env, unsigned int *cnt)
+{
+	t_env	*temp;
+	unsigned int i;
+
+	temp = env->head;
+	i = 0;
+	while (ft_isalnum(input[i]) == 1 || input[i] == '_')
+	{
+		i++;
+	}
+	if (ft_isspecial_parameter(input[i]) == 1) // i가 하나일 때만???
+	{
+		printf("| %c처리 coming soon. |", input[i]);
+		//특수 문자 처리
+	}
+	while (temp != NULL)
+	{
+		if (i == temp->name_len)
+		{
+			if (ft_strncmp(input, temp->name, i - 1) == 0)
+			{
+				*cnt += temp->value_len;
+				return (i);
+			}
+		}
+		temp = temp->next;
+	}
+	return (i);
+}
+
 t_env_deque	*save_env(char *env[])
 {
 	unsigned int	i;
@@ -71,37 +102,18 @@ t_env_deque	*save_env(char *env[])
 
 int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 {
-	t_env	*temp;
-	unsigned int i;
+	unsigned int len;
 
-	i = 0;
-	if (ft_isupper(input[i]) == 0 && ft_isspecial_parameter(input[i]) == 0)
+	len = 0;
+	if (ft_isupper(input[len]) == 0 && ft_isspecial_parameter(input[len]) == 0)
 	{
-		i = invalid_env_name(input);
-		return (i);
+		len = invalid_env_name(input);
 	}
 	else
 	{
-		temp = env->head;
-		i = 0;
-		while (ft_isalnum(input[i]) == 1 || input[i] == '_')
-		{
-			i++;
-		}
-		while (temp != NULL)
-		{
-			if (i == temp->name_len)
-			{
-				if (ft_strncmp(input, temp->name, i - 1) == 0)
-				{
-					*cnt += temp->value_len;
-					return (i);
-				}
-			}
-			temp = temp->next;
-		}
+		len = valid_env_name(input, env, cnt);
 	}
-	return (i);
+	return (len);
 }
 
 void	replace_env(char **input, char **arg, t_env_deque *env)
