@@ -1,5 +1,32 @@
 #include "minishell.h"
 
+int	ft_isspecial_parameter(int c)
+{
+	if (c == '$' || c == '?' || c == '-' || c == '_' || c == '0' || c == '!')
+		return (1);
+	else
+		return (0);
+}
+
+int	invalid_env_name(char *input)
+{
+	unsigned int	i;
+
+	i = 0;
+	if (ft_isdigit(input[i]) != 0)
+	{
+		i++;
+	}
+	else
+	{
+		while (ft_isalnum(input[i]) == 1 || input[i] == '_')
+		{
+			i++;
+		}
+	}
+	return (i);
+}
+
 t_env_deque	*save_env(char *env[])
 {
 	unsigned int	i;
@@ -48,20 +75,9 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 	unsigned int i;
 
 	i = 0;
-	if (ft_isupper(input[i]) == 0 && input[i] != '_')
+	if (ft_isupper(input[i]) == 0 && ft_isspecial_parameter(input[i]) == 0)
 	{
-		if (ft_isdigit(input[i]) == 1)
-		{
-			i++;
-		}
-		else
-		{
-			while (ft_isalnum(input[i]) == 1 || input[i] == '_')
-			{
-				i++;
-			}
-		}
-		printf("적합하지 않은 env\n");
+		i = invalid_env_name(input);
 		return (i);
 	}
 	else
@@ -93,20 +109,9 @@ void	replace_env(char **input, char **arg, t_env_deque *env)
 	t_env	*temp;
 	unsigned int i;
 
-	i = 0;
-	if (ft_isupper((*input)[i]) == 0 && (*input)[i] != '_')
+	if (ft_isupper(**input) == 0 && ft_isspecial_parameter(**input) == 0)
 	{
-		if (ft_isdigit((*input)[i]) != 0)
-		{
-			(*input)++;
-		}
-		else
-		{
-			while (ft_isalnum((*input)[i]) == 1 || (*input)[i] == '_')
-			{
-				(*input)++;
-			}
-		}
+		(*input) += invalid_env_name(*input);
 		return ;
 	}
 	else
