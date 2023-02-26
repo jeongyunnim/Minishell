@@ -163,7 +163,7 @@ int	parse(char *input, t_info *info)
 	tmp_arg = args->head;
 	while(tmp_arg != NULL)
 	{
-		printf("%s %ld %u\n", tmp_arg->arg, ft_strlen(tmp_arg->arg));
+		printf("%s %ld\n", tmp_arg->arg, ft_strlen(tmp_arg->arg));
 		tmp_arg = tmp_arg->next;
 	}
 	while(args->head != NULL)

@@ -96,7 +96,6 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 				}
 			}
 		}
-		// 특수문자 처리 (만약 $ 만나면, 환경변수 찾아서 처리해줘야 함. get_env 같은 놈)
 		(*input)++;
 	}
 	*arg = '\0';

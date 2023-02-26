@@ -48,20 +48,16 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 	unsigned int i;
 
 	i = 0;
-	if (ft_isupper(input[i]) == 0)
+	if (ft_isupper(input[i]) == 0 && input[i] != '_')
 	{
-		if (ft_isdigit(input[i]) != 0)
+		if (ft_isdigit(input[i]) == 1)
 		{
 			i++;
 		}
 		else
 		{
-			while (input[i] != '\0')
+			while (ft_isalnum(input[i]) == 0)
 			{
-				if (ft_isalnum(input[i]) == 0)
-				{
-					return (i);
-				}
 				i++;
 			}
 		}
@@ -74,11 +70,11 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 		while (temp != NULL)
 		{
 			i = 0;
-			while (input[i] != '\0' && i < temp->name_len)
+			while (input[i] != '\0')
 			{
-				if (ft_isalnum(input[i]) == 0)
+				if (ft_isalnum(input[i]) == 0 && input[i] != '_')
 				{
-					printf("알넘이 아님\n");
+					printf("input[%d]:%c 알넘또는 _이 아님\n", i, input[i]);
 					break ;
 				}
 				else if (input[i] != temp->name[i])
@@ -86,18 +82,17 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 					break ;
 				}
 				i++;
-				if (i == temp->name_len)
-				{
-					*cnt += temp->value_len;
-					printf("적합한 env\n");
-					printf("value_len: %u cnt: %u\n",temp->value_len, *cnt);
-					return (i);
-				}
+			}
+			if (i == temp->name_len)
+			{
+				*cnt += temp->value_len;
+				// printf("value_len: %u cnt: %u\n",temp->value_len, *cnt);
+				return (i);
 			}
 			temp = temp->next;
 		}
 	}
-	printf("i는 무엇인가? %d\n", i);
+	// printf("i는 무엇인가? %d\n", i);
 	return (i);
 }
 
@@ -107,15 +102,15 @@ void	replace_env(char **input, char **arg, t_env_deque *env)
 	unsigned int i;
 
 	i = 0;
-	if (ft_isupper(*input[i]) == 0)
+	if (ft_isupper((*input)[i]) == 0 && (*input)[i] != '_')
 	{
-		if (ft_isdigit(*input[i]) != 0)
+		if (ft_isdigit((*input)[i]) != 0)
 		{
 			(*input)++;
 		}
 		else
 		{
-			while (ft_isalnum(*input[i]) != 0)
+			while (ft_isalnum((*input)[i]) != 0)
 			{
 				(*input)++;
 			}
@@ -128,14 +123,10 @@ void	replace_env(char **input, char **arg, t_env_deque *env)
 		while (temp != NULL)
 		{
 			i = 0;
-			printf("temp->name %s\n", temp->name);
+			// printf("temp->name %s\n", temp->name);
 			while ((*input)[i] != '\0')
 			{
-				if (i > temp->name_len)
-				{
-					break ;
-				}
-				if (ft_isalnum((*input)[i]) == 0)
+				if (ft_isalnum((*input)[i]) == 0 && (*input)[i] != '_')
 				{
 					break ;
 				}
@@ -143,22 +134,23 @@ void	replace_env(char **input, char **arg, t_env_deque *env)
 				{
 					break ;
 				}
-				if (i == temp->name_len - 1)
-				{
-					i = 0;
-					while (i < temp->value_len)
-					{
-						(*arg)[i] = (temp->value)[i];
-						printf("arg: %c value[%d]: %c\n",(*arg)[i], i, temp->value[i]);
-						i++;
-					}
-					(*input) += temp->name_len;
-					return ;
-				}
 				i++;
+			}
+			if (i == temp->name_len)
+			{
+				i = 0;
+				while (i < temp->value_len)
+				{
+					**arg = (temp->value)[i];
+					(*arg)++;
+					i++;
+				}
+				(*input) += temp->name_len;
+				return ;
 			}
 			temp = temp->next;
 		}
+		(*input) += i;
 	}
 	return ;
 }
