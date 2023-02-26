@@ -56,7 +56,7 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 		}
 		else
 		{
-			while (ft_isalnum(input[i]) == 0)
+			while (ft_isalnum(input[i]) == 1 || input[i] == '_')
 			{
 				i++;
 			}
@@ -85,7 +85,6 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 			temp = temp->next;
 		}
 	}
-	// printf("i는 무엇인가? %d\n", i);
 	return (i);
 }
 
@@ -103,7 +102,7 @@ void	replace_env(char **input, char **arg, t_env_deque *env)
 		}
 		else
 		{
-			while (ft_isalnum((*input)[i]) != 0)
+			while (ft_isalnum((*input)[i]) == 1 || (*input)[i] == '_')
 			{
 				(*input)++;
 			}
