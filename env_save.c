@@ -14,7 +14,7 @@
 
 int	ft_isspecial_parameter(int c)
 {
-	if (c == '$' || c == '?' || c == '-' || c == '_' || c == '0' || c == '!')
+	if (c == '$' || c == '?' || c == '-' || c == '0' || c == '!') // _는 처리할 수가 없어. 마지막 인자를 어떻게 가지고 다녀?
 		return (1);
 	else
 		return (0);
