@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 17:41:58 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/28 19:41:55 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,50 +128,75 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 	return (len);
 }
 
-int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
+//int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
+//{
+
+//	temp = env->head;
+//	i = 0;
+//	while (ft_isalnum((*input)[i]) == 1 || (*input)[i] == '_')
+//	{
+//		i++;
+//	}
+//	while (temp != NULL)
+//	{
+//		if (i == temp->name_len)
+//		{
+//			if (ft_strncmp((*input), temp->name, i - 1) == 0)
+//			{
+//				i = 0;
+//				while (i < temp->value_len)
+//				{
+//					**arg = (temp->value)[i];
+//					(*arg)++;
+//					i++;
+//				}
+//				return (0);
+//			}
+//		}
+//		temp = temp->next;
+//	}
+//	(*input) += i;
+//	return (0);
+//}
+
+void	replace_env(char **input, char **arg, t_env_deque *env)
 {
 	t_env	*temp;
 	unsigned int i;
 
-	temp = env->head;
-	i = 0;
-	while (ft_isalnum((*input)[i]) == 1 || (*input)[i] == '_')
-	{
-		i++;
-	}
-	while (temp != NULL)
-	{
-		if (i == temp->name_len)
-		{
-			if (ft_strncmp((*input), temp->name, i - 1) == 0)
-			{
-				i = 0;
-				while (i < temp->value_len)
-				{
-					**arg = (temp->value)[i];
-					(*arg)++;
-					i++;
-				}
-				*arg += temp->value_len;
-				return (0);
-			}
-		}
-		temp = temp->next;
-	}
-	(*input) += i;
-}
-
-void	replace_env(char **input, char **arg, t_env_deque *env)
-{
-
-
 	if (ft_isupper(**input) == 0 && ft_isspecial_parameter(**input) == 0)
 	{
 		(*input) += invalid_env_name(*input);
+		return ;
 	}
 	else
 	{
-		valid_env_name_replace(input, arg, env);
+		temp = env->head;
+		i = 0;
+		while (ft_isalnum((*input)[i]) == 1 || (*input)[i] == '_')
+		{
+			i++;
+		}
+		while (temp != NULL)
+		{
+			if (i == temp->name_len)
+			{
+				if (ft_strncmp((*input), temp->name, i - 1) == 0)
+				{
+					i = 0;
+					while (i < temp->value_len)
+					{
+						**arg = (temp->value)[i];
+						(*arg)++;
+						i++;
+					}
+					(*input) += temp->name_len;
+					return ;
+				}
+			}
+			temp = temp->next;
+		}
+		(*input) += i;
 	}
 	return ;
 }

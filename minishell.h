@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 17:34:32 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/28 19:08:08 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env);
 void		replace_env(char **input, char **arg, t_env_deque *env);
 
 /* parse_count_len.c */
-int			inside_quote(char *input, t_env_deque *env, int quote_flag);
+int	inside_quote(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);
 
 #endif
 

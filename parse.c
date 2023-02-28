@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 17:41:37 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/28 19:19:53 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,35 @@ int	count_arg_len(char *input, t_env_deque *envs)
 	{
 		if (quote_flag != 0)
 		{
-			i += inside_quote(input, envs, quote_flag);
+			if (quote_flag == 1)
+			{
+				if (input[i] == '\'')
+				{
+					quote_flag = 0;
+				}
+				else
+				{
+					cnt++;
+				}
+			}
+			else if (quote_flag == 2)
+			{
+				if (input[i] == '\"')
+				{
+					quote_flag = 0;
+				}
+				else if (input[i] == '$')
+				{
+					i++;
+					i += set_env_len(&input[i], &cnt, envs);
+					continue ;
+					//환경변수 가져오기.. + 환경변수 길이만큼 할당할 길이. 달러는 스킵.
+				}
+				else
+				{
+					cnt++;
+				}
+			}
 		}
 		else
 		{
