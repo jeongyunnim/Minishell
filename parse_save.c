@@ -12,6 +12,66 @@
 
 #include "minishell.h"
 
+void	inside_quote_replace(char **input, char **arg, t_env_deque *envs, int *quote_flag)
+{
+	if (*quote_flag == 1)
+	{
+		if (**input == '\'')
+		{
+			*quote_flag = 0;
+		}
+		else
+		{
+			**arg = **input;
+			(*arg)++;
+		}
+	}
+	else if (*quote_flag == 2)
+	{
+		if (**input == '\"')
+		{
+			*quote_flag = 0;
+		}
+		else if (**input == '$')
+		{
+			(*input)++;
+			replace_env(input, arg, envs);
+			(*input)--;
+		}
+		else
+		{
+			**arg = **input;
+			(*arg)++;
+		}
+	}
+}
+
+void	outside_quote_replace(char **input, char **arg, t_env_deque *envs, int *quote_flag)
+{
+	if (ft_isspecial(**input) != 0)
+	{
+		if (**input == '\'')
+		{
+			*quote_flag = 1;
+		}
+		else if (**input == '\"')
+		{
+			*quote_flag = 2;
+		}
+		else if (**input == '$')
+		{
+			(*input)++;
+			replace_env(input, arg, envs);
+			(*input)--;
+		}
+	}
+    else
+    {
+        **arg = **input;
+        (*arg)++;
+    }
+}
+
 int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 {
 	unsigned int	cnt;
@@ -25,37 +85,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 	{
 		if (quote_flag != 0)
 		{
-			if (quote_flag == 1)
-			{
-				if (**input == '\'')
-				{
-					quote_flag = 0;
-				}
-				else
-				{
-					*arg = **input;
-					arg++;
-				}
-			}
-			else if (quote_flag == 2)
-			{
-				if (**input == '\"')
-				{
-					quote_flag = 0;
-				}
-				else if (**input == '$')
-				{
-					(*input)++; 
-					replace_env(input, &arg, envs);
-					continue ;
-					//환경변수 가져오기.. + 환경변수 길이만큼 할당할 길이. 달러는 스킵.
-				}
-				else
-				{
-					*arg = **input;
-					arg++;
-				}
-			}
+			inside_quote_replace(input, &arg, envs, &quote_flag);
 		}
 		else
 		{
@@ -65,29 +95,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 			}
 			else
 			{
-				if (ft_isspecial(**input) != 0)
-				{
-					if (**input == '\'')
-					{
-						quote_flag = 1;
-					}
-					else if (**input == '\"')
-					{
-						quote_flag = 2;
-					}
-					else if (**input == '$')
-					{
-						(*input)++;
-						replace_env(input, &arg, envs);
-						continue ;
-					}
-					//특수문자 처리
-				}
-				else
-				{
-					*arg = **input;
-					arg++;
-				}
+				outside_quote_replace(input, &arg, envs, &quote_flag);
 			}
 		}
 		(*input)++;
