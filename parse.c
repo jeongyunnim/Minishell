@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 19:19:53 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/28 20:37:56 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,71 +37,25 @@ int	count_arg_len(char *input, t_env_deque *envs)
 	{
 		if (quote_flag != 0)
 		{
-			if (quote_flag == 1)
-			{
-				if (input[i] == '\'')
-				{
-					quote_flag = 0;
-				}
-				else
-				{
-					cnt++;
-				}
-			}
-			else if (quote_flag == 2)
-			{
-				if (input[i] == '\"')
-				{
-					quote_flag = 0;
-				}
-				else if (input[i] == '$')
-				{
-					i++;
-					i += set_env_len(&input[i], &cnt, envs);
-					continue ;
-					//환경변수 가져오기.. + 환경변수 길이만큼 할당할 길이. 달러는 스킵.
-				}
-				else
-				{
-					cnt++;
-				}
-			}
+			i += inside_quote(&input[i], envs, &cnt, &quote_flag);
 		}
 		else
 		{
-			if (ft_isspace(input[i]) != 0)
+			if (ft_isspace(input[i]) == 1)
 			{
-				if (quote_flag != 0)
-					return (ERROR);
+				//if (quote_flag != 0)
+				//{
+				//	printf("쿼트가 아니면 뭐니 %d\n", input[i]);
+				//	return (ERROR);
+				//}
+				//생각해보니 이쪽으로 쿼트가 올 리가 없는 듯 하다.
 				return (cnt);
 			}
 			else
 			{
-				if (ft_isspecial(input[i]) != 0)
-				{
-					if (input[i] == '\'')
-					{
-						quote_flag = 1;
-					}
-					else if (input[i] == '\"')
-					{
-						quote_flag = 2;
-					}
-					else if (input[i] == '$')
-					{
-						i++;
-						i += set_env_len(&input[i], &cnt, envs);
-						continue ;
-					}
-					//특수문자 처리
-				}
-				else
-				{
-					cnt++;
-				}
+				i += outside_quote(&input[i], envs, &cnt, &quote_flag);
 			}
 		}
-		// 특수문자 처리 (만약 $ 만나면, 환경변수 찾아서 처리해줘야 함. get_env 같은 놈)
 		i++;
 	}
 	if (cnt >= INT_MAX)

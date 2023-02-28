@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:21:08 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 19:07:48 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/28 20:36:03 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,65 @@
 
 int	inside_quote(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag)
 {
-	unsigned int	len;
+	unsigned int	i;
 
-	len = 0;
+	i = 0;
 	if (*quote_flag == 1)
 	{
-		if (*input == '\'')
+		if (input[i] == '\'')
 		{
 			*quote_flag = 0;
 		}
 		else
 		{
 			(*cnt)++;
+		}
+	}
+	else if (*quote_flag == 2)
+	{
+		if (input[i] == '\"')
+		{
+			*quote_flag = 0;
+		}
+		else if (input[i] == '$')
+		{
+			i++;
+			i += set_env_len(&input[i], cnt, env);
+			return (i - 1);
+		}
+		else
+		{
+			(*cnt)++;
+		}
+	}
+	return (i);
+}
+
+int	outside_quote(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag)
+{
+	unsigned int	i;
+
+	i = 0;
+	if (ft_isspecial(input[i]) != 0)
+	{
+		if (input[i] == '\'')
+		{
+			*quote_flag = 1;
+		}
+		else if (input[i] == '\"')
+		{
+			*quote_flag = 2;
+		}
+		else if (input[i] == '$')
+		{
+			i++;
+			i += set_env_len(&input[i], cnt, env);
+			return (i - 1);
 		}
 	}
 	else
 	{
-		if (*input == '\"')
-		{
-			*quote_flag = 0;
-		}
-		else if (*input == '$')
-		{
-			len = set_env_len(input, cnt, env);
-			return (len - 1); // i 지우고 반환 값을 i로 건네주도록 하자.
-			//환경변수 가져오기.. + 환경변수 길이만큼 할당할 길이. 달러는 스킵.
-		}
-		else
-		{
-			(*cnt)++;
-		}
+		(*cnt)++;
 	}
-	return (len);
+	return (i);
 }

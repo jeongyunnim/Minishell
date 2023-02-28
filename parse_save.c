@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   save_parse.c                                       :+:      :+:    :+:   */
+/*   parse_save.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 15:58:06 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/28 20:25:30 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 	quote_flag = 0; // '(1)는 환경변수를 해석 안 함. "(2)는 환경변수 해석함
 	while (**input != '\0')
 	{
-		if (**input == '\0')
-		{
-			break ;
-		}
 		if (quote_flag != 0)
 		{
 			if (quote_flag == 1)
@@ -65,8 +61,6 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 		{
 			if (ft_isspace(**input) != 0)
 			{
-				if (quote_flag != 0)
-					return (ERROR);
 				return (cnt);
 			}
 			else
