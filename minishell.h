@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/23 22:22:06 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/28 17:34:32 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # define ERROR -1
 # define INT_MAX 2147483647
 
+int	g_exit_code;
+
 typedef enum	e_special
 {
 	NONE,
@@ -38,17 +40,17 @@ typedef struct s_arg
 	struct s_arg	*previous;
 	struct s_arg	*next;
 	char			*arg;
-	int				special;
+	int				special;// | < << > >> 
 }	t_arg;
 
 typedef struct s_env
 {
 	struct s_env	*previous;
 	struct s_env	*next;
-	unsigned int	name_len;
-	unsigned int	value_len;
 	char			*name;
 	char			*value;
+	unsigned int	name_len;
+	unsigned int	value_len;
 }	t_env;
 
 typedef struct s_arg_deque
@@ -74,29 +76,32 @@ int		parse(char *input, t_info *info);
 int		ft_isspecial(int c);
 
 /* deque_arg_util.c */
-t_arg	*lstnew_arg(char *arg);
-t_arg	*pop_head_arg(t_arg **head);
-t_arg	*pop_tail_arg(t_arg **tail);
-void	append_head_arg(t_arg **head, t_arg **tail, t_arg *new);
-void	append_tail_arg(t_arg **head, t_arg **tail, t_arg *new);
+t_arg		*lstnew_arg(char *arg);
+t_arg		*pop_head_arg(t_arg **head);
+t_arg		*pop_tail_arg(t_arg **tail);
+void		append_head_arg(t_arg **head, t_arg **tail, t_arg *new);
+void		append_tail_arg(t_arg **head, t_arg **tail, t_arg *new);
 
 /* deque_env_util.c */
-t_env	*lstnew_env(void);
-t_env	*pop_head_env(t_env **head);
-t_env	*pop_tail_env(t_env **tail);
-void	append_head_env(t_env **head, t_env **tail, t_env *new);
-void	append_tail_env(t_env **head, t_env **tail, t_env *new);
+t_env		*lstnew_env(void);
+t_env		*pop_head_env(t_env **head);
+t_env		*pop_tail_env(t_env **tail);
+void		append_head_env(t_env **head, t_env **tail, t_env *new);
+void		append_tail_env(t_env **head, t_env **tail, t_env *new);
 
 
-/* save_parse.c */
-int		save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);
-int		arg_to_deque(t_arg_deque **args, char *arg);
-int		ft_isupper(int c);
+/* parse_save.c */
+int			save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);
+int			arg_to_deque(t_arg_deque **args, char *arg);
+int			ft_isupper(int c);
 
-/* save_env.c */
+/* env_save.c */
 t_env_deque	*save_env(char **env);
 int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env);
 void		replace_env(char **input, char **arg, t_env_deque *env);
+
+/* parse_count_len.c */
+int			inside_quote(char *input, t_env_deque *env, int quote_flag);
 
 #endif
 

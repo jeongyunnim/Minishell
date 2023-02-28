@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_save.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
+/*   Updated: 2023/02/28 17:41:58 by jeseo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_isspecial_parameter(int c)
@@ -27,7 +39,7 @@ int	invalid_env_name(char *input)
 	return (i);
 }
 
-int	valid_env_name(char *input, t_env_deque *env, unsigned int *cnt)
+int	valid_env_name_find(char *input, t_env_deque *env, unsigned int *cnt)
 {
 	t_env	*temp;
 	unsigned int i;
@@ -40,7 +52,7 @@ int	valid_env_name(char *input, t_env_deque *env, unsigned int *cnt)
 	}
 	if (ft_isspecial_parameter(input[i]) == 1) // i가 하나일 때만???
 	{
-		printf("| %c처리 coming soon. |", input[i]);
+		printf(" | %c처리 coming soon. | ", input[i]);
 		//특수 문자 처리
 	}
 	while (temp != NULL)
@@ -92,7 +104,7 @@ t_env_deque	*save_env(char *env[])
 			}
 		}
 		new->name_len = name_len;
-		new->value_len = strlen(env[i] + name_len + 1);
+		new->value_len = ft_strlen(env[i] + name_len + 1);
 		append_tail_env(&envs->head, &envs->tail, new);
 		new = NULL;
 		i++;
@@ -111,49 +123,55 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 	}
 	else
 	{
-		len = valid_env_name(input, env, cnt);
+		len = valid_env_name_find(input, env, cnt);
 	}
 	return (len);
 }
 
-void	replace_env(char **input, char **arg, t_env_deque *env)
+int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 {
 	t_env	*temp;
 	unsigned int i;
 
+	temp = env->head;
+	i = 0;
+	while (ft_isalnum((*input)[i]) == 1 || (*input)[i] == '_')
+	{
+		i++;
+	}
+	while (temp != NULL)
+	{
+		if (i == temp->name_len)
+		{
+			if (ft_strncmp((*input), temp->name, i - 1) == 0)
+			{
+				i = 0;
+				while (i < temp->value_len)
+				{
+					**arg = (temp->value)[i];
+					(*arg)++;
+					i++;
+				}
+				*arg += temp->value_len;
+				return (0);
+			}
+		}
+		temp = temp->next;
+	}
+	(*input) += i;
+}
+
+void	replace_env(char **input, char **arg, t_env_deque *env)
+{
+
+
 	if (ft_isupper(**input) == 0 && ft_isspecial_parameter(**input) == 0)
 	{
 		(*input) += invalid_env_name(*input);
-		return ;
 	}
 	else
 	{
-		temp = env->head;
-		i = 0;
-		while (ft_isalnum((*input)[i]) == 1 || (*input)[i] == '_')
-		{
-			i++;
-		}
-		while (temp != NULL)
-		{
-			if (i == temp->name_len)
-			{
-				if (ft_strncmp((*input), temp->name, i - 1) == 0)
-				{
-					i = 0;
-					while (i < temp->value_len)
-					{
-						**arg = (temp->value)[i];
-						(*arg)++;
-						i++;
-					}
-					(*input) += temp->name_len;
-					return ;
-				}
-			}
-			temp = temp->next;
-		}
-		(*input) += i;
+		valid_env_name_replace(input, arg, env);
 	}
 	return ;
 }
