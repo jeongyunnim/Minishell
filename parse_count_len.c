@@ -6,13 +6,13 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:21:08 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 20:36:03 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/28 20:55:07 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	inside_quote(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag)
+int	inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag)
 {
 	unsigned int	i;
 
@@ -48,7 +48,7 @@ int	inside_quote(char *input, t_env_deque *env, unsigned int *cnt, int *quote_fl
 	return (i);
 }
 
-int	outside_quote(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag)
+int	outside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag)
 {
 	unsigned int	i;
 

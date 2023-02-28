@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 20:25:30 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/28 20:43:41 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 				}
 				else if (**input == '$')
 				{
-					(*input)++;
+					(*input)++; 
 					replace_env(input, &arg, envs);
 					continue ;
 					//환경변수 가져오기.. + 환경변수 길이만큼 할당할 길이. 달러는 스킵.

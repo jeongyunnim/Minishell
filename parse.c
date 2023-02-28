@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 20:37:56 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/02/28 20:55:08 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 	{
 		if (quote_flag != 0)
 		{
-			i += inside_quote(&input[i], envs, &cnt, &quote_flag);
+			i += inside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
 		}
 		else
 		{
@@ -53,7 +53,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 			}
 			else
 			{
-				i += outside_quote(&input[i], envs, &cnt, &quote_flag);
+				i += outside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
 			}
 		}
 		i++;
