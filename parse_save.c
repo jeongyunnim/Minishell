@@ -76,13 +76,11 @@ int	outside_quote_replace(char **input, char **arg, t_env_deque *envs, int *quot
 
 int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 {
-	unsigned int	cnt;
-	unsigned int	i;
-	int				quote_flag;
+	int	special;
+	int	quote_flag;
 
-	cnt = 0;
-	i = 0;
 	quote_flag = 0; // '(1)는 환경변수를 해석 안 함. "(2)는 환경변수 해석함
+	special = 0;
 	while (**input != '\0')
 	{
 		if (quote_flag != 0)
@@ -93,7 +91,39 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 		{
 			if (ft_isspace(**input) != 0)
 			{
-				return (cnt);
+				return (NONE);
+			}
+			else if (ft_isspecial_symbol(**input) == 1)
+			{
+				if (**input == '>' && *((*input) + 1) == '>')
+				{
+					ft_memcpy(arg, ">>", 2);
+					arg += 2;
+					(*input) += 2;
+					return (APPEND);
+				}
+				else if (**input == '<' && *((*input) + 1) == '<')
+				{
+					ft_memcpy(arg, "<<", 2);
+					arg += 2;
+					(*input) += 2;
+					return (HEREDOC);
+				}
+				else
+				{
+					ft_memcpy(arg, *input, 1);
+					arg += 1;
+					special = **input;
+					(*input) += 1;
+					return (special);
+				}
+			}
+			else if (ft_isspecial_symbol(*((*input) + 1)) == 1)
+			{
+				if (ft_isspecial_symbol(**input) == 0)
+				{
+					return (0);
+				}
 			}
 			else
 			{
@@ -117,7 +147,7 @@ int	ft_isupper(int c)
 		return (0);
 }
 
-int	arg_to_deque(t_arg_deque **args, char *arg)
+int	arg_to_deque(t_arg_deque **args, char *arg, int	special)
 {
 	t_arg	*new;
 
@@ -126,6 +156,7 @@ int	arg_to_deque(t_arg_deque **args, char *arg)
 	{
 		return (ERROR);
 	}
+	new->special = special;
 	append_tail_arg(&((*args)->head), &((*args)->tail), new);
 	return (0);
 }

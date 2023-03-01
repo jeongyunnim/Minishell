@@ -28,11 +28,11 @@ int	g_exit_code;
 typedef enum	e_special
 {
 	NONE,
-	PIPE,
-	REDIRECTION_L,
 	HEREDOC,
-	REDIRECTION_R,
-	APPEND
+	APPEND,
+	PIPE='|',
+	REDIRECT_L='<',
+	REDIRECT_R='>'
 }				t_special;
 
 typedef struct s_arg
@@ -92,8 +92,9 @@ void		append_tail_env(t_env **head, t_env **tail, t_env *new);
 
 /* parse_save.c */
 int			save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);
-int			arg_to_deque(t_arg_deque **args, char *arg);
+int			arg_to_deque(t_arg_deque **args, char *arg, int special);
 int			ft_isupper(int c);
+int			ft_isspecial_symbol(int c);
 
 /* env_save.c */
 t_env_deque	*save_env(char **env);

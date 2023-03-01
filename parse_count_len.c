@@ -53,7 +53,7 @@ int	outside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quo
 	unsigned int	i;
 
 	i = 0;
-	if (ft_isspecial(input[i]) != 0)
+	if (ft_isspecial(input[i]) == 1)
 	{
 		if (input[i] == '\'')
 		{

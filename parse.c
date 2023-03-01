@@ -14,7 +14,19 @@
 
 int	ft_isspecial(int c)
 {
-	if(c == '|' || c == '>' || c == '>' || c == '<' || c == '\'' || c == '\"' || c == '$')
+	if(c == '\'' || c == '\"' || c == '$')
+	{
+		return (1);
+	}
+	else
+	{
+		return (0);
+	}
+}
+
+int	ft_isspecial_symbol(int c)
+{
+	if(c == '>' || c == '<' || c == '|')
 	{
 		return (1);
 	}
@@ -39,16 +51,42 @@ int	count_arg_len(char *input, t_env_deque *envs)
 		{
 			i += inside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
 		}
+        if (ft_isspecial_symbol(input[i]) == 0 && ft_isspecial_symbol(input[i + 1]))
+        {
+            i++;
+        }
 		else
 		{
 			if (ft_isspace(input[i]) == 1)
 			{
-				//if (quote_flag != 0)
-				//{
-				//	printf("쿼트가 아니면 뭐니 %d\n", input[i]);
-				//	return (ERROR);
-				//}
-				//생각해보니 이쪽으로 쿼트가 올 리가 없는 듯 하다.
+				return (cnt);
+			}
+			else if (ft_isspecial_symbol(input[i]) == 1)
+			{
+				if (input[i] == '>' && input[i + 1] == '>')
+				{
+					cnt += 2;
+				}
+				else if (input[i] == '<' && input[i] == '<')
+				{
+					cnt += 2;
+				}
+				// else if (ft_isspecial_symbol(input[i + 1]) == 1)
+				// {
+				// 	printf("minishell: syntax error near unexpected token `%c'\n", input[i]);
+				// 	//에러처리를 출력하고 해줘야 하는데.. 어떻게 하지?
+				// 	return (ERROR);
+				// }
+				else
+				{
+					cnt++;
+				}
+				return (cnt);
+			}
+			else if (ft_isspecial_symbol(input[i + 1]) == 1)
+			{
+                cnt++;
+				//input[i]는 일반문자이므로 ls|에서 s를 가리키고 있어야 함.
 				return (cnt);
 			}
 			else
@@ -76,6 +114,7 @@ int	parse(char *input, t_info *info)
 	t_arg_deque	*args;
 	char		*arg;
 	int			arg_len;
+	int			special;
 
 	// t_env	*tmp;
 	// tmp = info->envs->head;
@@ -91,23 +130,35 @@ int	parse(char *input, t_info *info)
 	info->arguments = args;
 	while (*input != '\0')
 	{
+		special = 0;
 		while (*input != '\0' && ft_isspace(*input) != 0)
 		{
 			input++;
 		}
+		// if (ft_isspecial_symbol(*input) == 0 && ft_isspecial_symbol(*(input + 1)) == 1)
+		// {
+		// 	리턴해야하나?
+		// }
 		if (*input != '\0')
 		{
 			arg_len = count_arg_len(input, info->envs);
-			if (arg_len == -1)
+			if (arg_len == ERROR)
+			{
+
 				return (ERROR);
+			}
 			else
 			{
 				arg = (char *)ft_calloc(arg_len + 1, sizeof(char));
 				if (arg == NULL)
 					return (ERROR);
 			}
-			save_arg(&input, arg, arg_len, info->envs);
-			arg_to_deque(&args, arg);
+			special = save_arg(&input, arg, arg_len, info->envs);
+			if (special == ERROR)
+			{
+				return (ERROR);
+			}
+			arg_to_deque(&args, arg, special);
 		}
 	}
 	
@@ -116,7 +167,7 @@ int	parse(char *input, t_info *info)
 	tmp_arg = args->head;
 	while(tmp_arg != NULL)
 	{
-		printf("%s %ld\n", tmp_arg->arg, ft_strlen(tmp_arg->arg));
+		printf("%s %d\n", tmp_arg->arg, special);
 		tmp_arg = tmp_arg->next;
 	}
 	while(args->head != NULL)
