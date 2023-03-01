@@ -98,7 +98,11 @@ int			ft_isupper(int c);
 /* env_save.c */
 t_env_deque	*save_env(char **env);
 int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env);
-void		replace_env(char **input, char **arg, t_env_deque *env);
+int			replace_env(char **input, char **arg, t_env_deque *env);
+
+/* env_replace.c */
+int			special_parameter_len(char *input, unsigned int *cnt);
+int			special_parameter_replace(char **input, char **arg);
 
 /* parse_count_len.c */
 int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);

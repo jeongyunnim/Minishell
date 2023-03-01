@@ -46,7 +46,7 @@ void	inside_quote_replace(char **input, char **arg, t_env_deque *envs, int *quot
 	}
 }
 
-void	outside_quote_replace(char **input, char **arg, t_env_deque *envs, int *quote_flag)
+int	outside_quote_replace(char **input, char **arg, t_env_deque *envs, int *quote_flag)
 {
 	if (ft_isspecial(**input) != 0)
 	{
@@ -61,7 +61,8 @@ void	outside_quote_replace(char **input, char **arg, t_env_deque *envs, int *quo
 		else if (**input == '$')
 		{
 			(*input)++;
-			replace_env(input, arg, envs);
+			if (replace_env(input, arg, envs))
+				return (ERROR);
 			(*input)--;
 		}
 	}
@@ -70,6 +71,7 @@ void	outside_quote_replace(char **input, char **arg, t_env_deque *envs, int *quo
         **arg = **input;
         (*arg)++;
     }
+	return (0);
 }
 
 int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
@@ -95,12 +97,13 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 			}
 			else
 			{
-				outside_quote_replace(input, &arg, envs, &quote_flag);
+				if (outside_quote_replace(input, &arg, envs, &quote_flag) == ERROR)
+					return (ERROR);
 			}
 		}
 		(*input)++;
 	}
-	*arg = '\0';
+	*arg = '\0';//어차피 calloc이라 안해줘도 같을 것 같다.
 	return (0);
 }
 

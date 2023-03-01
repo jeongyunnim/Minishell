@@ -14,7 +14,7 @@
 
 int	ft_isspecial_parameter(int c)
 {
-	if (c == '$' || c == '?' || c == '-' || c == '0' || c == '!') // _는 처리할 수가 없어. 마지막 인자를 어떻게 가지고 다녀?
+	if (c == '?' || c == '0') // _, -, !는 처리할 수가 없다. 마지막 인자를 어떻게 가지고 다녀?
 		return (1);
 	else
 		return (0);
@@ -46,20 +46,20 @@ int	valid_env_name_find(char *input, t_env_deque *env, unsigned int *cnt)
 
 	temp = env->head;
 	i = 0;
+	if (ft_isspecial_parameter(input[i]) == 1) // i가 하나일 때만??? -> 그냥 하나만 처리 함
+	{
+		i += special_parameter_len(input, cnt);
+		return (i);
+	}
 	while (ft_isalnum(input[i]) == 1 || input[i] == '_')
 	{
 		i++;
-	}
-	if (ft_isspecial_parameter(input[i]) == 1) // i가 하나일 때만???
-	{
-		//printf(" | %c처리 coming soon. | ", input[i]);
-		//특수 문자 처리
 	}
 	while (temp != NULL)
 	{
 		if (i == temp->name_len)
 		{
-			if (ft_strncmp(input, temp->name, i - 1) == 0)
+			if (ft_strncmp(input, temp->name, i) == 0) // i인가 i - 1인가
 			{
 				*cnt += temp->value_len;
 				return (i);
@@ -117,7 +117,12 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 	unsigned int len;
 
 	len = 0;
-	if (ft_isupper(input[len]) == 0 && ft_isspecial_parameter(input[len]) == 0)
+	if (ft_isspace(input[len]) == 1 || input[len] == '\0' || ft_isspecial(input[len]) == 1)
+	{
+		(*cnt)++;
+		return (len);
+	}
+	else if (ft_isupper(input[len]) == 0 && ft_isspecial_parameter(input[len]) == 0 && input[len] != '_')
 	{
 		len = invalid_env_name(input);
 	}
@@ -128,13 +133,19 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 	return (len);
 }
 
-void	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
+int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 {
 	t_env	*temp;
 	unsigned int i;
 
 	temp = env->head;
 	i = 0;
+	if (ft_isspecial_parameter((*input)[i]) == 1)
+	{
+		if (special_parameter_replace(input, arg) == ERROR)
+			return (ERROR);
+        return (0);
+	}
 	while (ft_isalnum((*input)[i]) == 1 || (*input)[i] == '_')
 	{
 		i++;
@@ -153,22 +164,31 @@ void	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 					i++;
 				}
 				(*input) += temp->name_len;
-				return ;
+				return (0);
 			}
 		}
 		temp = temp->next;
 	}
 	(*input) += i;
+	return (0);
 }
 
-void	replace_env(char **input, char **arg, t_env_deque *env)
-{
-	if (ft_isupper(**input) == 0 && ft_isspecial_parameter(**input) == 0)
+int	replace_env(char **input, char **arg, t_env_deque *env)
+{	
+	if (ft_isspace(**input) == 1 || **input == '\0' || ft_isspecial(**input) == 1)
+	{
+		**arg = '$';
+		(*arg)++;
+		return (0);
+	}
+	if (ft_isupper(**input) == 0 && ft_isspecial_parameter(**input) == 0 && **input != '_')
 	{
 		(*input) += invalid_env_name(*input);
 	}
 	else
 	{
-		valid_env_name_replace(input, arg, env);
+		if (valid_env_name_replace(input, arg, env) == ERROR)
+			return (ERROR);
 	}
+	return (0);
 }
