@@ -103,11 +103,12 @@ int			replace_env(char **input, char **arg, t_env_deque *env);
 
 /* env_replace.c */
 int			special_parameter_len(char *input, unsigned int *cnt);
-int			special_parameter_replace(char **input, char **arg);
+int			special_parameter_replace(char **input, char **arg, int *special);
 
 /* parse_count_len.c */
 int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);
 int			quote_and_env_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);
+void		special_symbol_cnt(char *input, unsigned int *cnt);
 
 #endif
 

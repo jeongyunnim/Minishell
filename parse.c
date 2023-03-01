@@ -64,24 +64,11 @@ int	count_arg_len(char *input, t_env_deque *envs)
 			else if (ft_isspecial_symbol(input[i + 1]) == 1)
 			{
                 cnt++;
-				//input[i]는 일반문자이므로 ls|에서 s를 가리키고 있어야 함.
 				return (cnt);
 			}
 			else if (ft_isspecial_symbol(input[i]) == 1)
 			{
-				if (input[i] == '>' && input[i + 1] == '>')
-				{
-					cnt += 2;
-				}
-				else if (input[i] == '<' && input[i] == '<')
-				{
-					cnt += 2;
-				}
-				else
-				{
-					cnt++;
-				}
-				return (cnt);
+				special_symbol_cnt(input, &cnt);
 			}
 			else
 			{
@@ -110,14 +97,6 @@ int	parse(char *input, t_info *info)
 	int			arg_len;
 	int			special;
 
-	// t_env	*tmp;
-	// tmp = info->envs->head;
-	// while (tmp != NULL)
-	// {
-	// 	printf("%s=%s\n", tmp->name, tmp->value);
-	// 	tmp = tmp->next;
-	// }
-
 	args = (t_arg_deque *)ft_calloc(1, sizeof(t_arg_deque));
 	if (args == NULL)
 		return (ERROR);
@@ -129,16 +108,11 @@ int	parse(char *input, t_info *info)
 		{
 			input++;
 		}
-		// if (ft_isspecial_symbol(*input) == 0 && ft_isspecial_symbol(*(input + 1)) == 1)
-		// {
-		// 	리턴해야하나?
-		// }
 		if (*input != '\0')
 		{
 			arg_len = count_arg_len(input, info->envs);
 			if (arg_len == ERROR)
 			{
-
 				return (ERROR);
 			}
 			else

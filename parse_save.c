@@ -66,6 +66,30 @@ int	quote_or_env_replace(char **input, char **arg, t_env_deque *envs, int *quote
 	return (0);
 }
 
+void	special_symbol_replace(char **input, char **arg, int *special)
+{
+	if (**input == '>' && *((*input) + 1) == '>')
+	{
+		ft_memcpy(arg, ">>", 2);
+		arg += 2;
+		(*input) += 2;
+		*special = APPEND;
+	}
+	else if (**input == '<' && *((*input) + 1) == '<')
+	{
+		ft_memcpy(arg, "<<", 2);
+		arg += 2;
+		(*input) += 2;
+		*special = HEREDOC;
+	}
+	else
+	{
+		ft_memcpy(arg, *input, 1);
+		arg += 1;
+		*special = **input;
+		(*input) += 1;
+	}
+}
 int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 {
 	int	special;
@@ -95,32 +119,12 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 				*arg = **input;
 				arg++;
 				(*input)++;
-				return (0);
+				return (NONE);
 			}
 			else if (ft_isspecial_symbol(**input) == 1)
 			{
-				if (**input == '>' && *((*input) + 1) == '>')
-				{
-					ft_memcpy(arg, ">>", 2);
-					arg += 2;
-					(*input) += 2;
-					return (APPEND);
-				}
-				else if (**input == '<' && *((*input) + 1) == '<')
-				{
-					ft_memcpy(arg, "<<", 2);
-					arg += 2;
-					(*input) += 2;
-					return (HEREDOC);
-				}
-				else
-				{
-					ft_memcpy(arg, *input, 1);
-					arg += 1;
-					special = **input;
-					(*input) += 1;
-					return (special);
-				}
+				special_parameter_replace(input, &arg, &special);
+				return (special);
 			}
 			else
 			{
@@ -131,7 +135,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 		(*input)++;
 	}
 	*arg = '\0';//어차피 calloc이라 안해줘도 같을 것 같다.
-	return (0);
+	return (NONE);
 }
 
 int	ft_isupper(int c)

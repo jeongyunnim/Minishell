@@ -69,3 +69,19 @@ int	quote_and_env_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quo
 	}
 	return (i);
 }
+
+void	special_symbol_cnt(char *input, unsigned int *cnt)
+{
+	if (*input == '>' && *(input + 1) == '>')
+	{
+		(*cnt) += 2;
+	}
+	else if (*input == '<' && *(input + 1) == '<')
+	{
+		(*cnt) += 2;
+	}
+	else
+	{
+		(*cnt)++;
+	}
+}
