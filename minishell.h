@@ -73,7 +73,7 @@ typedef struct s_info
 
 /* parse.c */
 int		parse(char *input, t_info *info);
-int		ft_isspecial(int c);
+int		is_quote_or_env(int c);
 
 /* deque_arg_util.c */
 t_arg		*lstnew_arg(char *arg);
@@ -107,7 +107,7 @@ int			special_parameter_replace(char **input, char **arg);
 
 /* parse_count_len.c */
 int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);
-int			outside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);
+int			quote_and_env_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);
 
 #endif
 

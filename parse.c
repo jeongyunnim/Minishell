@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	ft_isspecial(int c)
+int	is_quote_or_env(int c)
 {
 	if(c == '\'' || c == '\"' || c == '$')
 	{
@@ -51,14 +51,20 @@ int	count_arg_len(char *input, t_env_deque *envs)
 		{
 			i += inside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
 		}
-        if (ft_isspecial_symbol(input[i]) == 0 && ft_isspecial_symbol(input[i + 1]))
-        {
-            i++;
-        }
 		else
 		{
 			if (ft_isspace(input[i]) == 1)
 			{
+				return (cnt);
+			}
+			else if (is_quote_or_env(input[i]))
+			{
+				i += quote_and_env_cnt(&input[i], envs, &cnt, &quote_flag);
+			}
+			else if (ft_isspecial_symbol(input[i + 1]) == 1)
+			{
+                cnt++;
+				//input[i]는 일반문자이므로 ls|에서 s를 가리키고 있어야 함.
 				return (cnt);
 			}
 			else if (ft_isspecial_symbol(input[i]) == 1)
@@ -71,27 +77,15 @@ int	count_arg_len(char *input, t_env_deque *envs)
 				{
 					cnt += 2;
 				}
-				// else if (ft_isspecial_symbol(input[i + 1]) == 1)
-				// {
-				// 	printf("minishell: syntax error near unexpected token `%c'\n", input[i]);
-				// 	//에러처리를 출력하고 해줘야 하는데.. 어떻게 하지?
-				// 	return (ERROR);
-				// }
 				else
 				{
 					cnt++;
 				}
 				return (cnt);
 			}
-			else if (ft_isspecial_symbol(input[i + 1]) == 1)
-			{
-                cnt++;
-				//input[i]는 일반문자이므로 ls|에서 s를 가리키고 있어야 함.
-				return (cnt);
-			}
 			else
 			{
-				i += outside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
+				cnt++;
 			}
 		}
 		i++;
@@ -167,7 +161,7 @@ int	parse(char *input, t_info *info)
 	tmp_arg = args->head;
 	while(tmp_arg != NULL)
 	{
-		printf("%s %d\n", tmp_arg->arg, special);
+		printf("%s %d\n", tmp_arg->arg, tmp_arg->special);
 		tmp_arg = tmp_arg->next;
 	}
 	while(args->head != NULL)

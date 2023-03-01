@@ -48,31 +48,24 @@ int	inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quot
 	return (i);
 }
 
-int	outside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag)
+int	quote_and_env_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag)
 {
 	unsigned int	i;
 
 	i = 0;
-	if (ft_isspecial(input[i]) == 1)
+	if (input[i] == '\'')
 	{
-		if (input[i] == '\'')
-		{
-			*quote_flag = 1;
-		}
-		else if (input[i] == '\"')
-		{
-			*quote_flag = 2;
-		}
-		else if (input[i] == '$')
-		{
-			i++;
-			i += set_env_len(&input[i], cnt, env);
-			return (i - 1);
-		}
+		*quote_flag = 1;
 	}
-	else
+	else if (input[i] == '\"')
 	{
-		(*cnt)++;
+		*quote_flag = 2;
+	}
+	else if (input[i] == '$')
+	{
+		i++;
+		i += set_env_len(&input[i], cnt, env);
+		return (i - 1);
 	}
 	return (i);
 }

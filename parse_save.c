@@ -46,31 +46,23 @@ void	inside_quote_replace(char **input, char **arg, t_env_deque *envs, int *quot
 	}
 }
 
-int	outside_quote_replace(char **input, char **arg, t_env_deque *envs, int *quote_flag)
+int	quote_or_env_replace(char **input, char **arg, t_env_deque *envs, int *quote_flag)
 {
-	if (ft_isspecial(**input) != 0)
+	if (**input == '\'')
 	{
-		if (**input == '\'')
-		{
-			*quote_flag = 1;
-		}
-		else if (**input == '\"')
-		{
-			*quote_flag = 2;
-		}
-		else if (**input == '$')
-		{
-			(*input)++;
-			if (replace_env(input, arg, envs))
-				return (ERROR);
-			(*input)--;
-		}
+		*quote_flag = 1;
 	}
-    else
-    {
-        **arg = **input;
-        (*arg)++;
-    }
+	else if (**input == '\"')
+	{
+		*quote_flag = 2;
+	}
+	else
+	{
+		(*input)++;
+		if (replace_env(input, arg, envs))
+			return (ERROR);
+		(*input)--;
+	}
 	return (0);
 }
 
@@ -89,9 +81,21 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 		}
 		else
 		{
-			if (ft_isspace(**input) != 0)
+			if (ft_isspace(**input) == 1)
 			{
 				return (NONE);
+			}
+			else if (is_quote_or_env(**input) == 1)
+			{
+				if (quote_or_env_replace(input, &arg, envs, &quote_flag) == ERROR)
+					return (ERROR);
+			}
+			else if (ft_isspecial_symbol(*((*input) + 1)) == 1)
+			{
+				*arg = **input;
+				arg++;
+				(*input)++;
+				return (0);
 			}
 			else if (ft_isspecial_symbol(**input) == 1)
 			{
@@ -118,17 +122,10 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 					return (special);
 				}
 			}
-			else if (ft_isspecial_symbol(*((*input) + 1)) == 1)
-			{
-				if (ft_isspecial_symbol(**input) == 0)
-				{
-					return (0);
-				}
-			}
 			else
 			{
-				if (outside_quote_replace(input, &arg, envs, &quote_flag) == ERROR)
-					return (ERROR);
+				*arg = **input;
+                arg++;
 			}
 		}
 		(*input)++;

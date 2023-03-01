@@ -117,7 +117,7 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 	unsigned int len;
 
 	len = 0;
-	if (ft_isspace(input[len]) == 1 || input[len] == '\0' || ft_isspecial(input[len]) == 1)
+	if (ft_isspace(input[len]) == 1 || input[len] == '\0' || is_quote_or_env(input[len]) == 1)
 	{
 		(*cnt)++;
 		return (len);
@@ -175,7 +175,7 @@ int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 
 int	replace_env(char **input, char **arg, t_env_deque *env)
 {	
-	if (ft_isspace(**input) == 1 || **input == '\0' || ft_isspecial(**input) == 1)
+	if (ft_isspace(**input) == 1 || **input == '\0' || is_quote_or_env(**input) == 1)
 	{
 		**arg = '$';
 		(*arg)++;
