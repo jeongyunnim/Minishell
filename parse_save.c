@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/02 17:36:56 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/02 18:45:54 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,6 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 			inside_quote_replace(input, &arg, envs, &quote_flag);
 			if (quote_flag == 0 && ft_isspecial_symbol(*((*input) + 1)) == 1)
 			{
-				*arg = **input;
-				arg++;
 				(*input)++;
 				return (0);
 			}
