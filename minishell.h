@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 20:43:21 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/02 19:45:48 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void		append_tail_env(t_env **head, t_env **tail, t_env *new);
 int			save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);
 int			arg_to_deque(t_arg_deque **args, char *arg, int special);
 int			ft_isupper(int c);
-int			ft_isspecial_symbol(int c);
+int			ft_ismeta(int c);
 
 /* env_save.c */
 t_env_deque	*save_env(char **env);

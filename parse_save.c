@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/02 18:54:14 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/02 19:44:50 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 		if (quote_flag != 0)
 		{
 			inside_quote_replace(input, &arg, envs, &quote_flag);
-			if (quote_flag == 0 && ft_isspecial_symbol(*((*input) + 1)) == 1)
+			if (quote_flag == 0 && ft_ismeta(*((*input) + 1)) == 1)
 			{
 				(*input)++;
 				return (0);
@@ -95,7 +95,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 				if (quote_or_env_replace(input, &arg, envs, &quote_flag) == ERROR)
 					return (ERROR);
 			}
-			else if (ft_isspecial_symbol(**input) == 1)
+			else if (ft_ismeta(**input) == 1)
 			{
 				if (**input == '>' && *((*input) + 1) == '>')
 				{
@@ -120,7 +120,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 					return (special);
 				}
 			}
-			else if (ft_isspecial_symbol(*((*input) + 1)) == 1)
+			else if (ft_ismeta(*((*input) + 1)) == 1)
 			{
 				*arg = **input;
 				arg++;

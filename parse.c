@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/02 17:43:54 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/02 19:45:37 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	is_quote_or_env(int c)
 	}
 }
 
-int	ft_isspecial_symbol(int c)
+int	ft_ismeta(int c)
 {
 	if(c == '>' || c == '<' || c == '|')
 	{
@@ -50,7 +50,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 		if (quote_flag != 0)
 		{
 			i += inside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
-			if (quote_flag == 0 && ft_isspecial_symbol(input[i + 1]) == 1)
+			if (quote_flag == 0 && ft_ismeta(input[i + 1]) == 1)
 			{
 				return (cnt);
 			}
@@ -65,7 +65,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 			{
 				i += quote_and_env_cnt(&input[i], envs, &cnt, &quote_flag);
 			}
-			else if (ft_isspecial_symbol(input[i]) == 1)
+			else if (ft_ismeta(input[i]) == 1)
 			{
 				if (input[i] == '>' && input[i + 1] == '>')
 				{
@@ -81,7 +81,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 				}
 				return (cnt);
 			}
-			else if (ft_isspecial_symbol(input[i + 1]) == 1)
+			else if (ft_ismeta(input[i + 1]) == 1)
 			{
 				cnt++;
 				//input[i]는 일반문자이므로 ls|에서 s를 가리키고 있어야 함.
@@ -133,10 +133,6 @@ int	parse(char *input, t_info *info)
 		{
 			input++;
 		}
-		// if (ft_isspecial_symbol(*input) == 0 && ft_isspecial_symbol(*(input + 1)) == 1)
-		// {
-		// 	리턴해야하나?
-		// }
 		if (*input != '\0')
 		{
 			arg_len = count_arg_len(input, info->envs);
