@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/02 17:32:03 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/02 17:36:45 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	count_arg_len(char *input, t_env_deque *envs)
 			i += inside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
 			if (quote_flag == 0 && ft_isspecial_symbol(input[i + 1]) == 1)
 			{
+				cnt++;
+				//input[i]는 일반문자이므로 ls|에서 s를 가리키고 있어야 함.
 				return (cnt);
 			}
 		}
