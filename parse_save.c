@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 20:43:41 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/02 17:32:02 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,10 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 		if (quote_flag != 0)
 		{
 			inside_quote_replace(input, &arg, envs, &quote_flag);
+			if (quote_flag == 0 && ft_isspecial_symbol(*((*input) + 1)) == 1)
+			{
+				return (0);
+			}
 		}
 		else
 		{
@@ -89,13 +93,6 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 			{
 				if (quote_or_env_replace(input, &arg, envs, &quote_flag) == ERROR)
 					return (ERROR);
-			}
-			else if (ft_isspecial_symbol(*((*input) + 1)) == 1)
-			{
-				*arg = **input;
-				arg++;
-				(*input)++;
-				return (0);
 			}
 			else if (ft_isspecial_symbol(**input) == 1)
 			{
@@ -121,6 +118,13 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 					(*input) += 1;
 					return (special);
 				}
+			}
+			else if (ft_isspecial_symbol(*((*input) + 1)) == 1)
+			{
+				*arg = **input;
+				arg++;
+				(*input)++;
+				return (0);
 			}
 			else
 			{
