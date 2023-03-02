@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 19:54:24 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/02 19:27:36 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 	len = 0;
 	if (ft_isspace(input[len]) == 1 || input[len] == '\0' || is_quote_or_env(input[len]) == 1)
 	{
+		if (input[len] == '\'' || input[len] == '\"')
+			return (len);
 		(*cnt)++;
 		return (len);
 	}
@@ -177,6 +179,8 @@ int	replace_env(char **input, char **arg, t_env_deque *env)
 {	
 	if (ft_isspace(**input) == 1 || **input == '\0' || is_quote_or_env(**input) == 1)
 	{
+		if (**input == '\'' || **input == '\"')
+			return (0);
 		**arg = '$';
 		(*arg)++;
 		return (0);
