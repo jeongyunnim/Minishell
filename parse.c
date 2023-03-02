@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/02 19:45:37 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/02 20:12:42 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,18 +157,18 @@ int	parse(char *input, t_info *info)
 	}
 	
 	/* 잘 담겼는지 확인하기 */
-	t_arg *tmp_arg;
-	tmp_arg = args->head;
-	while(tmp_arg != NULL)
-	{
-		printf("%s %d\n", tmp_arg->arg, tmp_arg->special);
-		tmp_arg = tmp_arg->next;
-	}
-	while(args->head != NULL)
-	{
-		tmp_arg = pop_head_arg(&args->head);
-		free(tmp_arg->arg);
-		free(tmp_arg);
-	}
+	//t_arg *tmp_arg;
+	//tmp_arg = args->head;
+	//while(tmp_arg != NULL)
+	//{
+	//	printf("%s %d\n", tmp_arg->arg, tmp_arg->special);
+	//	tmp_arg = tmp_arg->next;
+	//}
+	//while(args->head != NULL)
+	//{
+	//	tmp_arg = pop_head_arg(&args->head);
+	//	free(tmp_arg->arg);
+	//	free(tmp_arg);
+	//}
 	return (0);
 }
