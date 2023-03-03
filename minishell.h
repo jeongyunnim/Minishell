@@ -109,6 +109,9 @@ int			special_parameter_replace(char **input, char **arg);
 int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);
 int			quote_and_env_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);
 
+/* parse_prioritize */
+int			prioritize(t_info *info);
+
 #endif
 
 //ls|cat 작동 함.

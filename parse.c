@@ -63,7 +63,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 			}
 			else if (is_quote_or_env(input[i]))
 			{
-				i += quote_and_env_cnt(&input[i], envs, &cnt, &quote_flag);
+				i += quote_and_env_cnt(&input[i], envs, &cnt, &quote_flag); // quote 와 $ 분리하자.
 			}
 			else if (ft_ismeta(input[i]) == 1)
 			{
@@ -96,7 +96,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 	}
 	if (cnt >= INT_MAX)
 	{
-		write(2, "Minishell: Argument too long\n", 29);
+		write(2, "minishell: Argument too long\n", 29);
 		return (ERROR);
 	}
 	if(quote_flag != 0)

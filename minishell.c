@@ -29,6 +29,7 @@ int main(int argc, char *argv[], char *env[])
 		}
 		add_history(input);
 		parse(input, &info);
+		prioritize(&info);
 		free(input);
 	}
 	return (0);
