@@ -1,6 +1,7 @@
 
 #include "minishell.h"
 
+/* 우선순위를 정해서 실행하고, 명령 실행 단위(파이프 단위)로 명령 노드를 따로 만들 예정.*/
 int	prioritize(t_info *info)
 {
 	t_arg	*temp;
@@ -12,8 +13,12 @@ int	prioritize(t_info *info)
 		temp = temp->next;
 	}
 	/*
+		//이 전에 pipe를 먼저 연결을 해놓는 것이 좋겠다는 거지?
 		1. heredoc -> 임시파일 처리
-		2. redirection
+		2. redirection + 리다이렉션은 뒤에 항상 파일이 와야 한다. <(redirection) >(redirection) >>(append)  || << 는 heredoc이므로 나중에 처리.
+
+		cat < a > b > c << d | wc -l | grep 0
+
 		3. 1st instruction
 		...
 
