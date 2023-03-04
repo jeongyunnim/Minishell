@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/02 19:34:56 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 17:34:13 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	valid_env_name_find(char *input, t_env_deque *env, unsigned int *cnt)
 	{
 		if (i == temp->name_len)
 		{
-			if (ft_strncmp(input, temp->name, i) == 0) // i인가 i - 1인가
+			if (ft_strncmp(input, temp->name, i) == 0)
 			{
 				*cnt += temp->value_len;
 				return (i);
@@ -117,13 +117,13 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 	unsigned int len;
 
 	len = 0;
-	if (ft_isspace(input[len]) == 1 || input[len] == '\0' || is_quote_or_env(input[len]) == 1)
+	if (ft_isspace(input[len]) == 1 || input[len] == '\0' || input[len] == '$')
 	{
-		if (input[len] == '\'' || input[len] == '\"')
-			return (len);
 		(*cnt)++;
 		return (len);
 	}
+	else if (is_quote(input[len]))
+		return (len);
 	else if (ft_isupper(input[len]) == 0 && ft_isspecial_parameter(input[len]) == 0 && input[len] != '_')
 	{
 		len = invalid_env_name(input);
@@ -177,7 +177,7 @@ int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 
 int	replace_env(char **input, char **arg, t_env_deque *env)
 {	
-	if (ft_isspace(**input) == 1 || **input == '\0' || is_quote_or_env(**input) == 1)
+	if (ft_isspace(**input) == 1 || **input == '\0' || is_quote(**input) == 1 || **input == '$')
 	{
 		if (**input == '\'' || **input == '\"')
 			return (0);

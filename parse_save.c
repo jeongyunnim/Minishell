@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/02 19:44:50 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 17:40:51 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 			{
 				return (NONE);
 			}
-			else if (is_quote_or_env(**input) == 1)
+			else if (is_quote(**input) == 1 && **input == '$')
 			{
 				if (quote_or_env_replace(input, &arg, envs, &quote_flag) == ERROR)
 					return (ERROR);
@@ -129,13 +129,12 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 			}
 			else
 			{
-				*arg = **input;
+ 				*arg = **input;
                 arg++;
 			}
 		}
 		(*input)++;
 	}
-	*arg = '\0';//어차피 calloc이라 안해줘도 같을 것 같다.
 	return (0);
 }
 

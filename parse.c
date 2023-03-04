@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/03 20:50:18 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 18:06:27 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,51 +45,26 @@ int	count_arg_len(char *input, t_env_deque *envs)
 	cnt = 0;
 	i = 0;
 	quote_flag = 0;
-	while (input[i] != '\0')
+	while (input[i] != '\0') // return 조건 추가하기
 	{
 		if (quote_flag != 0)
 		{
 			i += inside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
-			if (quote_flag == 0 && ft_ismeta(input[i + 1]) == 1)
-			{
-				return (cnt);
-			}
 		}
 		else
 		{
-			if (ft_isspace(input[i]) == 1)
+			if (is_quote(input[i]))
 			{
-				return (cnt);
-			}
-			else if (is_quote(input[i]))
-			{
-				quote_enter(&input[i], envs, &cnt, &quote_flag); // quote 와 $ 분리하자.
+				enter_quote(input[i], &quote_flag); // quote 와 $ 분리하자.
 			}
 			else if (input[i] == '$')
 			{
-				i += set_env_len(*input, &cnt, envs);
+				i += set_env_len(input, &cnt, envs);
 				continue;
 			}
 			else if (ft_ismeta(input[i]) == 1)
 			{
-				if (input[i] == '>' && input[i + 1] == '>')
-				{
-					cnt += 2;
-				}
-				else if (input[i] == '<' && input[i] == '<')
-				{
-					cnt += 2;
-				}
-				else
-				{
-					cnt++;
-				}
-				return (cnt);
-			}
-			else if (ft_ismeta(input[i + 1]) == 1)
-			{
-				cnt++;
-				//input[i]는 일반문자이므로 ls|에서 s를 가리키고 있어야 함.
+				meet_meta_cnt(input, &cnt);
 				return (cnt);
 			}
 			else
@@ -97,18 +72,19 @@ int	count_arg_len(char *input, t_env_deque *envs)
 				cnt++;
 			}
 		}
+
 		i++;
 	}
-	if (cnt >= INT_MAX)
-	{
-		write(2, "minishell: Argument too long\n", 29);
-		return (ERROR);
-	}
-	if(quote_flag != 0)
-	{
-		printf("syntax error: 쿼트가 닫히지 않음\n");
-		return (ERROR);
-	}
+	//if (cnt >= INT_MAX)
+	//{
+	//	write(2, "minishell: Argument too long\n", 29);
+	//	return (ERROR);
+	//}
+	//if(quote_flag != 0)
+	//{
+	//	printf("syntax error: 쿼트가 닫히지 않음\n");
+	//	return (ERROR);
+	//}
 	return (cnt);
 }
 
