@@ -6,21 +6,21 @@ CC			=	cc
 CFLAGS		=	-g3 -fsanitize=address\
 #-Wall -Wextra -Werror
 
-#INCLUDES =	-I /opt/homebrew/opt/readline/include \
-#			-I ./libft/ \
-#			-I .
+INCLUDES =	-I /opt/homebrew/opt/readline/include \
+			-I ./libft/ \
+			-I .
 
-#LIBS	 = 	-lreadline -L /opt/homebrew/opt/readline/lib/ \
-#			-lhistory -L /opt/homebrew/opt/readline/lib/ \
-#			-L ./libft/ -lft
+LIBS	 = 	-lreadline -L /opt/homebrew/opt/readline/lib/ \
+			-lhistory -L /opt/homebrew/opt/readline/lib/ \
+			-L ./libft/ -lft
 
-  INCLUDES 	=	-I ~/goinfre/.brew/opt/readline/include \
-   				-I ./libft/ \
-   				-I .
+#   INCLUDES 	=	-I ~/goinfre/.brew/opt/readline/include \
+#    				-I ./libft/ \
+#    				-I .
 
-  LIBS		=	-lreadline -L ~/goinfre/.brew/opt/readline/lib/ \
-   				-lhistory -L ~/goinfre/.brew/opt/readline/lib/ \
-   				-L ./libft/ -lft
+#   LIBS		=	-lreadline -L ~/goinfre/.brew/opt/readline/lib/ \
+#    				-lhistory -L ~/goinfre/.brew/opt/readline/lib/ \
+#    				-L ./libft/ -lft
 
 SRCS			=	./minishell.c\
 					./parse.c\

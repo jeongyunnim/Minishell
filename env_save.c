@@ -141,7 +141,6 @@ int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 
 	temp = env->head;
 	i = 0;
-	(*input)++;
 	if (is_env_special(**input) == 1)
 	{
 		if (env_special_replace(input, arg) == ERROR)
