@@ -6,13 +6,13 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/02 19:34:56 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 20:32:40 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_isspecial_parameter(int c)
+int	is_env_special(int c)
 {
 	if (c == '?' || c == '0') // _, -, !는 처리할 수가 없다. 마지막 인자를 어떻게 가지고 다녀?
 		return (1);
@@ -24,13 +24,13 @@ int	invalid_env_name(char *input)
 {
 	unsigned int	i;
 
-	i = 0;
 	if (ft_isdigit(input[i]) != 0)
 	{
-		i++;
+		return (1);
 	}
 	else
 	{
+		i = 0;
 		while (ft_isalnum(input[i]) == 1 || input[i] == '_')
 		{
 			i++;
@@ -39,16 +39,16 @@ int	invalid_env_name(char *input)
 	return (i);
 }
 
-int	valid_env_name_find(char *input, t_env_deque *env, unsigned int *cnt)
+int	valid_env_name_match(char *input, t_env_deque *env, unsigned int *cnt)
 {
 	t_env	*temp;
 	unsigned int i;
 
 	temp = env->head;
 	i = 0;
-	if (ft_isspecial_parameter(input[i]) == 1) // i가 하나일 때만??? -> 그냥 하나만 처리 함
+	if (is_env_special(input[i]) == 1)
 	{
-		i += special_parameter_len(input, cnt);
+		i += env_special_len(input, cnt);
 		return (i);
 	}
 	while (ft_isalnum(input[i]) == 1 || input[i] == '_')
@@ -59,7 +59,7 @@ int	valid_env_name_find(char *input, t_env_deque *env, unsigned int *cnt)
 	{
 		if (i == temp->name_len)
 		{
-			if (ft_strncmp(input, temp->name, i) == 0) // i인가 i - 1인가
+			if (ft_strncmp(input, temp->name, i) == 0)
 			{
 				*cnt += temp->value_len;
 				return (i);
@@ -114,25 +114,24 @@ t_env_deque	*save_env(char *env[])
 
 int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 {
-	unsigned int len;
-
-	len = 0;
-	if (ft_isspace(input[len]) == 1 || input[len] == '\0' || is_quote_or_env(input[len]) == 1)
+	input++;
+	if (ft_isspace(*input) == 1 || *input == '\0' || *input == '$')
 	{
-		if (input[len] == '\'' || input[len] == '\"')
-			return (len);
 		(*cnt)++;
-		return (len);
+		return (1);
 	}
-	else if (ft_isupper(input[len]) == 0 && ft_isspecial_parameter(input[len]) == 0 && input[len] != '_')
+	else if (is_quote(*input))
 	{
-		len = invalid_env_name(input);
+		return (0);
+	}
+	else if (ft_isupper(*input) == 0 && is_env_special(*input) == 0 && *input != '_')
+	{
+		return (invalid_env_name(input) + 1);
 	}
 	else
 	{
-		len = valid_env_name_find(input, env, cnt);
+		return (valid_env_name_match(input, env, cnt) + 1);
 	}
-	return (len);
 }
 
 int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
@@ -142,9 +141,10 @@ int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 
 	temp = env->head;
 	i = 0;
-	if (ft_isspecial_parameter((*input)[i]) == 1)
+	(*input)++;
+	if (is_env_special(**input) == 1)
 	{
-		if (special_parameter_replace(input, arg) == ERROR)
+		if (env_special_replace(input, arg) == ERROR)
 			return (ERROR);
         return (0);
 	}
@@ -177,15 +177,16 @@ int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 
 int	replace_env(char **input, char **arg, t_env_deque *env)
 {	
-	if (ft_isspace(**input) == 1 || **input == '\0' || is_quote_or_env(**input) == 1)
+	(*input)++;
+	if (ft_isspace(**input) == 1 || **input == '\0' || **input == '$')
 	{
-		if (**input == '\'' || **input == '\"')
-			return (0);
 		**arg = '$';
 		(*arg)++;
 		return (0);
 	}
-	if (ft_isupper(**input) == 0 && ft_isspecial_parameter(**input) == 0 && **input != '_')
+	if (is_quote(**input))
+		return (0);
+	if (ft_isupper(**input) == 0 && is_env_special(**input) == 0 && **input != '_')
 	{
 		(*input) += invalid_env_name(*input);
 	}

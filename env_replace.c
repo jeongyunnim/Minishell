@@ -6,13 +6,13 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 19:45:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/28 17:42:22 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 20:26:07 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
-int	special_parameter_len(char *input, unsigned int *cnt)
+int	env_special_len(char *input, unsigned int *cnt)
 {
 	if (*input == '0')
 	{
@@ -30,7 +30,7 @@ int	special_parameter_len(char *input, unsigned int *cnt)
 	return (1);
 }
 
-int	special_parameter_replace(char **input, char **arg)
+int	env_special_replace(char **input, char **arg)
 {
 	char	*code;
 
@@ -46,8 +46,7 @@ int	special_parameter_replace(char **input, char **arg)
 		code = ft_itoa(g_exit_code);
 		if (code == NULL)
 		{
-			printf("설마하니 itoa 할당이 실패하겠어?\n");
-			//이토아 실패 어떤 메세지를 출력해야 할까?
+			printf("설마하니 itoa 할당이 실패하겠어?\n"); // 할당 실패시 메시지 어떻게?
 			return (ERROR);
 		}
 		ft_memcpy(*arg, code, ft_strlen(code));

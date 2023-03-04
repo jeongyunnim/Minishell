@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/02 19:45:48 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 20:25:35 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ typedef struct s_info
 
 /* parse.c */
 int		parse(char *input, t_info *info);
-int		is_quote_or_env(int c);
 
 /* deque_arg_util.c */
 t_arg		*lstnew_arg(char *arg);
@@ -94,6 +93,7 @@ void		append_tail_env(t_env **head, t_env **tail, t_env *new);
 int			save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);
 int			arg_to_deque(t_arg_deque **args, char *arg, int special);
 int			ft_isupper(int c);
+int			is_quote(int c);
 int			ft_ismeta(int c);
 
 /* env_save.c */
@@ -102,12 +102,13 @@ int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env);
 int			replace_env(char **input, char **arg, t_env_deque *env);
 
 /* env_replace.c */
-int			special_parameter_len(char *input, unsigned int *cnt);
-int			special_parameter_replace(char **input, char **arg);
+int			env_special_len(char *input, unsigned int *cnt);
+int			env_special_replace(char **input, char **arg);
 
 /* parse_count_len.c */
-int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);
-int			quote_and_env_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);
+int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quote_flag);
+void		enter_quote(char input, char *quote_flag);
+int			meet_meta(char *input);
 
 /* parse_prioritize */
 int			prioritize(t_info *info);

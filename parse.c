@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/03 20:50:18 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 20:34:02 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,56 +40,43 @@ int	count_arg_len(char *input, t_env_deque *envs)
 {
 	unsigned int	cnt;
 	unsigned int	i;
-	int				quote_flag;
+	char			quote_flag;
 
 	cnt = 0;
 	i = 0;
 	quote_flag = 0;
-	while (input[i] != '\0')
+	while (input[i] != '\0') // return 조건 추가하기
 	{
 		if (quote_flag != 0)
 		{
 			i += inside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
-			if (quote_flag == 0 && ft_ismeta(input[i + 1]) == 1)
+			if (quote_flag == 0 && ft_ismeta(input[i + 1] == 1))
 			{
+				cnt++;
 				return (cnt);
 			}
 		}
 		else
 		{
 			if (ft_isspace(input[i]) == 1)
-			{
 				return (cnt);
-			}
-			else if (is_quote(input[i]))
+			else if (is_quote(input[i]) == 1)
 			{
-				quote_enter(&input[i], envs, &cnt, &quote_flag); // quote 와 $ 분리하자.
+				enter_quote(input[i], &quote_flag); // quote 와 $ 분리하자.
+			}
+			else if (ft_ismeta(input[i + 1]) ==  1)
+			{
+				return (cnt + 1);
 			}
 			else if (input[i] == '$')
 			{
-				i += set_env_len(*input, &cnt, envs);
+				i += set_env_len(&input[i], &cnt, envs);
+				printf("set_env_len i의 값: %d\n", i);
 				continue;
 			}
 			else if (ft_ismeta(input[i]) == 1)
 			{
-				if (input[i] == '>' && input[i + 1] == '>')
-				{
-					cnt += 2;
-				}
-				else if (input[i] == '<' && input[i] == '<')
-				{
-					cnt += 2;
-				}
-				else
-				{
-					cnt++;
-				}
-				return (cnt);
-			}
-			else if (ft_ismeta(input[i + 1]) == 1)
-			{
-				cnt++;
-				//input[i]는 일반문자이므로 ls|에서 s를 가리키고 있어야 함.
+				cnt += meet_meta(input);
 				return (cnt);
 			}
 			else
@@ -143,7 +130,6 @@ int	parse(char *input, t_info *info)
 			arg_len = count_arg_len(input, info->envs);
 			if (arg_len == ERROR)
 			{
-
 				return (ERROR);
 			}
 			else
