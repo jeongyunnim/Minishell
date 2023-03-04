@@ -6,13 +6,13 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:21:08 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 18:48:56 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 19:46:18 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag)
+int	inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quote_flag)
 {
 	unsigned int	i;
 
@@ -48,7 +48,7 @@ int	inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quot
 	return (i);
 }
 
-void	enter_quote(char input, int *quote_flag)
+void	enter_quote(char input, char *quote_flag)
 {
 	if (input == '\'')
 		*quote_flag = 1;
@@ -56,19 +56,19 @@ void	enter_quote(char input, int *quote_flag)
 		*quote_flag = 2;
 }
 
-void	meet_meta_cnt(char *input, unsigned int *cnt)
+int	meet_meta(char *input)
 {
 	if (*input == '>' && *(input + 1) == '>')
 	{
-		*cnt += 2;
+		return (2);
 	}
 	else if (*input == '<' && *(input + 1) == '<')
 	{
-		*cnt += 2;
+		return (2);
 	}
 	else
 	{
-		*cnt += 1;
+		return (1);
 	}
 }
 

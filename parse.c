@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 18:57:51 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 19:46:01 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 {
 	unsigned int	cnt;
 	unsigned int	i;
-	int				quote_flag;
+	char			quote_flag;
 
 	cnt = 0;
 	i = 0;
@@ -52,6 +52,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 			i += inside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
 			if (quote_flag == 0 && ft_ismeta(input[i + 1] == 1))
 			{
+				cnt++;
 				return (cnt);
 			}
 		}
@@ -59,7 +60,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 		{
 			if (ft_isspace(input[i]) == 1)
 				return (cnt);
-			else if (is_quote(input[i]))
+			else if (is_quote(input[i]) == 1)
 			{
 				enter_quote(input[i], &quote_flag); // quote 와 $ 분리하자.
 			}
@@ -75,7 +76,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 			}
 			else if (ft_ismeta(input[i]) == 1)
 			{
-				meet_meta_cnt(input, &cnt);
+				cnt += meet_meta(input);
 				return (cnt);
 			}
 			else
@@ -85,16 +86,16 @@ int	count_arg_len(char *input, t_env_deque *envs)
 		}
 		i++;
 	}
-	//if (cnt >= INT_MAX)
-	//{
-	//	write(2, "minishell: Argument too long\n", 29);
-	//	return (ERROR);
-	//}
-	//if(quote_flag != 0)
-	//{
-	//	printf("syntax error: 쿼트가 닫히지 않음\n");
-	//	return (ERROR);
-	//}
+	if (cnt >= INT_MAX)
+	{
+		write(2, "minishell: Argument too long\n", 29);
+		return (ERROR);
+	}
+	if(quote_flag != 0)
+	{
+		printf("syntax error: 쿼트가 닫히지 않음\n");
+		return (ERROR);
+	}
 	return (cnt);
 }
 

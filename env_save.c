@@ -6,13 +6,13 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 17:34:13 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 19:53:34 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_isspecial_parameter(int c)
+int	is_env_special(int c)
 {
 	if (c == '?' || c == '0') // _, -, !는 처리할 수가 없다. 마지막 인자를 어떻게 가지고 다녀?
 		return (1);
@@ -46,7 +46,7 @@ int	valid_env_name_find(char *input, t_env_deque *env, unsigned int *cnt)
 
 	temp = env->head;
 	i = 0;
-	if (ft_isspecial_parameter(input[i]) == 1) // i가 하나일 때만??? -> 그냥 하나만 처리 함
+	if (is_env_special(input[i]) == 1) // i가 하나일 때만??? -> 그냥 하나만 처리 함
 	{
 		i += special_parameter_len(input, cnt);
 		return (i);
@@ -124,7 +124,7 @@ int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 	}
 	else if (is_quote(input[len]))
 		return (len);
-	else if (ft_isupper(input[len]) == 0 && ft_isspecial_parameter(input[len]) == 0 && input[len] != '_')
+	else if (ft_isupper(input[len]) == 0 && is_env_special(input[len]) == 0 && input[len] != '_')
 	{
 		len = invalid_env_name(input);
 	}
@@ -142,7 +142,7 @@ int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 
 	temp = env->head;
 	i = 0;
-	if (ft_isspecial_parameter((*input)[i]) == 1)
+	if (is_env_special((*input)[i]) == 1)
 	{
 		if (special_parameter_replace(input, arg) == ERROR)
 			return (ERROR);
@@ -185,7 +185,7 @@ int	replace_env(char **input, char **arg, t_env_deque *env)
 		(*arg)++;
 		return (0);
 	}
-	if (ft_isupper(**input) == 0 && ft_isspecial_parameter(**input) == 0 && **input != '_')
+	if (ft_isupper(**input) == 0 && is_env_special(**input) == 0 && **input != '_')
 	{
 		(*input) += invalid_env_name(*input);
 	}

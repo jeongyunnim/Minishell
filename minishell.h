@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 17:34:00 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 19:45:37 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,9 @@ int			special_parameter_len(char *input, unsigned int *cnt);
 int			special_parameter_replace(char **input, char **arg);
 
 /* parse_count_len.c */
-int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, int *quote_flag);
-void		enter_quote(char input, int *quote_flag);
-void		meet_meta_cnt(char *input, unsigned int *cnt);
+int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quote_flag);
+void		enter_quote(char input, char *quote_flag);
+int			meet_meta(char *input);
 
 /* parse_prioritize */
 int			prioritize(t_info *info);
