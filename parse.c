@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 18:06:27 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 18:57:51 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,23 @@ int	count_arg_len(char *input, t_env_deque *envs)
 		if (quote_flag != 0)
 		{
 			i += inside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
+			if (quote_flag == 0 && ft_ismeta(input[i + 1] == 1))
+			{
+				return (cnt);
+			}
 		}
 		else
 		{
-			if (is_quote(input[i]))
+			if (ft_isspace(input[i]) == 1)
+				return (cnt);
+			else if (is_quote(input[i]))
 			{
 				enter_quote(input[i], &quote_flag); // quote 와 $ 분리하자.
+			}
+			else if (ft_ismeta(input[i + 1]) ==  1)
+			{
+				cnt++;
+				return (cnt);
 			}
 			else if (input[i] == '$')
 			{
@@ -72,7 +83,6 @@ int	count_arg_len(char *input, t_env_deque *envs)
 				cnt++;
 			}
 		}
-
 		i++;
 	}
 	//if (cnt >= INT_MAX)
@@ -119,7 +129,6 @@ int	parse(char *input, t_info *info)
 			arg_len = count_arg_len(input, info->envs);
 			if (arg_len == ERROR)
 			{
-
 				return (ERROR);
 			}
 			else
