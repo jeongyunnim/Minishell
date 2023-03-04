@@ -98,19 +98,17 @@ int			ft_ismeta(int c);
 
 /* env_save.c */
 t_env_deque	*save_env(char **env);
-int	        set_env_in_quote(char *input, unsigned int *cnt, t_env_deque *env);
-int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env);
-int			replace_env(char **input, char **arg, t_env_deque *env);
-int     	replace_env_in_quote(char **input, char **arg, t_env_deque *env);
+int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env, char quote_flag);
+int			replace_env(char **input, char **arg, t_env_deque *env, char quote_flag);
 
 /* env_replace.c */
-int			env_special_len(char *input, unsigned int *cnt);
+int			env_special_len(char *input);
 int			env_special_replace(char **input, char **arg);
 
 /* parse_count_len.c */
 int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quote_flag);
 void		enter_quote(char input, char *quote_flag);
-int			meet_meta(char *input);
+int			meta_len(char *input);
 
 /* parse_prioritize */
 int			prioritize(t_info *info);

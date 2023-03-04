@@ -40,40 +40,6 @@ char	meet_meta_replace(char **input, char **arg)
 	}
 }
 
-void	inside_quote_replace(char **input, char **arg, t_env_deque *envs, char *quote_flag)
-{
-	if (*quote_flag == 1)
-	{
-		if (**input == '\'')
-		{
-			*quote_flag = 0;
-		}
-		else
-		{
-			**arg = **input;
-			(*arg)++;
-		}
-	}
-	else if (*quote_flag == 2)
-	{
-		if (**input == '\"')
-		{
-			*quote_flag = 0;
-		}
-		else if (**input == '$')
-		{
-			(*input)++;
-			replace_env_in_quote(input, arg, envs);
-			(*input)--;
-		}
-		else
-		{
-			**arg = **input;
-			(*arg)++;
-		}
-	}
-}
-
 int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 {
 	char	special;
@@ -83,53 +49,33 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 	special = 0;
 	while (**input != '\0')
 	{
-		if (quote_flag != 0)
+		if (quote_flag == 0 && ft_isspace(**input) == 1)
+			return (special);
+		else if (is_quote(**input) == 1)
+			enter_quote(**input, &quote_flag);
+		else if (quote_flag != 1 && **input == '$')
 		{
-			inside_quote_replace(input, &arg, envs, &quote_flag);
-			if (quote_flag == 0 && ft_ismeta(*((*input) + 1)) == 1)
-			{
-				(*input)++;
-				return (0);
-			}
+			replace_env(input, &arg, envs, quote_flag);
+            if (**input == '\0')
+                return (special);
+		}
+		else if (quote_flag == 0 && ft_ismeta(**input) == 1)
+		{
+			special = meet_meta_replace(input, &arg);
+			return (special);
 		}
 		else
 		{
-			if (ft_isspace(**input) == 1)
-			{
-				return (NONE);
-			}
-			else if (is_quote(**input) == 1)
-			{
-				enter_quote(**input, &quote_flag);
-			}
-			else if (**input == '$')
-			{
-				(*input)++;
-				if (replace_env(input, &arg, envs))
-					return (ERROR);
-				(*input)--;
-			}
-			else if (ft_ismeta(**input) == 1)
-			{
-				special = meet_meta_replace(input, &arg);
-				return (special);
-			}
-			else if (ft_ismeta(*((*input) + 1)) == 1)
-			{
-				*arg = **input;
-				arg++;
-				(*input)++; 
-				return (0);
-			}
-			else
-			{
- 				*arg = **input;
-                arg++;
-			}
+ 			*arg = **input;
+            arg++;
 		}
 		(*input)++;
+		if (quote_flag == 0 && ft_ismeta(**input) == 1)
+		{		
+			return (special);
+		}
 	}
-	return (0);
+	return (special);
 }
 
 int	ft_isupper(int c)

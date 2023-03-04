@@ -12,46 +12,68 @@
 
 #include "./minishell.h"
 
-int	env_special_len(char *input, unsigned int *cnt)
+int	env_special_len(char *input)
 {
 	if (*input == '0')
 	{
-		*cnt += 9;
+		return (9);
 	}
-	else if (*input == '?')
+	else
 	{
-		if (0 <= g_exit_code && g_exit_code < 10)
-            *cnt += 1;
-        else if (10<= g_exit_code && g_exit_code < 100)
-            *cnt += 2;
+		if (g_exit_code < 10)
+            return (1);
+        else if (g_exit_code < 100)
+            return (2);
         else
-            *cnt += 3;
+            return (3);
 	}
-	return (1);
+}
+void	code_to_arg(char (*code)[4])
+{
+	char	temp;
+	int		i;
+
+	temp = g_exit_code;
+	i = 0;
+	while (temp > 0)
+	{
+		temp /= 10;
+		i++;
+	}
+	temp = g_exit_code;
+	if (temp == 0)
+		i++;
+	while (i > 0)
+	{
+		*(code[i - 1]) = temp % 10 + '0';
+		temp /= 10;
+		i--;
+	}
 }
 
 int	env_special_replace(char **input, char **arg)
 {
-	char	*code;
+	char	code[4];
+	int		len;
 
+	(*input)++;
 	if (**input == '0')
 	{
-		(*input)++;
 		ft_memcpy(*arg, "minishell", 9);
 		(*arg) += 9;
 	}
 	else if (**input == '?')
 	{
-		(*input)++;
-		code = ft_itoa(g_exit_code);
-		if (code == NULL)
-		{
-			printf("설마하니 itoa 할당이 실패하겠어?\n"); // 할당 실패시 메시지 어떻게?
-			return (ERROR);
-		}
-		ft_memcpy(*arg, code, ft_strlen(code));
-		(*arg) += ft_strlen(code);
-		free(code);
+		ft_memset(code, 0, 4);
+		code_to_arg(&code);
+		if (g_exit_code < 10)
+			len = 1;
+        else if (g_exit_code < 100)
+			len = 2;
+        else
+			len = 3;
+		ft_memcpy(*arg, code, len);
+		*arg += len;
 	}
 	return (0);
 }

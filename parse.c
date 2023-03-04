@@ -47,41 +47,31 @@ int	count_arg_len(char *input, t_env_deque *envs)
 	quote_flag = 0;
 	while (input[i] != '\0') // return 조건 추가하기
 	{
-		if (quote_flag == 0 && ft_ismeta(input[i + 1] == 1))
+		if (quote_flag == 0 && ft_isspace(input[i]) == 1)
+			return (cnt);
+		else if (is_quote(input[i]) == 1)
+			enter_quote(input[i], &quote_flag);
+		else if (quote_flag != 1 && input[i] == '$')
 		{
-			return (cnt + 1);
+			cnt += set_env_len(input, &i, envs, quote_flag);
+            if (input[i] == '\0')
+                break ;
 		}
-		if (quote_flag != 0)
+		else if (quote_flag == 0 && ft_ismeta(input[i]) == 1)
 		{
-			i += inside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
+			return (meta_len(input));
 		}
 		else
 		{
-			if (ft_isspace(input[i]) == 1)
-				return (cnt);
-			else if (is_quote(input[i]) == 1)
-			{
-				enter_quote(input[i], &quote_flag);
-			}
-			else if (input[i] == '$')
-			{
-				i++;
-				i += set_env_len(&input[i], &cnt, envs);
-				printf("i = %d\n", i);
-				continue;
-			}
-			else if (ft_ismeta(input[i]) == 1)
-			{
-				cnt += meet_meta(input);
-				return (cnt);
-			}
-			else
-			{
-				cnt++;
-			}
+			cnt++;
 		}
 		i++;
+		if (quote_flag == 0 && ft_ismeta(input[i]) == 1)
+		{
+			return (cnt);
+		}
 	}
+
 	if (cnt >= INT_MAX)
 	{
 		write(2, "minishell: Argument too long\n", 29);
@@ -126,7 +116,7 @@ int	parse(char *input, t_info *info)
 				if (arg == NULL)
 					return (ERROR);
 			}
-			printf("arg_len%d\n", arg_len);
+			printf("arg_len: %d\n", arg_len);
 			special = save_arg(&input, arg, arg_len, info->envs);
 			if (special == ERROR)
 			{

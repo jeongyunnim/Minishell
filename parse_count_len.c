@@ -12,51 +12,25 @@
 
 #include "minishell.h"
 
-int	inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quote_flag)
-{
-	unsigned int	i;
-
-	i = 0;
-	if (*quote_flag == 1)
-	{
-		if (input[i] == '\'')
-		{
-			*quote_flag = 0;
-		}
-		else
-		{
-			(*cnt)++;
-		}
-	}
-	else if (*quote_flag == 2)
-	{
-		if (input[i] == '\"')
-		{
-			*quote_flag = 0;
-		}
-		else if (input[i] == '$')
-		{
-			i++;
-			i += set_env_in_quote(&input[i], cnt, env);
-			return (i - 1);
-		}
-		else
-		{
-			(*cnt)++;
-		}
-	}
-	return (i);
-}
-
 void	enter_quote(char input, char *quote_flag)
 {
-	if (input == '\'')
-		*quote_flag = 1;
-	else if (input == '\"')
-		*quote_flag = 2;
+	if (input == '\'' && *quote_flag != 2)
+	{
+		if (*quote_flag == 0)
+			*quote_flag = 1;
+		else
+			*quote_flag = 0;
+	}
+	else if (input == '\"' && *quote_flag != 1)
+	{
+		if (*quote_flag == 0)
+			*quote_flag = 2;
+		else
+			*quote_flag = 0;
+	}
 }
 
-int	meet_meta(char *input)
+int	meta_len(char *input)
 {
 	if (*input == '>' && *(input + 1) == '>')
 	{
