@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-int	is_quote_or_env(int c)
+int	is_quote(int c)
 {
-	if(c == '\'' || c == '\"' || c == '$')
+	if(c == '\'' || c == '\"')
 	{
 		return (1);
 	}
@@ -31,7 +31,7 @@ int	ft_ismeta(int c)
 		return (1);
 	}
 	else
-	{~
+	{
 		return (0);
 	}
 }
@@ -61,9 +61,14 @@ int	count_arg_len(char *input, t_env_deque *envs)
 			{
 				return (cnt);
 			}
-			else if (is_quote_or_env(input[i]))
+			else if (is_quote(input[i]))
 			{
-				i += quote_and_env_cnt(&input[i], envs, &cnt, &quote_flag); // quote 와 $ 분리하자.
+				quote_enter(&input[i], envs, &cnt, &quote_flag); // quote 와 $ 분리하자.
+			}
+			else if (input[i] == '$')
+			{
+				i += set_env_len(*input, &cnt, envs);
+				continue;
 			}
 			else if (ft_ismeta(input[i]) == 1)
 			{
