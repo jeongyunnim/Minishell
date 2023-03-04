@@ -112,6 +112,27 @@ t_env_deque	*save_env(char *env[])
 	return (envs);
 }
 
+int	set_env_in_quote(char *input, unsigned int *cnt, t_env_deque *env)
+{
+    unsigned int len;
+
+    len = 0;
+    if (ft_isspace(input[len]) == 1 || input[len] == '\0' || input[len] == '$' || is_quote(input[len]))
+    {
+        (*cnt)++;
+        return (len);
+    }
+    else if (ft_isupper(input[len]) == 0 && is_env_special(input[len]) == 0 && input[len] != '_')
+    {
+        len = invalid_env_name(input);
+    }
+    else
+    {
+        len = valid_env_name_match(input, env, cnt);
+    }
+    return (len);
+}
+
 int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 {
 	unsigned int len;
@@ -175,6 +196,26 @@ int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 	}
 	(*input) += i;
 	return (0);
+}
+
+int	replace_env_in_quote(char **input, char **arg, t_env_deque *env)
+{
+    if (ft_isspace(**input) == 1 || **input == '\0' || **input == '$' || is_quote(**input) == 1)
+    {
+        **arg = '$';
+        (*arg)++;
+        return (0);
+    }
+    if (ft_isupper(**input) == 0 && is_env_special(**input) == 0 && **input != '_')
+    {
+        (*input) += invalid_env_name(*input);
+    }
+    else
+    {
+        if (valid_env_name_replace(input, arg, env) == ERROR)
+            return (ERROR);
+    }
+    return (0);
 }
 
 int	replace_env(char **input, char **arg, t_env_deque *env)

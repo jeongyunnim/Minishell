@@ -63,7 +63,7 @@ void	inside_quote_replace(char **input, char **arg, t_env_deque *envs, char *quo
 		else if (**input == '$')
 		{
 			(*input)++;
-			replace_env(input, arg, envs);
+			replace_env_in_quote(input, arg, envs);
 			(*input)--;
 		}
 		else

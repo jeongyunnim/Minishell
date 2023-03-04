@@ -98,8 +98,10 @@ int			ft_ismeta(int c);
 
 /* env_save.c */
 t_env_deque	*save_env(char **env);
+int	        set_env_in_quote(char *input, unsigned int *cnt, t_env_deque *env);
 int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env);
 int			replace_env(char **input, char **arg, t_env_deque *env);
+int     	replace_env_in_quote(char **input, char **arg, t_env_deque *env);
 
 /* env_replace.c */
 int			env_special_len(char *input, unsigned int *cnt);

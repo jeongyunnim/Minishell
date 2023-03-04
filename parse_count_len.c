@@ -37,7 +37,7 @@ int	inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quo
 		else if (input[i] == '$')
 		{
 			i++;
-			i += set_env_len(&input[i], cnt, env);
+			i += set_env_in_quote(&input[i], cnt, env);
 			return (i - 1);
 		}
 		else

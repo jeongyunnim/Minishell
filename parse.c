@@ -47,14 +47,13 @@ int	count_arg_len(char *input, t_env_deque *envs)
 	quote_flag = 0;
 	while (input[i] != '\0') // return 조건 추가하기
 	{
+		if (quote_flag == 0 && ft_ismeta(input[i + 1] == 1))
+		{
+			return (cnt + 1);
+		}
 		if (quote_flag != 0)
 		{
 			i += inside_quote_cnt(&input[i], envs, &cnt, &quote_flag);
-			if (quote_flag == 0 && ft_ismeta(input[i + 1] == 1))
-			{
-				cnt++;
-				return (cnt);
-			}
 		}
 		else
 		{
@@ -64,13 +63,10 @@ int	count_arg_len(char *input, t_env_deque *envs)
 			{
 				enter_quote(input[i], &quote_flag);
 			}
-			else if (ft_ismeta(input[i + 1]) ==  1)
-			{
-				return (cnt + 1);
-			}
 			else if (input[i] == '$')
 			{
-				set_env_len(input, &i, &cnt, envs);
+				i++;
+				i += set_env_len(&input[i], &cnt, envs);
 				printf("i = %d\n", i);
 				continue;
 			}
