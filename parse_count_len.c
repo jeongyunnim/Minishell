@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:21:08 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 20:09:04 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 21:54:05 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quo
 		}
 		else if (input[i] == '$')
 		{
+			i++;
 			i += set_env_len(&input[i], cnt, env);
 			return (i - 1);
 		}

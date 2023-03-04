@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 21:38:27 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 21:55:03 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,10 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 			}
 			else if (**input == '$')
 			{
+				(*input)++;
 				if (replace_env(input, &arg, envs))
 					return (ERROR);
-				continue ;
+				(*input)--;
 			}
 			else if (ft_ismeta(**input) == 1)
 			{

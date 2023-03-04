@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 21:48:36 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 21:59:02 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	invalid_env_name(char *input)
 		{
 			i++;
 		}
+		return (i);
 	}
-	return (i);
 }
 
 int	valid_env_name_match(char *input, t_env_deque *env, unsigned int *cnt)
@@ -112,28 +112,29 @@ t_env_deque	*save_env(char *env[])
 	return (envs);
 }
 
-void	set_env_len(char *input, unsigned int *i, unsigned int *cnt, t_env_deque *env)
+int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
 {
-	(*i)++;
-	if (ft_isspace(input[*i]) == 1 || input[*i] == '\0' || input[*i] == '$')
+	unsigned int len;
+
+	len = 0;
+	if (ft_isspace(input[len]) == 1 || input[len] == '\0' || input[len] == '$')
 	{
 		(*cnt)++;
-		(*i)++;
-		return ;
+		return (len);
 	}
-	else if (is_quote(input[*i]))
+	else if (is_quote(input[len]) == 1)
 	{
-		(*i)++;
-		return ;
+		return (len);
 	}
-	else if (ft_isupper(input[*i]) == 0 && is_env_special(input[*i]) == 0 && input[*i] != '_')
+	else if (ft_isupper(input[len]) == 0 && is_env_special(input[len]) == 0 && input[len] != '_')
 	{
-		(*i) += invalid_env_name(input);
+		len = invalid_env_name(input);
 	}
 	else
 	{
-		(*i) += valid_env_name_match(input, env, cnt);
+		len = valid_env_name_match(input, env, cnt);
 	}
+	return (len);
 }
 
 int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
@@ -178,19 +179,14 @@ int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 
 int	replace_env(char **input, char **arg, t_env_deque *env)
 {	
-	(*input)++;
 	if (ft_isspace(**input) == 1 || **input == '\0' || **input == '$')
 	{
 		**arg = '$';
 		(*arg)++;
-		(*input)++;
 		return (0);
 	}
-	if (is_quote(**input))
-	{
-		(*input)++;
+	if (is_quote(**input) == 1)
 		return (0);
-	}
 	if (ft_isupper(**input) == 0 && is_env_special(**input) == 0 && **input != '_')
 	{
 		(*input) += invalid_env_name(*input);
