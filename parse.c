@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 20:34:02 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 21:46:00 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 				return (cnt);
 			else if (is_quote(input[i]) == 1)
 			{
-				enter_quote(input[i], &quote_flag); // quote 와 $ 분리하자.
+				enter_quote(input[i], &quote_flag);
 			}
 			else if (ft_ismeta(input[i + 1]) ==  1)
 			{
@@ -70,8 +70,8 @@ int	count_arg_len(char *input, t_env_deque *envs)
 			}
 			else if (input[i] == '$')
 			{
-				i += set_env_len(&input[i], &cnt, envs);
-				printf("set_env_len i의 값: %d\n", i);
+				set_env_len(input, &i, &cnt, envs);
+				printf("i = %d\n", i);
 				continue;
 			}
 			else if (ft_ismeta(input[i]) == 1)
@@ -106,14 +106,6 @@ int	parse(char *input, t_info *info)
 	int			arg_len;
 	int			special;
 
-	// t_env	*tmp;
-	// tmp = info->envs->head;
-	// while (tmp != NULL)
-	// {
-	// 	printf("%s=%s\n", tmp->name, tmp->value);
-	// 	tmp = tmp->next;
-	// }
-
 	args = (t_arg_deque *)ft_calloc(1, sizeof(t_arg_deque));
 	if (args == NULL)
 		return (ERROR);
@@ -138,6 +130,7 @@ int	parse(char *input, t_info *info)
 				if (arg == NULL)
 					return (ERROR);
 			}
+			printf("arg_len%d\n", arg_len);
 			special = save_arg(&input, arg, arg_len, info->envs);
 			if (special == ERROR)
 			{

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 20:09:59 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 21:38:27 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ char	meet_meta_replace(char **input, char **arg)
 	}
 	else if (**input == '<' && *((*input) + 1) == '<')
 	{
+		ft_memcpy(*arg, "<<", 2);
 		(*arg) += 2;
 		(*input) += 2;
-		ft_memcpy(*arg, "<<", 2);
 		return (HEREDOC);
 	}
 	else
@@ -106,7 +106,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 			{
 				if (replace_env(input, &arg, envs))
 					return (ERROR);
-				(*input)--;
+				continue ;
 			}
 			else if (ft_ismeta(**input) == 1)
 			{

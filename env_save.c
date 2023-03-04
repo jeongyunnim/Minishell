@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 20:32:40 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 21:48:36 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,25 +112,27 @@ t_env_deque	*save_env(char *env[])
 	return (envs);
 }
 
-int	set_env_len(char *input, unsigned int *cnt, t_env_deque *env)
+void	set_env_len(char *input, unsigned int *i, unsigned int *cnt, t_env_deque *env)
 {
-	input++;
-	if (ft_isspace(*input) == 1 || *input == '\0' || *input == '$')
+	(*i)++;
+	if (ft_isspace(input[*i]) == 1 || input[*i] == '\0' || input[*i] == '$')
 	{
 		(*cnt)++;
-		return (1);
+		(*i)++;
+		return ;
 	}
-	else if (is_quote(*input))
+	else if (is_quote(input[*i]))
 	{
-		return (0);
+		(*i)++;
+		return ;
 	}
-	else if (ft_isupper(*input) == 0 && is_env_special(*input) == 0 && *input != '_')
+	else if (ft_isupper(input[*i]) == 0 && is_env_special(input[*i]) == 0 && input[*i] != '_')
 	{
-		return (invalid_env_name(input) + 1);
+		(*i) += invalid_env_name(input);
 	}
 	else
 	{
-		return (valid_env_name_match(input, env, cnt) + 1);
+		(*i) += valid_env_name_match(input, env, cnt);
 	}
 }
 
@@ -181,10 +183,14 @@ int	replace_env(char **input, char **arg, t_env_deque *env)
 	{
 		**arg = '$';
 		(*arg)++;
+		(*input)++;
 		return (0);
 	}
 	if (is_quote(**input))
+	{
+		(*input)++;
 		return (0);
+	}
 	if (ft_isupper(**input) == 0 && is_env_special(**input) == 0 && **input != '_')
 	{
 		(*input) += invalid_env_name(*input);

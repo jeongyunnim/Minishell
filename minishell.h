@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 20:25:35 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/04 21:45:02 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int			ft_ismeta(int c);
 
 /* env_save.c */
 t_env_deque	*save_env(char **env);
-int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env);
+void		set_env_len(char *input, unsigned int *i, unsigned int *cnt, t_env_deque *env);
 int			replace_env(char **input, char **arg, t_env_deque *env);
 
 /* env_replace.c */
