@@ -110,6 +110,10 @@ int	parse(char *input, t_info *info)
 			{
 				return (ERROR);
 			}
+			// else if (arg_len == 0 && is_quote(*input) == 0)
+			// {
+			// 	printf("아무것도 하지 않는다.\n");
+			// }
 			else
 			{
 				arg = (char *)ft_calloc(arg_len + 1, sizeof(char));
@@ -122,7 +126,11 @@ int	parse(char *input, t_info *info)
 			{
 				return (ERROR);
 			}
-			arg_to_deque(&args, arg, special);
+			if (arg != NULL)
+			{
+				printf("아그: %s\n", arg);
+				arg_to_deque(&args, arg, special);
+			}
 		}
 	}
 	

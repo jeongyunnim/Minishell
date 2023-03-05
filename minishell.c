@@ -17,8 +17,6 @@ int main(int argc, char *argv[], char *env[])
 	char	*input;
 	t_info	info;
 
-	//env에 추가될 수 있으니까 연결리스트로 맵 만들기.
-	//대충 노드 안에 네임이랑 밸류.
 	info.envs = save_env(env);
 	while (1)
 	{
@@ -30,7 +28,7 @@ int main(int argc, char *argv[], char *env[])
 		add_history(input);
 		parse(input, &info);
 		prioritize(&info);
-		//fork_to_execute_command(&info);
+		// fork_to_execute_command(&info);
 		free(input);
 	}
 	return (0);

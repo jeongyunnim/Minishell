@@ -197,14 +197,14 @@ int	replace_env(char **input, char **arg, t_env_deque *env, char quote_flag)
 		}
 		return (0);
 	}
-	if (ft_isupper(**input) == 0 && is_env_special(**input) == 0 && **input != '_')
+	if (ft_isupper(**input) == 1 && is_env_special(**input) == 1 && **input == '_')
 	{
-		invalid_env_name(*input, &i);
-		(*input) += i;
+		valid_env_name_replace(input, arg, env);
 	}
 	else
 	{
-		valid_env_name_replace(input, arg, env);
+		invalid_env_name(*input, &i);
+		(*input) += i;
 	}
     (*input)--;
 	return (0);

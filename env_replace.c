@@ -14,6 +14,8 @@
 
 int	env_special_len(char *input)
 {
+	int	cnt;
+	
 	if (*input == '0')
 	{
 		return (9);
@@ -56,7 +58,6 @@ int	env_special_replace(char **input, char **arg)
 	char	code[4];
 	int		len;
 
-	(*input)++;
 	if (**input == '0')
 	{
 		ft_memcpy(*arg, "minishell", 9);
@@ -75,5 +76,6 @@ int	env_special_replace(char **input, char **arg)
 		ft_memcpy(*arg, code, len);
 		*arg += len;
 	}
+	(*input)++;
 	return (0);
 }
