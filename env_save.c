@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 21:59:02 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/05 15:54:57 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,32 +39,33 @@ int	invalid_env_name(char *input, unsigned int *i)
 int	valid_env_name_match(char *input, t_env_deque *env, unsigned int *i)
 {
 	t_env			*temp;
-	unsigned int	name_len;
+	unsigned int	len;
 
 	temp = env->head;
-	name_len = 0;
+	len = 0;
 	if (is_env_special(input[*i]) == 1)
 	{
+		len = env_special_len(&input[*i]);
 		(*i)++;
-		return (env_special_len(input));
+		return (len);
 	}
-	while (ft_isalnum(input[*i + name_len]) == 1 || input[*i + name_len] == '_')
+	while (ft_isalnum(input[*i + len]) == 1 || input[*i + len] == '_')
 	{
-		name_len++;
+		len++;
 	}
 	while (temp != NULL)
 	{
-		if (name_len == temp->name_len)
+		if (len == temp->name_len)
 		{
-			if (ft_strncmp(&input[*i], temp->name, name_len) == 0)
+			if (ft_strncmp(&input[*i], temp->name, len) == 0)
 			{
-                (*i) += name_len;
+                (*i) += len;
 				return (temp->value_len);
 			}
 		}
 		temp = temp->next;
 	}
-    (*i) += name_len;
+    (*i) += len;
 	return (0);
 }
 
@@ -142,7 +143,7 @@ int	set_env_len(char *input, unsigned int *i, t_env_deque *env, char quote_flag)
 	}
 }
 
-int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
+int	 valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 {
 	t_env	*temp;
 	unsigned int i;
@@ -152,7 +153,7 @@ int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 	if (is_env_special(**input) == 1)
 	{
 		env_special_replace(input, arg);
-        return (0);
+		return (0);
 	}
 	while (ft_isalnum((*input)[i]) == 1 || (*input)[i] == '_')
 	{
@@ -188,7 +189,7 @@ int	replace_env(char **input, char **arg, t_env_deque *env, char quote_flag)
 		(*arg)++;
 		return (0);
 	}
-	if (is_quote(**input) == 1)
+	else if (is_quote(**input) == 1)
 	{
 		if (quote_flag != 0)
 		{
@@ -197,7 +198,7 @@ int	replace_env(char **input, char **arg, t_env_deque *env, char quote_flag)
 		}
 		return (0);
 	}
-	if (ft_isupper(**input) == 1 && is_env_special(**input) == 1 && **input == '_')
+	else if (ft_isupper(**input) == 1 || is_env_special(**input) == 1 || **input == '_')
 	{
 		valid_env_name_replace(input, arg, env);
 	}

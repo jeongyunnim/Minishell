@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 19:45:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 20:26:07 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/05 15:50:07 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ int	env_special_replace(char **input, char **arg)
 		code_to_arg(&code);
 		if (g_exit_code < 10)
 			len = 1;
-        else if (g_exit_code < 100)
+		else if (g_exit_code < 100)
 			len = 2;
-        else
+		else
 			len = 3;
 		ft_memcpy(*arg, code, len);
 		*arg += len;

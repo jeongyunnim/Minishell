@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 21:46:00 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/05 16:02:58 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,12 @@ int	count_arg_len(char *input, t_env_deque *envs)
                 break ;
 		}
 		else if (quote_flag == 0 && ft_ismeta(input[i]) == 1)
-		{
 			return (meta_len(input));
-		}
 		else
-		{
 			cnt++;
-		}
 		i++;
 		if (quote_flag == 0 && ft_ismeta(input[i]) == 1)
-		{
 			return (cnt);
-		}
 	}
 
 	if (cnt >= INT_MAX)
@@ -98,6 +92,7 @@ int	parse(char *input, t_info *info)
 	info->arguments = args;
 	while (*input != '\0')
 	{
+		arg = NULL;
 		special = 0;
 		while (*input != '\0' && ft_isspace(*input) != 0)
 		{
@@ -110,11 +105,7 @@ int	parse(char *input, t_info *info)
 			{
 				return (ERROR);
 			}
-			// else if (arg_len == 0 && is_quote(*input) == 0)
-			// {
-			// 	printf("아무것도 하지 않는다.\n");
-			// }
-			else
+			else if (arg_len != 0 || is_quote(*input) == 1)
 			{
 				arg = (char *)ft_calloc(arg_len + 1, sizeof(char));
 				if (arg == NULL)
@@ -128,7 +119,6 @@ int	parse(char *input, t_info *info)
 			}
 			if (arg != NULL)
 			{
-				printf("아그: %s\n", arg);
 				arg_to_deque(&args, arg, special);
 			}
 		}
