@@ -52,7 +52,13 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 		if (quote_flag == 0 && ft_isspace(**input) == 1)
 			return (special);
 		else if (is_quote(**input) == 1)
-			enter_quote(**input, &quote_flag);
+		{
+			if (enter_quote(**input, &quote_flag) == 1)
+			{
+ 				*arg = **input;
+        		arg++;
+			}
+		}
 		else if (quote_flag != 1 && **input == '$')
 		{
 			replace_env(input, &arg, envs, quote_flag);

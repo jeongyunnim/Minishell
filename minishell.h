@@ -107,7 +107,7 @@ int			env_special_replace(char **input, char **arg);
 
 /* parse_count_len.c */
 int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quote_flag);
-void		enter_quote(char input, char *quote_flag);
+int			enter_quote(char input, char *quote_flag);
 int			meta_len(char *input);
 
 /* parse_prioritize */

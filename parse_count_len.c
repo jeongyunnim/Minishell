@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	enter_quote(char input, char *quote_flag)
+int	enter_quote(char input, char *quote_flag)
 {
 	if (input == '\'' && *quote_flag != 2)
 	{
@@ -20,6 +20,7 @@ void	enter_quote(char input, char *quote_flag)
 			*quote_flag = 1;
 		else
 			*quote_flag = 0;
+		return (0);
 	}
 	else if (input == '\"' && *quote_flag != 1)
 	{
@@ -27,7 +28,10 @@ void	enter_quote(char input, char *quote_flag)
 			*quote_flag = 2;
 		else
 			*quote_flag = 0;
+		return (0);
 	}
+	else
+		return (1);
 }
 
 int	meta_len(char *input)

@@ -50,7 +50,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 		if (quote_flag == 0 && ft_isspace(input[i]) == 1)
 			return (cnt);
 		else if (is_quote(input[i]) == 1)
-			enter_quote(input[i], &quote_flag);
+			cnt += enter_quote(input[i], &quote_flag);
 		else if (quote_flag != 1 && input[i] == '$')
 		{
 			cnt += set_env_len(input, &i, envs, quote_flag);
