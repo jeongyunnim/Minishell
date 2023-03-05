@@ -31,6 +31,7 @@ SRCS			=	./minishell.c\
 					./parse_prioritize.c\
 					./env_save.c\
 					./env_replace.c\
+					./exec_fork.c\
 
 OBJS			=	$(SRCS:%.c=%.o)
 

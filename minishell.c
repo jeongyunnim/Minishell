@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 17:33:00 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/05 16:24:19 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int main(int argc, char *argv[], char *env[])
 		add_history(input);
 		parse(input, &info);
 		prioritize(&info);
-		// fork_to_execute_command(&info);
+		fork_to_execute_command(&info);
 		free(input);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 21:55:03 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/05 16:50:23 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 		else if (is_quote(**input) == 1)
 		{
 			if (enter_quote(**input, &quote_flag) == 1)
-			{
- 				*arg = **input;
-        		arg++;
-			}
+ 				*(arg++) = **input;
 		}
 		else if (quote_flag != 1 && **input == '$')
 		{
@@ -66,20 +63,12 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
                 return (special);
 		}
 		else if (quote_flag == 0 && ft_ismeta(**input) == 1)
-		{
-			special = meet_meta_replace(input, &arg);
-			return (special);
-		}
+			return (meet_meta_replace(input, &arg));
 		else
-		{
- 			*arg = **input;
-            arg++;
-		}
+ 			*(arg++) = **input;
 		(*input)++;
 		if (quote_flag == 0 && ft_ismeta(**input) == 1)
-		{		
 			return (special);
-		}
 	}
 	return (special);
 }
@@ -87,9 +76,7 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 int	ft_isupper(int c)
 {
 	if ('A' <= c && c <= 'Z')
-	{
 		return (1);
-	}
 	else
 		return (0);
 }

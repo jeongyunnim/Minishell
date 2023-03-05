@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/04 21:51:10 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/05 17:11:38 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_info
 {
 	t_arg_deque	*arguments;
 	t_env_deque	*envs;
+	int			pipes;
 }	t_info;
 
 /* parse.c */
@@ -112,6 +113,9 @@ int			meta_len(char *input);
 
 /* parse_prioritize */
 int			prioritize(t_info *info);
+
+/* fork_to_execute_command.c */
+int			fork_to_execute_command(t_info *info);
 
 #endif
 

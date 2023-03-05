@@ -6,18 +6,18 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/03 21:28:47 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/05 16:52:39 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-pid_t	fork_to_execute_command(t_info *info)
+int	fork_to_execute_command(t_info *info)
 {
 	pid_t	pid;
 	int		fd[2];
 
 	//count pipe
-	
-	return (pid);
+	while (1)
+	return (0);
 }
