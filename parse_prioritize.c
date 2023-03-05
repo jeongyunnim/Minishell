@@ -9,9 +9,9 @@ int	prioritize(t_info *info)
 	temp = info->arguments->head;
 	while (temp != NULL)
 	{
-		if (temp->special != 0 && (temp->next == NULL || temp->special != 0))
+		if (temp->special != 0 && (temp->next == NULL || temp->next->special != 0))
 		{
-			write(2, "bash: syntax error near unexpected token `", 42);
+			write(2, "minishell: syntax error near unexpected token `", 47);
 			write(2, temp->arg, strlen(temp->arg));
 			write(2, "\'\n", 2);
 			return (ERROR);
@@ -22,7 +22,7 @@ int	prioritize(t_info *info)
 		temp = temp->next;
 	}
 	/*
-		//노드 트리 만들기... 석훈아 도와줘
+		//노드 트리 만들기... 석훈아 고마워
 		//이 전에 pipe를 먼저 연결을 해놓는 것이 좋겠다는 거지?
 		1. heredoc -> 임시파일 처리
 		2. redirection + 리다이렉션은 뒤에 항상 파일이 와야 한다. <(redirection) >(redirection) >>(append)  || << 는 heredoc이므로 나중에 처리.
