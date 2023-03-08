@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/05 17:11:38 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/08 17:02:51 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -70,6 +71,7 @@ typedef struct s_info
 	t_arg_deque	*arguments;
 	t_env_deque	*envs;
 	int			pipes;
+	int			redirects;
 }	t_info;
 
 /* parse.c */
@@ -111,11 +113,11 @@ int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *q
 int			enter_quote(char input, char *quote_flag);
 int			meta_len(char *input);
 
-/* parse_prioritize */
-int			prioritize(t_info *info);
+/* parse_conver_to_ast */
+int			convert_to_ast(t_info *info);
 
-/* fork_to_execute_command.c */
-int			fork_to_execute_command(t_info *info);
+/* exec_commands.c */
+int			exec_commands(t_info *info);
 
 #endif
 

@@ -28,10 +28,10 @@ SRCS			=	./minishell.c\
 					./deque_env_util.c\
 					./parse_save.c\
 					./parse_count_len.c\
-					./parse_prioritize.c\
+					./parse_convert_to_ast.c\
 					./env_save.c\
 					./env_replace.c\
-					./exec_fork.c\
+					./exec_commands.c\
 
 OBJS			=	$(SRCS:%.c=%.o)
 

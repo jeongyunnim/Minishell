@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/05 15:54:57 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/07 16:41:25 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	is_env_special(int c)
 int	invalid_env_name(char *input, unsigned int *i)
 {
 	if (ft_isdigit(input[*i]) != 0)
-	{
+	{ 
 		(*i)++;
 	}
 	else

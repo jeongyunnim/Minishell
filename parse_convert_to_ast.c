@@ -2,7 +2,7 @@
 #include "minishell.h"
 
 /* 우선순위를 정해서 실행하고, 명령 실행 단위(파이프 단위)로 명령 노드를 따로 만들 예정.*/
-int	prioritize(t_info *info)
+int	convert_to_ast(t_info *info)
 {
 	t_arg	*temp;
 
@@ -18,16 +18,19 @@ int	prioritize(t_info *info)
 		}
 		if (temp->special == PIPE)
 			info->pipes++;
+		else if (temp->special != NONE)
+			info->redirects++;
 		printf("----------------------\n\n[input]: %s\n[type]: %d\n\n----------------------\n", temp->arg, temp->special);
 		temp = temp->next;
 	}
 	/*
-		//노드 트리 만들기... 석훈아 고마워
 		//이 전에 pipe를 먼저 연결을 해놓는 것이 좋겠다는 거지?
 		1. heredoc -> 임시파일 처리
 		2. redirection + 리다이렉션은 뒤에 항상 파일이 와야 한다. <(redirection) >(redirection) >>(append)  || << 는 heredoc이므로 나중에 처리.
 
 		cat < a > b > c << d | wc -l | grep 0
+
+		<<a | cat 은 어쩌지?
 
 		3. 1st instruction
 		...
