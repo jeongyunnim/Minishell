@@ -2,8 +2,31 @@
 #include "minishell.h"
 
 
+t_ast_node *parse_command(t_arg_deque *args)
+{
+	t_arg		*temp;
+	t_ast_node	*node;
 
-/* 우선순위를 정해서 실행하고, 명령 실행 단위(파이프 단위)로 명령 노드를 따로 만들 예정.*/
+	temp = args->head;
+	node = NULL;
+	if (temp == NULL)
+	{
+		return (NULL);
+	}
+	while (temp->special == PIPE)
+	{
+		node = create_ast_node(PIPE, NULL);
+		node->left = parse_command(args->head);
+		node->right = parse_command(temp);
+	}
+	if (temp->special != 0)
+	{
+		//히어독 처리..는 어떻게 하지? 일단 노드에만 담아주도록 하자.
+		node = create_ast_node(temp->special, temp->arg);
+		node->left = 
+	}
+}
+
 int	convert_to_ast(t_info *info)
 {
 	t_arg	*temp;
@@ -26,7 +49,6 @@ int	convert_to_ast(t_info *info)
 		temp = temp->next;
 	}
 
-	
 
 	/*
 		//이 전에 pipe를 먼저 연결을 해놓는 것이 좋겠다는 거지?
