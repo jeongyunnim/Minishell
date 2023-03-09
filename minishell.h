@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/08 17:02:51 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/09 17:32:57 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,24 @@ typedef enum	e_special
 	HEREDOC,
 	APPEND,
 	PIPE='|',
-	REDIRECT_L='<',
-	REDIRECT_R='>'
+	REDIRECT_IN='<',
+	REDIRECT_OUT='>'
 }				t_special;
+
+typedef struct s_ast_node
+{
+	t_special			type;
+	char				*value;
+	struct s_ast_node	*left;
+	struct s_ast_node	*right;
+}				t_ast_node;
 
 typedef struct s_arg
 {
 	struct s_arg	*previous;
 	struct s_arg	*next;
 	char			*arg;
-	int				special;// | < << > >> 
+	int				special;
 }	t_arg;
 
 typedef struct s_env
@@ -118,6 +126,10 @@ int			convert_to_ast(t_info *info);
 
 /* exec_commands.c */
 int			exec_commands(t_info *info);
+
+/* binary_tree_util.c */
+t_ast_node *create_ast_node(t_special special, char *arg);
+
 
 #endif
 
