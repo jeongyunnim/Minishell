@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/10 18:14:04 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/10 18:18:42 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,15 @@ int	redirection_handler(t_info *info)
 	{
 		if (temp->special == REDIRECT_IN)
 		{
-			open("tempfilename", O_RDONLY);
+			open(temp->next->arg, O_RDONLY);
 		}
 		else if (temp->special == REDIRECT_OUT)
 		{
-			open("tempfilename", O_RDONLY);
+			open(temp->next->arg, O_WRONLY|O_CREAT|O_TRUNC);
 		}
 		else if (temp->special == APPEND)
 		{
-			open("tempfilename", O_RDONLY);
+			open(temp->next->arg, O_WRONLY|O_CREAT);
 		}
 		temp = temp->next;
 	}
