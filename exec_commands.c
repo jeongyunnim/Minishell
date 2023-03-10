@@ -16,16 +16,28 @@ char	*gen_temp_file_name(void)
 {
 	static char		name[255];
 	char			name_len;
-	int				temp;
+	int				i;
 
-	ft_memcpy(name, "temp/", 5);
-	if (i == 0)
-	{
-		name[5] = '0';
+
+	if (name[5] == 0)
+		ft_memcpy(name, "temp/0", 5);
 		return (name);
+	i = 5;
+	while (i < 255)
+	{
+		if (name[i] != '9')
+		{
+			name[i]++;
+			break ;
+		}
+		else
+			i++;
 	}
-	
-	// "/temp" -> name_len에 5 더해야 함
+	printf("name: %s\n", name);
+	return (name);
+	// 1. 0 에서 + 1을 한다.
+	// 2. 9 라면 뒤의 0에 '0'을 하거나 + 1을 한다.
+	// 3. 반복
 }
 
 int	heredoc_handler(t_info *info)
@@ -37,24 +49,24 @@ int	heredoc_handler(t_info *info)
 
 	temp = info->arguments->head;
 	temp_file = gen_temp_file_name();
-	while (temp != NULL)
-	{
-		if (temp->special == HEREDOC)
-		{
-			temp_fd = open(temp_file, O_WRONLY|O_CREAT|O_TRUNC, 0600);
-			while (1)
-			{
-				heredoc_input = readline("> ");
-				if (ft_strncmp(temp->next->arg, heredoc_input, ft_strlen(heredoc_input)) == 0)
-					break ;
-				write(temp_fd, heredoc_input, ft_strlen(heredoc_input));
-				write(temp_fd, "\n", 1);
-				printf("%d: %s\n", temp_fd, heredoc_input);
-			}
-			close(temp_fd);
-		}
-		temp = temp->next;
-	}
+	// while (temp != NULL)
+	// {
+	// 	if (temp->special == HEREDOC)
+	// 	{
+	// 		temp_fd = open(temp_file, O_WRONLY|O_CREAT|O_TRUNC, 0600);
+	// 		while (1)
+	// 		{
+	// 			heredoc_input = readline("> ");
+	// 			if (ft_strncmp(temp->next->arg, heredoc_input, ft_strlen(heredoc_input)) == 0)
+	// 				break ;
+	// 			write(temp_fd, heredoc_input, ft_strlen(heredoc_input));
+	// 			write(temp_fd, "\n", 1);
+	// 			printf("%d: %s\n", temp_fd, heredoc_input);
+	// 		}
+	// 		close(temp_fd);
+	// 	}
+	// 	temp = temp->next;
+	// }
 	// temp = info->arguments->head; // 미리 열어버릴 수 없음.
 	// while (temp != NULL)
 	// {
