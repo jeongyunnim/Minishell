@@ -18,26 +18,30 @@ char	*gen_temp_file_name(void)
 	char			name_len;
 	int				i;
 
-
 	if (name[5] == 0)
-		ft_memcpy(name, "temp/0", 5);
+	{
+		ft_memcpy(name, "temp/0", 6);
 		return (name);
-	i = 5;
+	}
+	i = 6;
 	while (i < 255)
 	{
-		if (name[i] != '9')
+		if (name[i] == 0)
+		{
+			name[i] = '0';
+		}
+		else if (name[i] == '9')
+		{
+			name[i] = '0';
+			i++;
+		}
+		else
 		{
 			name[i]++;
 			break ;
 		}
-		else
-			i++;
 	}
-	printf("name: %s\n", name);
 	return (name);
-	// 1. 0 에서 + 1을 한다.
-	// 2. 9 라면 뒤의 0에 '0'을 하거나 + 1을 한다.
-	// 3. 반복
 }
 
 int	heredoc_handler(t_info *info)
@@ -48,25 +52,32 @@ int	heredoc_handler(t_info *info)
 	int		temp_fd;
 
 	temp = info->arguments->head;
-	temp_file = gen_temp_file_name();
-	// while (temp != NULL)
-	// {
-	// 	if (temp->special == HEREDOC)
-	// 	{
-	// 		temp_fd = open(temp_file, O_WRONLY|O_CREAT|O_TRUNC, 0600);
-	// 		while (1)
-	// 		{
-	// 			heredoc_input = readline("> ");
-	// 			if (ft_strncmp(temp->next->arg, heredoc_input, ft_strlen(heredoc_input)) == 0)
-	// 				break ;
-	// 			write(temp_fd, heredoc_input, ft_strlen(heredoc_input));
-	// 			write(temp_fd, "\n", 1);
-	// 			printf("%d: %s\n", temp_fd, heredoc_input);
-	// 		}
-	// 		close(temp_fd);
-	// 	}
-	// 	temp = temp->next;
-	// }
+	while (temp != NULL)
+	{
+		if (temp->special == HEREDOC)
+		{
+			temp_file = gen_temp_file_name();
+			temp_fd = open(temp_file, O_WRONLY|O_CREAT|O_TRUNC, 0600);
+			while (1)
+			{
+				heredoc_input = readline("> ");
+				if (ft_strncmp(temp->next->arg, heredoc_input, ft_strlen(heredoc_input)) == 0)
+					break ;
+				write(temp_fd, heredoc_input, ft_strlen(heredoc_input));
+				write(temp_fd, "\n", 1);
+				printf("%d: %s\n", temp_fd, heredoc_input);
+			}
+			free(temp->next->arg);
+			temp->next->arg = ft_strdup(temp_file);
+			if (temp->next->arg == NULL)
+			{
+				write(2, "파일명 문자열 멀록 실패\n", 34);
+				return (ERROR);
+			}
+			close(temp_fd);
+		}
+		temp = temp->next;
+	}
 	// temp = info->arguments->head; // 미리 열어버릴 수 없음.
 	// while (temp != NULL)
 	// {
@@ -94,6 +105,7 @@ int	exec_commands(t_info *info)
 	int		temp;
 	int		i;
 
-	heredoc_handler(info);
+	if (heredoc_handler(info))
+		return (ERROR);
 	return (0);
 }
