@@ -23,7 +23,7 @@ t_ast_node *parse_command(t_arg_deque *args)
 	{
 		//히어독 처리..는 어떻게 하지? 일단 노드에만 담아주도록 하자.
 		node = create_ast_node(temp->special, temp->arg);
-		node->left = 
+		//node->left = 
 	}
 }
 
