@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/09 17:32:57 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/10 17:59:39 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 # define ERROR -1
 # define INT_MAX 2147483647
+# define HEREDOC_TEMP "./temp/temp"
 
 int	g_exit_code;
 
@@ -129,7 +130,6 @@ int			exec_commands(t_info *info);
 
 /* binary_tree_util.c */
 t_ast_node *create_ast_node(t_special special, char *arg);
-
 
 #endif
 

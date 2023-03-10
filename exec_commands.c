@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/10 14:51:48 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/10 18:14:04 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,17 @@ int	redirection_handler(t_info *info)
 {
 	t_arg	*temp;
 	char	*heredoc_input;
-	int		*fds;
 	int		temp_fd;
 	int		i;
 
-	fds = ft_calloc(info->redirects, sizeof(int));
 	i = 0;
 	temp = info->arguments->head;
 	while (temp != NULL)
 	{
 		if (temp->special == HEREDOC)
 		{
-			fds[i] = open("./temp/temp", O_WRONLY|O_CREAT|O_EXCL|O_TRUNC);
-			temp_fd = dup(fds[i]);
+			temp_fd = open(HEREDOC_TEMP, O_WRONLY|O_CREAT|O_TRUNC, 0600);
+			//fds[i] = open(HEREDOC_TEMP, O_WRONLY|O_CREAT|O_EXCL|O_TRUNC);
 			while (1)
 			{
 				heredoc_input = readline("> ");
@@ -36,10 +34,11 @@ int	redirection_handler(t_info *info)
 					break ;
 				write(temp_fd, heredoc_input, ft_strlen(heredoc_input));
 				write(temp_fd, "\n", 1);
-				printf("%d: %s\n", fds[i], heredoc_input);
+				printf("%d: %s\n", temp_fd, heredoc_input);
 			}
+			open(HEREDOC_TEMP, O_RDONLY); // 현재 받아온 델리미터를 현재의 fd 값을 가리키게 할 수 있을까?
 			close(temp_fd);
-			i++;
+			unlink(HEREDOC_TEMP);
 		}
 		temp = temp->next;
 	}
