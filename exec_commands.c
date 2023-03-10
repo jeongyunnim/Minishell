@@ -12,21 +12,36 @@
 
 #include "minishell.h"
 
-int	redirection_handler(t_info *info)
+char	*gen_temp_file_name(void)
+{
+	static char		name[255];
+	char			name_len;
+	int				temp;
+
+	ft_memcpy(name, "temp/", 5);
+	if (i == 0)
+	{
+		name[5] = '0';
+		return (name);
+	}
+	
+	// "/temp" -> name_len에 5 더해야 함
+}
+
+int	heredoc_handler(t_info *info)
 {
 	t_arg	*temp;
 	char	*heredoc_input;
+	char	*temp_file;
 	int		temp_fd;
-	int		i;
 
-	i = 0;
 	temp = info->arguments->head;
+	temp_file = gen_temp_file_name();
 	while (temp != NULL)
 	{
 		if (temp->special == HEREDOC)
 		{
-			temp_fd = open(HEREDOC_TEMP, O_WRONLY|O_CREAT|O_TRUNC, 0600);
-			//fds[i] = open(HEREDOC_TEMP, O_WRONLY|O_CREAT|O_EXCL|O_TRUNC);
+			temp_fd = open(temp_file, O_WRONLY|O_CREAT|O_TRUNC, 0600);
 			while (1)
 			{
 				heredoc_input = readline("> ");
@@ -36,29 +51,27 @@ int	redirection_handler(t_info *info)
 				write(temp_fd, "\n", 1);
 				printf("%d: %s\n", temp_fd, heredoc_input);
 			}
-			open(HEREDOC_TEMP, O_RDONLY); // 현재 받아온 델리미터를 현재의 fd 값을 가리키게 할 수 있을까?
 			close(temp_fd);
-			unlink(HEREDOC_TEMP);
 		}
 		temp = temp->next;
 	}
-	temp = info->arguments->head;
-	while (temp != NULL)
-	{
-		if (temp->special == REDIRECT_IN)
-		{
-			open(temp->next->arg, O_RDONLY);
-		}
-		else if (temp->special == REDIRECT_OUT)
-		{
-			open(temp->next->arg, O_WRONLY|O_CREAT|O_TRUNC);
-		}
-		else if (temp->special == APPEND)
-		{
-			open(temp->next->arg, O_WRONLY|O_CREAT);
-		}
-		temp = temp->next;
-	}
+	// temp = info->arguments->head; // 미리 열어버릴 수 없음.
+	// while (temp != NULL)
+	// {
+	// 	if (temp->special == REDIRECT_IN)
+	// 	{
+	// 		open(temp->next->arg, O_RDONLY);
+	// 	}
+	// 	else if (temp->special == REDIRECT_OUT)
+	// 	{
+	// 		open(temp->next->arg, O_WRONLY|O_CREAT|O_TRUNC);
+	// 	}
+	// 	else if (temp->special == APPEND)
+	// 	{
+	// 		open(temp->next->arg, O_WRONLY|O_CREAT);
+	// 	}
+	// 	temp = temp->next;
+	// }
 	return (0);
 }
 
@@ -69,7 +82,6 @@ int	exec_commands(t_info *info)
 	int		temp;
 	int		i;
 
-
-	redirection_handler(info);
+	heredoc_handler(info);
 	return (0);
 }

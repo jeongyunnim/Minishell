@@ -50,7 +50,6 @@ int	convert_to_ast(t_info *info)
 		temp = temp->next;
 	}
 
-
 	/*
 		//이 전에 pipe를 먼저 연결을 해놓는 것이 좋겠다는 거지?
 		1. heredoc -> 임시파일 처리

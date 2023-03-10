@@ -23,7 +23,6 @@
 
 # define ERROR -1
 # define INT_MAX 2147483647
-# define HEREDOC_TEMP "./temp/temp"
 
 int	g_exit_code;
 

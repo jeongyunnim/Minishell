@@ -15,6 +15,7 @@
 int main(int argc, char *argv[], char *env[])
 {
 	char	*input;
+	int		stdio_fd[2];
 	t_info	info;
 
 	info.envs = save_env(env);
@@ -27,8 +28,8 @@ int main(int argc, char *argv[], char *env[])
 		}
 		add_history(input);
 		parse(input, &info);
-		convert_to_ast(&info);
-		exec_commands(&info);
+		if (convert_to_ast(&info) != ERROR);
+			exec_commands(&info);
 		free(input);
 	}
 	return (0);
