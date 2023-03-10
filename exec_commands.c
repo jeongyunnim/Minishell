@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/08 17:33:03 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/10 14:51:48 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ int	redirection_handler(t_info *info)
 	temp = info->arguments->head;
 	while (temp != NULL)
 	{
-		if (temp->special == REDIRECT_L)
+		if (temp->special == REDIRECT_IN)
 		{
 			open("tempfilename", O_RDONLY);
 		}
-		else if (temp->special == REDIRECT_R)
+		else if (temp->special == REDIRECT_OUT)
 		{
 			open("tempfilename", O_RDONLY);
 		}
