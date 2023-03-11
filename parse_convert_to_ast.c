@@ -38,7 +38,7 @@ int	convert_to_ast(t_info *info)
 		if (temp->special != 0 && (temp->next == NULL || temp->next->special != 0))
 		{
 			write(2, "minishell: syntax error near unexpected token `", 47);
-			write(2, temp->arg, strlen(temp->arg));
+			write(2, temp->arg, ft_strlen(temp->arg));
 			write(2, "\'\n", 2);
 			return (ERROR);
 		}

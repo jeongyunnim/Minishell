@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/10 18:18:42 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/11 13:54:11 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,11 @@ char	*gen_temp_file_name(void)
 		ft_memcpy(name, "temp/0", 6);
 		return (name);
 	}
-	i = 6;
+	i = 5;
 	while (i < 255)
 	{
 		if (name[i] == 0)
-		{
 			name[i] = '0';
-		}
 		else if (name[i] == '9')
 		{
 			name[i] = '0';
