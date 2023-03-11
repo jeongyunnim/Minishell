@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 18:02:28 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/11 18:24:44 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/11 20:48:59 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,35 +18,27 @@ t_ast_node *parse_command(t_arg_deque *args)
 	t_arg		*temp;
 	t_ast_node	*node;
 
-	temp = args->head;
-	node = NULL;
+	temp = pop_head_arg(args->head);
 	if (temp == NULL)
-	{
 		return (NULL);
-	}
+	node = create_ast_node(temp->special, temp->arg);
+	free(temp->arg);
+	free(temp);
 	if (temp->special == PIPE)
 	{
-		node = create_ast_node(PIPE, NULL);
-		node->left = parse_command(args->head);
-		node->right = parse_command(temp);
-	}
-	else if (temp->special == NONE)
-	{
-		node = create_ast_node(temp->special, temp->arg);
-		node->left = parse_command(args->head);
+		node->left = parse_command(args);
+		node->left = parse_command(args);
 	}
 	else
 	{
-		node = create_ast_node(temp->special, temp->next->arg);
-		node->left = parse_command(args->head);
+		node->right = parse_command(args);
 	}
 	return (node);
 }
 
 int	convert_to_ast(t_info *info)
 {
-	t_arg	*temp;
-
+	t_arg		*temp;
 	temp = info->arguments->head;
 	while (temp != NULL)
 	{
@@ -63,6 +55,8 @@ int	convert_to_ast(t_info *info)
 			info->redirects++;
 		printf("----------------------\n\n[input]: %s\n[type]: %d\n\n----------------------\n", temp->arg, temp->special);
 		temp = temp->next;
+		info->root = parse_command(info->arguments);
+		return (0);
 	}
 
 	/*

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/11 15:52:24 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/11 20:44:31 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_info
 {
 	t_arg_deque	*arguments;
 	t_env_deque	*envs;
+	t_ast_node	*root;
 	int			pipes;
 	int			redirects;
 }	t_info;
