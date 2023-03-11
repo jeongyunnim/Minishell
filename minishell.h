@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/10 17:59:39 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/11 15:45:52 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ typedef enum	e_special
 	REDIRECT_IN='<',
 	REDIRECT_OUT='>'
 }				t_special;
+
+typedef enum	e_special_node
+{
+	PIPE_NODE,
+	REDIRECT_NODE,
+	COMMAND_NODE
+}				t_special_node;
 
 typedef struct s_ast_node
 {

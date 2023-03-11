@@ -4,28 +4,28 @@
 
 t_ast_node *parse_command(t_arg_deque *args)
 {
-	//t_arg		*temp;
-	//t_ast_node	*node;
+	t_arg		*temp;
+	t_ast_node	*node;
 
-	//temp = args->head;
-	//node = NULL;
-	//if (temp == NULL)
-	//{
-	//	return (NULL);
-	//}
-	//while (temp->special == PIPE)
-	//{
-	//	node = create_ast_node(PIPE, NULL);
-	//	node->left = parse_command(args->head);
-	//	node->right = parse_command(temp);
-	//}
-	//if (temp->special != 0)
-	//{
-	//	//히어독 처리..는 어떻게 하지? 일단 노드에만 담아주도록 하자.
-	//	node = create_ast_node(temp->special, temp->arg);
-	//	//node->left = 
-	//}
-	//return (node);
+	temp = args->head;
+	node = NULL;
+	if (temp == NULL)
+	{
+		return (NULL);
+	}
+	while (temp->special == PIPE)
+	{
+		node = create_ast_node(PIPE, NULL);
+		node->left = parse_command(args->head);
+		node->right = parse_command(temp);
+	}
+	if (temp->special != 0)
+	{
+		//히어독 처리..는 어떻게 하지? 일단 노드에만 담아주도록 하자.
+		node = create_ast_node(temp->special, temp->arg);
+		//node->left = 
+	}
+	return (node);
 }
 
 int	convert_to_ast(t_info *info)
