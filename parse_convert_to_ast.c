@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_convert_to_ast.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/11 18:02:28 by jeseo             #+#    #+#             */
+/*   Updated: 2023/03/11 18:24:44 by jeseo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #include "minishell.h"
-
 
 t_ast_node *parse_command(t_arg_deque *args)
 {
@@ -13,17 +24,21 @@ t_ast_node *parse_command(t_arg_deque *args)
 	{
 		return (NULL);
 	}
-	while (temp->special == PIPE)
+	if (temp->special == PIPE)
 	{
 		node = create_ast_node(PIPE, NULL);
 		node->left = parse_command(args->head);
 		node->right = parse_command(temp);
 	}
-	if (temp->special != 0)
+	else if (temp->special == NONE)
 	{
-		//히어독 처리..는 어떻게 하지? 일단 노드에만 담아주도록 하자.
 		node = create_ast_node(temp->special, temp->arg);
-		//node->left = 
+		node->left = parse_command(args->head);
+	}
+	else
+	{
+		node = create_ast_node(temp->special, temp->next->arg);
+		node->left = parse_command(args->head);
 	}
 	return (node);
 }
