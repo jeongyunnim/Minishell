@@ -1,23 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   binary_tree_util.c                                 :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/09 17:14:39 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/09 19:20:19 by jeseo            ###   ########.fr       */
+/*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
+/*   Updated: 2023/03/12 15:02:58 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_ast_node *create_ast_node(t_special special, char *arg)
+int main(int argc, char *argv[], char *env[])
 {
-	t_ast_node	*new;
+	char	*input;
+	int		stdio_fd[2];
+	t_info	info;
 
-	new = ft_calloc(sizeof(t_ast_node), 1);
-	new->value = arg;
-	new->type = special;
-	return (new);
+	info.envs = save_env(env);
+	while (1)
+	{
+		input = readline("Minishell$ ");
+		if (input == NULL)
+		{
+			continue ;// 이자리는 엑싯임
+		}
+		add_history(input);
+		parse(input, &info);
+		if (print_args_deque(&info) != ERROR)
+		{
+			devide_pipe(&info);
+			exec_commands(&info);
+		}
+		free(input);
+		//free structs
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/11 20:44:31 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/12 15:40:53 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,6 @@ typedef enum	e_special
 	REDIRECT_OUT='>'
 }				t_special;
 
-typedef struct s_ast_node
-{
-	t_special			type;
-	char				*value;
-	char				**commands_args;
-	struct s_ast_node	*left;
-	struct s_ast_node	*right;
-}				t_ast_node;
-
 typedef struct s_arg
 {
 	struct s_arg	*previous;
@@ -69,17 +60,33 @@ typedef struct s_arg_deque
 	t_arg	*tail;
 }	t_arg_deque;
 
+
 typedef struct s_env_deque
 {
 	t_env	*head;
 	t_env	*tail;
 }	t_env_deque;
 
+typedef struct s_cmd
+{
+	t_arg_deque		*redirections;
+	char			**commands_args;
+	struct s_cmd	*next;
+	struct s_cmd	*previous;
+}				t_cmd;
+
+typedef struct s_cmd_deque
+{
+	t_cmd	*head;
+	t_cmd	*tail;
+}	t_cmd_deque;
+
+
 typedef struct s_info
 {
 	t_arg_deque	*arguments;
 	t_env_deque	*envs;
-	t_ast_node	*root;
+	t_cmd_deque	*cmds;
 	int			pipes;
 	int			redirects;
 }	t_info;
@@ -101,6 +108,12 @@ t_env		*pop_tail_env(t_env **tail);
 void		append_head_env(t_env **head, t_env **tail, t_env *new);
 void		append_tail_env(t_env **head, t_env **tail, t_env *new);
 
+/* deque_cmd_util.c */
+t_cmd		*lstnew_cmd(void);
+t_cmd		*pop_head_cmd(t_cmd **head);
+t_cmd		*pop_tail_cmd(t_cmd **tail);
+void		append_head_cmd(t_cmd **head, t_cmd **tail, t_cmd *new);
+void		append_tail_cmd(t_cmd **head, t_cmd **tail, t_cmd *new);
 
 /* parse_save.c */
 int			save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);
@@ -123,14 +136,13 @@ int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *q
 int			enter_quote(char input, char *quote_flag);
 int			meta_len(char *input);
 
-/* parse_conver_to_ast */
-int			convert_to_ast(t_info *info);
+/* parse_devide_pipe */
+int			print_args_deque(t_info *info);
+int			devide_pipe(t_info *info);
 
 /* exec_commands.c */
 int			exec_commands(t_info *info);
 
-/* binary_tree_util.c */
-t_ast_node *create_ast_node(t_special special, char *arg);
 
 #endif
 

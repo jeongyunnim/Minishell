@@ -1,42 +1,85 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_convert_to_ast.c                             :+:      :+:    :+:   */
+/*   parse_devide_pipe.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 18:02:28 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/11 20:48:59 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/12 15:50:21 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishell.h"
 
-t_ast_node *parse_command(t_arg_deque *args)
+int	cmd_node_init(t_cmd	**node, t_arg_deque *args)
 {
-	t_arg		*temp;
-	t_ast_node	*node;
+	t_arg	*temp;
+	int		cmd_arg_count;
+	int		redirect_flag;
 
-	temp = pop_head_arg(args->head);
-	if (temp == NULL)
-		return (NULL);
-	node = create_ast_node(temp->special, temp->arg);
-	free(temp->arg);
-	free(temp);
-	if (temp->special == PIPE)
+	redirect_flag = 0;
+	if (*node == NULL)
+		return (ERROR);
+	temp = args->head;
+	while (temp == NULL)
 	{
-		node->left = parse_command(args);
-		node->left = parse_command(args);
+		if (temp->special == PIPE)
+			return (0);
+		else if (temp->special == NONE)
+			cmd_arg_count++;
+		else
+			redirect_flag++;
+		temp = temp->next;
 	}
-	else
+	(*node)->commands_args = (char **)ft_calloc(sizeof(char *), cmd_arg_count);
+	if ((*node)->commands_args == NULL)
+		return (ERROR);
+	if (redirect_flag > 0)
 	{
-		node->right = parse_command(args);
+		(*node)->redirections = (t_arg_deque *)ft_calloc(sizeof(t_arg_deque), 1);
+		if ((*node)->redirections == NULL)
+			return (ERROR);
 	}
-	return (node);
+	return (0);
 }
 
-int	convert_to_ast(t_info *info)
+int devide_pipe(t_info	*info)
+{
+	t_arg	*temp;
+	t_cmd	*new;
+
+	//info->cmds = ft_calloc(sizeof(t_cmd_deque), 1);
+	//if (info->cmds == NULL)
+	//{
+	//	return (ERROR);
+	//}
+	//temp = info->arguments->head;
+	//while (temp != NULL)
+	//{
+	//	new = lstnew_cmd();
+	//	if (cmd_node_init(&new, info->arguments) == NULL)
+	//	{
+	//		//지금까지 할당된 다른 노드들 프리.
+	//		return (NULL);
+	//	}
+	//	while (temp != NULL)
+	//	{
+	//		if (temp->special == PIPE)
+	//		{
+	//			//다음 cmd 노드로 이동하기
+	//			continue ;
+	//		}
+	//		else if (temp->special == NONE)
+	//		{
+	//			new->commands_args[i] = 
+	//		}
+	//	}
+	//}
+	return (0);
+}
+
+int	print_args_deque(t_info *info)
 {
 	t_arg		*temp;
 	temp = info->arguments->head;
@@ -55,10 +98,8 @@ int	convert_to_ast(t_info *info)
 			info->redirects++;
 		printf("----------------------\n\n[input]: %s\n[type]: %d\n\n----------------------\n", temp->arg, temp->special);
 		temp = temp->next;
-		info->root = parse_command(info->arguments);
 		return (0);
 	}
-
 	/*
 		//이 전에 pipe를 먼저 연결을 해놓는 것이 좋겠다는 거지?
 		1. heredoc -> 임시파일 처리
