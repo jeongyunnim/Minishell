@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   deque_util.c                                       :+:      :+:    :+:   */
+/*   deque_arg_util.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 21:49:25 by jeseo             #+#    #+#             */
-/*   Updated: 2023/02/22 20:23:04 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/12 16:53:14 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,34 +67,34 @@ t_arg	*pop_tail_arg(t_arg **tail)
 	return (pop);
 }
 
-void	append_head_arg(t_arg **head, t_arg **tail, t_arg *new)
+void	append_head_arg(t_arg_deque **deque, t_arg *new)
 {
-	if (*head == NULL)
+	if ((*deque)->head == NULL)
 	{
-		*head = new;
-		*tail = new;
+		(*deque)->head = new;
+		(*deque)->tail = new;
 	}
 	else
 	{
-		(*head)->previous = new;
-		new->next = *head;
-		*head = new;
-		(*head)->previous = NULL;
+		(*deque)->head->previous = new;
+		new->next = (*deque)->head;
+		(*deque)->head = new;
+		(*deque)->head->previous = NULL;
 	}
 }
 
-void	append_tail_arg(t_arg **head, t_arg **tail, t_arg *new)
+void	append_tail_arg(t_arg_deque **deque, t_arg *new)
 {
-	if (*tail == NULL)
+	if ((*deque)->tail == NULL)
 	{
-		*head = new;
-		*tail = new;
+		(*deque)->head = new;
+		(*deque)->tail = new;
 	}
 	else
 	{
-		(*tail)->next = new;
-		new->previous = *tail;
-		*tail = new;
-		(*tail)->next = NULL;
+		(*deque)->tail->next = new;
+		new->previous = (*deque)->tail;
+		(*deque)->tail = new;
+		(*deque)->tail->next = NULL;
 	}
 }

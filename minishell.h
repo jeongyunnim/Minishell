@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/12 15:40:53 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/12 16:53:47 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ int		parse(char *input, t_info *info);
 t_arg		*lstnew_arg(char *arg);
 t_arg		*pop_head_arg(t_arg **head);
 t_arg		*pop_tail_arg(t_arg **tail);
-void		append_head_arg(t_arg **head, t_arg **tail, t_arg *new);
-void		append_tail_arg(t_arg **head, t_arg **tail, t_arg *new);
+void		append_head_arg(t_arg_deque **deque, t_arg *new);
+void		append_tail_arg(t_arg_deque **deque, t_arg *new);
 
 /* deque_env_util.c */
 t_env		*lstnew_env(void);
@@ -112,8 +112,8 @@ void		append_tail_env(t_env **head, t_env **tail, t_env *new);
 t_cmd		*lstnew_cmd(void);
 t_cmd		*pop_head_cmd(t_cmd **head);
 t_cmd		*pop_tail_cmd(t_cmd **tail);
-void		append_head_cmd(t_cmd **head, t_cmd **tail, t_cmd *new);
-void		append_tail_cmd(t_cmd **head, t_cmd **tail, t_cmd *new);
+void		append_head_cmd(t_cmd_deque **deque, t_cmd *new);
+void		append_tail_cmd(t_cmd_deque **deque, t_cmd *new);
 
 /* parse_save.c */
 int			save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);

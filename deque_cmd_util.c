@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 14:38:31 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/12 14:52:48 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/12 16:05:14 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,34 +65,34 @@ t_cmd	*pop_tail_cmd(t_cmd **tail)
 	return (pop);
 }
 
-void	append_head_cmd(t_cmd **head, t_cmd **tail, t_cmd *new)
+void	append_head_cmd(t_cmd_deque **deque, t_cmd *new)
 {
-	if (*head == NULL)
+	if ((*deque)->head == NULL)
 	{
-		*head = new;
-		*tail = new;
+		(*deque)->head = new;
+		(*deque)->tail = new;
 	}
 	else
 	{
-		(*head)->previous = new;
-		new->next = *head;
-		*head = new;
-		(*head)->previous = NULL;
+		(*deque)->head->previous = new;
+		new->next = (*deque)->head;
+		(*deque)->head = new;
+		(*deque)->head->previous = NULL;
 	}
 }
 
-void	append_tail_cmd(t_cmd **head, t_cmd **tail, t_cmd *new)
+void	append_tail_cmd(t_cmd_deque **deque, t_cmd *new)
 {
-	if (*tail == NULL)
+	if ((*deque)->tail == NULL)
 	{
-		*head = new;
-		*tail = new;
+		(*deque)->head = new;
+		(*deque)->tail = new;
 	}
 	else
 	{
-		(*tail)->next = new;
-		new->previous = *tail;
-		*tail = new;
-		(*tail)->next = NULL;
+		(*deque)->tail->next = new;
+		new->previous = (*deque)->tail;
+		(*deque)->tail = new;
+		(*deque)->tail->next = NULL;
 	}
 }
