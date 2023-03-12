@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/05 16:50:23 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/12 18:22:48 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,6 @@ int	arg_to_deque(t_arg_deque **args, char *arg, int	special)
 		return (ERROR);
 	}
 	new->special = special;
-	append_tail_arg(&((*args)->head), &((*args)->tail), new);
+	append_tail_arg(args, new);
 	return (0);
 }
