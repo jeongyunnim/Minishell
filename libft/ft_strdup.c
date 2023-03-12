@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:58:39 by jeseo             #+#    #+#             */
-/*   Updated: 2022/07/13 21:32:19 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/12 20:11:01 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_strdup(const char *str)
 	str_len = ft_strlen(str);
 	str_dup = (char *)malloc(sizeof(char) * (str_len + 1));
 	if (str_dup == NULL)
-		return (NULL);
+		exit(EXIT_FAILURE);
 	while (i < str_len)
 	{
 		str_dup[i] = str[i];

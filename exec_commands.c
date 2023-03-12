@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/12 15:02:03 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/12 21:13:19 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,55 +44,42 @@ char	*gen_temp_file_name(void)
 
 int	heredoc_handler(t_info *info)
 {
-	t_arg	*temp;
+	t_cmd	*temp;
+	t_arg	*temp_redirect;
 	char	*heredoc_input;
 	char	*temp_file;
 	int		temp_fd;
 
-	temp = info->arguments->head;
+	temp = info->cmds->head;
 	while (temp != NULL)
 	{
-		if (temp->special == HEREDOC)
+		if (temp->redirections == NULL)
 		{
-			temp_file = gen_temp_file_name();
-			temp_fd = open(temp_file, O_WRONLY|O_CREAT|O_TRUNC, 0600);
-			while (1)
+			temp = temp->next;
+			continue ;
+		}
+		temp_redirect = temp->redirections->head;
+		while (temp_redirect != NULL)
+		{
+			if (temp_redirect->special == HEREDOC)
 			{
-				heredoc_input = readline("> ");
-				if (ft_strncmp(temp->next->arg, heredoc_input, ft_strlen(heredoc_input)) == 0)
-					break ;
-				write(temp_fd, heredoc_input, ft_strlen(heredoc_input));
-				write(temp_fd, "\n", 1);
-				printf("%d: %s\n", temp_fd, heredoc_input);
+				temp_file = gen_temp_file_name();
+				temp_fd = open(temp_file, O_WRONLY|O_CREAT|O_TRUNC, 0600);
+				while (1)
+				{
+					heredoc_input = readline("> ");
+					if (ft_strncmp(temp_redirect->arg, heredoc_input, ft_strlen(heredoc_input)) == 0)
+						break ;
+					write(temp_fd, heredoc_input, ft_strlen(heredoc_input));
+					write(temp_fd, "\n", 1);
+				}
+				temp_redirect->arg = ft_strdup(temp_file);
+				close(temp_fd);
 			}
-			free(temp->next->arg);
-			temp->next->arg = ft_strdup(temp_file);
-			if (temp->next->arg == NULL)
-			{
-				write(2, "파일명 문자열 멀록 실패\n", 34);
-				return (ERROR);
-			}
-			close(temp_fd);
+			temp_redirect = temp_redirect->next;
 		}
 		temp = temp->next;
 	}
-	// temp = info->arguments->head; // 미리 열어버릴 수 없음.
-	// while (temp != NULL)
-	// {
-	// 	if (temp->special == REDIRECT_IN)
-	// 	{
-	// 		open(temp->next->arg, O_RDONLY);
-	// 	}
-	// 	else if (temp->special == REDIRECT_OUT)
-	// 	{
-	// 		open(temp->next->arg, O_WRONLY|O_CREAT|O_TRUNC);
-	// 	}
-	// 	else if (temp->special == APPEND)
-	// 	{
-	// 		open(temp->next->arg, O_WRONLY|O_CREAT);
-	// 	}
-	// 	temp = temp->next;
-	// }
 	return (0);
 }
 
@@ -105,5 +92,40 @@ int	exec_commands(t_info *info)
 
 	if (heredoc_handler(info))
 		return (ERROR);
+	i = 0;
+	ft_memset(fd, 0 , sizeof(fd));
+	while (i <= info->pipes)
+	{
+		if (i < info->pipes)
+		{
+			if (pipe(fd) != ERROR)
+				return (ERROR);
+			temp = fd[0];
+		}
+		pid = fork();
+		if (pid == -1)
+			return (ERROR); // 이미 생성된 자식 프로세스는 어찌할까?
+		else if (pid == 0) // 자식 프로세스 할 거 해
+		{
+			if (info->pipes == 0)
+			{
+								
+			}
+			if (i == 0)
+			{
+				close(fd[0]);
+			}
+			//리다이렉션 처리
+			//command 찾기.
+			//execve(info->cmds->head->commands_args[0], &info->cmds->head->commands_args[0], info->envp_bash);
+			write(2, "exec 실행 오류.. 어떻게 해야하는데..\n", 49);
+			//exit(어쩌구);
+			//전역변수 에러 코드 변환해주기.
+		}
+		i++;
+	}
+	// 1. pipe 처리
+	// 2. redirection 처리
+	// 3. 실행
 	return (0);
 }

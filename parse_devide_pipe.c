@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 18:02:28 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/12 20:03:05 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/12 20:24:09 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,6 @@ int	print_args_deque(t_info *info)
 			write(2, "\'\n", 2);
 			return (ERROR);
 		}
-		else if (temp->special != NONE)
-			info->redirects++;
 		printf("----------------------\n\n[input]: %s\n[type]: %d\n\n----------------------\n", temp->arg, temp->special);
 		temp = temp->next;
 	}

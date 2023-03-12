@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/12 20:03:30 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/12 20:56:54 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int main(int argc, char *argv[], char *env[])
 	t_info	info;
 
 	info.envs = save_env(env);
+	info.envp_bash = env;
 	while (1)
 	{
 		input = readline("Minishell$ ");
