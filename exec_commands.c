@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/13 20:14:52 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/13 20:57:30 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,18 +102,47 @@ int	heredoc_handler(t_info *info)
 
 int	isbuiltin(char *cmd)
 {
-	if (ft_strncmp("echo", cmd, ft_strlen(cmd)) == 0)
+	if (ft_strncmp("echo", cmd, 5) == 0)
 	{
-
+		write(1, "이 자리에 echo 와야 함\n", 30);
+		//echo 실행
 	}
-	else if (ft_strncmp("echo", cmd, ft_strlen(cmd)) == 0)
+	else if (ft_strncmp("cd", cmd, 3) == 0)
 	{
-
+		write(1, "이 자리에 ㅊㅇ 와야 함\n", 28);
+		//cd 실행
 	}
-	else if (ft_strncmp(cmd, "echo", 5) == 0)
+	else if (ft_strncmp("pwd", cmd, 4) == 0)
 	{
-
+		write(1, "이 자리에 pwd 와야 함\n", 29);
+		//pwd 실행
 	}
+	else if (ft_strncmp("export", cmd, 7) == 0)
+	{
+		write(1, "이 자리에 export 와야 함\n", 32);
+		//export 실행
+	}
+	else if (ft_strncmp("unset", cmd, 6) == 0)
+	{
+		write(1, "이 자리에 unset 와야 함\n", 31);
+		//unset 실행
+	}
+	else if (ft_strncmp("env", cmd, 4) == 0)
+	{
+		write(1, "이 자리에 env 와야 함\n", 29);
+		//env 실행
+	}
+	else if (ft_strncmp("exit", cmd, 5) == 0)
+	{
+		write(1, "이 자리에 exit 와야 함\n", 30);
+		//exit 실행
+	}
+	else
+	{
+		write(1, "빌트인 처리로 감\n", 24);
+	}
+		return (0);
+	return (1);
 }
 
 int	exec_commands(t_info *info)
@@ -128,28 +157,28 @@ int	exec_commands(t_info *info)
 	i = 0;
 	fd[0] = -1;
 	fd[1] = -1;
-	while (i <= info->pipes)
-	{
-		if (i < info->pipes)
-		{
-			if (pipe(fd) != ERROR)
-				return (ERROR);
-			temp = fd[0];
-		}
-		if (info->pipes == 0 && isbuiltin(info->cmds->head->commands_args[0]) == 1)
-		{
-			//포크뜨지 않기.. 그래야 export a=1 같은 것이 저장이 된다..... ㅜㅜ 
-			//바로 실행
-		}
-		pid = fork();
-		if (pid == -1)
-			return (ERROR);
-		else if (pid == 0) // 자식 프로세스
-		{
-			child_process_run(info, i, fd);
-		}
-		i++;
-	}
+	//while (i <= info->pipes)
+	//{
+	//	if (i < info->pipes)
+	//	{
+	//		if (pipe(fd) != ERROR)
+	//			return (ERROR);
+	//		temp = fd[0];
+	//	}
+	//	if (info->pipes == 0 && isbuiltin(info->cmds->head->commands_args[0]) == 1)
+	//	{
+	//		//포크뜨지 않기.. 그래야 export a=1 같은 것이 저장이 된다..... ㅜㅜ 
+	//		//바로 실행
+	//	}
+	//	pid = fork();
+	//	if (pid == -1)
+	//		return (ERROR);
+	//	else if (pid == 0) // 자식 프로세스
+	//	{
+	//		child_process_run(info, i, fd, temp);
+	//	}
+	//	i++;
+	//}
 	// 1. pipe 처리
 	// 2. redirection 처리
 	// 3. 실행

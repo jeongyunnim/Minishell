@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 18:02:28 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/13 20:03:48 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/13 20:53:53 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,10 @@ int	print_args_deque(t_info *info)
 		{
 			heredoc_flag++;
 			if (heredoc_flag > 16)
+			{
+				write(2, "minishell: maximum here-document count exceeded\n", 48);
 				exit(2);
+			}
 		}
 		printf("----------------------\n\n[input]: %s\n[type]: %d\n\n----------------------\n", temp->arg, temp->special);
 		temp = temp->next;

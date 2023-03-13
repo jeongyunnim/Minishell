@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/13 16:26:38 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/13 20:22:09 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,6 @@ int			devide_pipe(t_info *info);
 int			exec_commands(t_info *info);
 
 /* exec_child.c */
-int			child_process_run(t_info *info, int i, int fd[]);
+int			child_process_run(t_info *info, int i, int fd[], int temp_fd);
 
 #endif
