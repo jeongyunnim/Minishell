@@ -65,7 +65,7 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		add_history(input);
 		parse(input, &info);
-		if (print_args_deque(&info) != ERROR && devide_pipe(&info) != ERROR)
+		if (print_args_deque(&info) != ERROR && divide_pipe(&info) != ERROR)
 		{
 			print_cmd_deque(&info);
 			exec_commands(&info);

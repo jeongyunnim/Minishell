@@ -39,7 +39,7 @@ int	cmd_node_init(t_cmd	**node, t_arg_deque *args)
 	return (0);
 }
 
-int devide_pipe(t_info	*info)
+int divide_pipe(t_info	*info)
 {
 	t_arg	*temp;
 	t_arg	*arg_node;

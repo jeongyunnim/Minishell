@@ -137,9 +137,9 @@ int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *q
 int			enter_quote(char input, char *quote_flag);
 int			meta_len(char *input);
 
-/* parse_devide_pipe */
+/* parse_divide_pipe */
 int			print_args_deque(t_info *info);
-int			devide_pipe(t_info *info);
+int			divide_pipe(t_info *info);
 
 /* exec_commands.c */
 int			exec_commands(t_info *info);

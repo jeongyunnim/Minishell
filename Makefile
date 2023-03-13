@@ -19,7 +19,7 @@ SRCS			=	./main.c\
 					./deque_cmd_util.c\
 					./parse_save.c\
 					./parse_count_len.c\
-					./parse_devide_pipe.c\
+					./parse_divide_pipe.c\
 					./env_save.c\
 					./env_replace.c\
 					./exec_commands.c\
