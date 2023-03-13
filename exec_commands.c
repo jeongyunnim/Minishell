@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/12 21:23:25 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/13 16:29:16 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ int	exec_commands(t_info *info)
 
 	if (heredoc_handler(info))
 		return (ERROR);
-	i = 0;
 	ft_memset(fd, 0 , sizeof(fd));
 	while (i <= info->pipes)
 	{
@@ -104,27 +103,10 @@ int	exec_commands(t_info *info)
 		}
 		pid = fork();
 		if (pid == -1)
-			return (ERROR); // 이미 생성된 자식 프로세스는 어찌할까?
-		else if (pid == 0) // 자식 프로세스 할 거 해
+			return (ERROR);
+		else if (pid == 0) // 자식 프로세스
 		{
-			if (info->pipes == 0)
-			{
-				//아무것도 하지 않음
-			}
-			if (i == 0)
-			{
-				close(fd[0]);
-			}
-			else if (i == info->pipes)
-			{
-				// 마지막 파이프는 연결하지 않고 종료.
-			}
-			//리다이렉션 처리
-			//command 찾기.
-			//execve(info->cmds->head->commands_args[0], &info->cmds->head->commands_args[0], info->envp_bash);
-			write(2, "exec 실행 오류.. 어떻게 해야하는데..\n", 49);
-			//exit(어쩌구);
-			//전역변수 에러 코드 변환해주기.
+			child_process_run(info, i, fd);
 		}
 		i++;
 	}
