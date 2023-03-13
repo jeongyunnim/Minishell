@@ -138,9 +138,10 @@ int	my_echo(char **args)
 	while (args[i] != NULL)
 	{
 		write(1, args[i], ft_strlen(args[i]));
-		write(1, "\n", 1);
+		write(1, " ", 1);
 		i++;
 	}
+	write(1, "\n", 1);
 	return (0);
 }
 
