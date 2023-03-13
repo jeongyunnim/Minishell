@@ -140,8 +140,8 @@ int	isbuiltin(char *cmd)
 	else
 	{
 		write(1, "빌트인 처리로 감\n", 24);
-	}
 		return (0);
+	}
 	return (1);
 }
 
@@ -179,6 +179,7 @@ int	exec_commands(t_info *info)
 		{
 			//포크뜨지 않기.. 그래야 export a=1 같은 것이 저장이 된다..... ㅜㅜ 
 			//바로 실행
+			return (0);
 		}
 		pid = fork();
 		printf("pid: %d\n", pid);
