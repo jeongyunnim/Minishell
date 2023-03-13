@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 18:02:28 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/12 20:24:09 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/13 20:03:48 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,9 @@ int devide_pipe(t_info	*info)
 int	print_args_deque(t_info *info)
 {
 	t_arg		*temp;
+	int			heredoc_flag;
 	
+	heredoc_flag = 0;
 	temp = info->arguments->head;
 	if (temp == NULL)
 	{
@@ -119,6 +121,12 @@ int	print_args_deque(t_info *info)
 			write(2, temp->arg, ft_strlen(temp->arg));
 			write(2, "\'\n", 2);
 			return (ERROR);
+		}
+		else if (temp->special == HEREDOC)
+		{
+			heredoc_flag++;
+			if (heredoc_flag > 16)
+				exit(2);
 		}
 		printf("----------------------\n\n[input]: %s\n[type]: %d\n\n----------------------\n", temp->arg, temp->special);
 		temp = temp->next;

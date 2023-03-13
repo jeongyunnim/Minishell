@@ -6,15 +6,32 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/13 16:29:16 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/13 20:14:52 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	ft_strcmp(const char *str1, const char *str2)
+{
+	size_t	i;
+
+	i = 0;
+	while (str1[i] != '\0' || str2[i] != '\0')
+	{
+		if (str1[i] > str2[i])
+			return (1);
+		else if (str1[i] < str2[i])
+			return (-1);
+		else
+			i++;
+	}
+	return (0);
+}
+
 char	*gen_temp_file_name(void)
 {
-	static char		name[255];
+	static char		name[10];
 	char			name_len;
 	int				i;
 
@@ -24,7 +41,7 @@ char	*gen_temp_file_name(void)
 		return (name);
 	}
 	i = 5;
-	while (i < 255)
+	while (i < 10)
 	{
 		if (name[i] == 0)
 			name[i] = '0';
@@ -83,6 +100,22 @@ int	heredoc_handler(t_info *info)
 	return (0);
 }
 
+int	isbuiltin(char *cmd)
+{
+	if (ft_strncmp("echo", cmd, ft_strlen(cmd)) == 0)
+	{
+
+	}
+	else if (ft_strncmp("echo", cmd, ft_strlen(cmd)) == 0)
+	{
+
+	}
+	else if (ft_strncmp(cmd, "echo", 5) == 0)
+	{
+
+	}
+}
+
 int	exec_commands(t_info *info)
 {
 	pid_t	pid;
@@ -92,7 +125,9 @@ int	exec_commands(t_info *info)
 
 	if (heredoc_handler(info))
 		return (ERROR);
-	ft_memset(fd, 0 , sizeof(fd));
+	i = 0;
+	fd[0] = -1;
+	fd[1] = -1;
 	while (i <= info->pipes)
 	{
 		if (i < info->pipes)
@@ -100,6 +135,11 @@ int	exec_commands(t_info *info)
 			if (pipe(fd) != ERROR)
 				return (ERROR);
 			temp = fd[0];
+		}
+		if (info->pipes == 0 && isbuiltin(info->cmds->head->commands_args[0]) == 1)
+		{
+			//포크뜨지 않기.. 그래야 export a=1 같은 것이 저장이 된다..... ㅜㅜ 
+			//바로 실행
 		}
 		pid = fork();
 		if (pid == -1)
