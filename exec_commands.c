@@ -129,12 +129,26 @@ void	parent_process_wait(void)
 	printf("status %d\n", status);
 }
 
+int	my_echo(char **args)
+{
+	int i;
+
+	i = 1;
+	//echo -n 등 옵션 처리
+	while (args[i] != NULL)
+	{
+		write(1, args[i], ft_strlen(args[i]));
+		write(1, "\n", 1);
+		i++;
+	}
+	return (0);
+}
+
 int	exec_builtin(t_cmd_deque *cmd_line)
 {
 	if (ft_strncmp("echo", cmd_line->head->commands_args[0], 5) == 0)
 	{
-		write(1, "이 자리에 echo 와야 함\n", 30);
-		//echo 실행
+		my_echo(cmd_line->head->commands_args);
 	}
 	else if (ft_strncmp("cd", cmd_line->head->commands_args[0], 3) == 0)
 	{
@@ -192,7 +206,7 @@ int	exec_commands(t_info *info)
 		}
 		if (info->pipes == 0 && isbuiltin(info->cmds->head->commands_args[0]) == 1)
 		{
-			exec_builtin(info->cmds->head);
+			exec_builtin(info->cmds);
 			//포크뜨지 않기.. 그래야 export a=1 같은 것이 저장이 된다..... ㅜㅜ 
 			//바로 실행
 			return (0);
