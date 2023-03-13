@@ -145,6 +145,15 @@ int	isbuiltin(char *cmd)
 	return (1);
 }
 
+void	parent_process_wait(void)
+{
+	int	status;
+
+	status = 0;
+	waitpid(-1, &status, 0);
+	printf("status %d\n", status);
+}
+
 int	exec_commands(t_info *info)
 {
 	pid_t	pid;
@@ -178,6 +187,10 @@ int	exec_commands(t_info *info)
 		else if (pid == 0) // 자식 프로세스
 		{
 			child_process_run(info, i, fd, temp);
+		}
+		else
+		{
+			parent_process_wait();
 		}
 		i++;
 	}
