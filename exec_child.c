@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/13 20:51:50 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/13 21:15:37 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,13 @@ int	handle_redirection(t_arg_deque *redirections)
 
 int child_process_run(t_info *info, int i, int fd[], int temp_fd)
 {
-	//stdio_to_pipe(info, i, fd, temp_fd);
-	//handle_redirection(info->cmds->head->commands_args); // command 노드가 NULL이면 어디서 처리가 되는가?
+	printf("child process 입니다.\n");
+	stdio_to_pipe(info, i, fd, temp_fd);
+	handle_redirection(info->cmds->head->redirections); // command 노드가 NULL이면 어디서 처리가 되는가?
 	//command 찾기.
-	//execve(info->cmds->head->commands_args[0], info->cmds->head->commands_args, info->envp_bash);
-	//write(2, "exec 실행 오류.. 어떻게 해야하는데..\n", 49);
-	//exit(어쩌구);
+	execve(info->cmds->head->commands_args[0], info->cmds->head->commands_args, info->envp_bash);
+	write(2, "exec 실행 오류.. 어떻게 해야하는데..\n", 49);
+	exit(1);
 	//전역변수 에러 코드 변환해주기.
 	return (0);
 }

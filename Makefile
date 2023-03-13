@@ -23,6 +23,7 @@ SRCS			=	./main.c\
 					./env_save.c\
 					./env_replace.c\
 					./exec_commands.c\
+					./exec_child.c\
 
 OBJS			=	$(SRCS:%.c=%.o)
 

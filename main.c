@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/12 21:18:40 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/13 21:15:24 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,19 @@ void	print_cmd_deque(t_info *info)
 	}
 }
 
-int main(int argc, char *argv[], char *env[])
+int main(int argc, char *argv[], char *envp[])
 {
 	char	*input;
 	int		stdio_fd[2];
 	t_info	info;
 
-	info.envs = save_env(env);
-	info.envp_bash = env;
+	ft_memset(&info, 0, sizeof(info));
+	info.envs = save_env(envp);
+	info.envp_bash = envp;
 	while (1)
 	{
+		info.pipes = 0;
+		info.redirects = 0;
 		input = readline("minishell$ ");
 		if (input == NULL)
 		{

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 18:02:28 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/13 20:53:53 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/13 21:12:02 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,9 @@ int	print_args_deque(t_info *info)
 		if (temp->special == PIPE)
 		{
 			if (temp->next != NULL && temp->previous != NULL)
-				info->pipes++;
+			{
+				info->pipes += 1;
+			}
 			else
 			{
 				write(2, "minishell: syntax error near unexpected token `|'\n", 50);

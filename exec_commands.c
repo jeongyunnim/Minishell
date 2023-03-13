@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/13 20:57:30 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/13 21:08:03 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,28 +157,30 @@ int	exec_commands(t_info *info)
 	i = 0;
 	fd[0] = -1;
 	fd[1] = -1;
-	//while (i <= info->pipes)
-	//{
-	//	if (i < info->pipes)
-	//	{
-	//		if (pipe(fd) != ERROR)
-	//			return (ERROR);
-	//		temp = fd[0];
-	//	}
-	//	if (info->pipes == 0 && isbuiltin(info->cmds->head->commands_args[0]) == 1)
-	//	{
-	//		//포크뜨지 않기.. 그래야 export a=1 같은 것이 저장이 된다..... ㅜㅜ 
-	//		//바로 실행
-	//	}
-	//	pid = fork();
-	//	if (pid == -1)
-	//		return (ERROR);
-	//	else if (pid == 0) // 자식 프로세스
-	//	{
-	//		child_process_run(info, i, fd, temp);
-	//	}
-	//	i++;
-	//}
+	printf("i %d, pipes: %d\n", i, info->pipes);
+	while (i <= info->pipes)
+	{
+		if (i < info->pipes)
+		{
+			if (pipe(fd) != ERROR)
+				return (ERROR);
+			temp = fd[0];
+		}
+		if (info->pipes == 0 && isbuiltin(info->cmds->head->commands_args[0]) == 1)
+		{
+			//포크뜨지 않기.. 그래야 export a=1 같은 것이 저장이 된다..... ㅜㅜ 
+			//바로 실행
+		}
+		pid = fork();
+		printf("pid: %d\n", pid);
+		if (pid == -1)
+			return (ERROR);
+		else if (pid == 0) // 자식 프로세스
+		{
+			child_process_run(info, i, fd, temp);
+		}
+		i++;
+	}
 	// 1. pipe 처리
 	// 2. redirection 처리
 	// 3. 실행
