@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/14 18:13:58 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/14 19:39:39 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int	my_echo(char **args)
 	return (0);
 }
 
-int	exec_builtin(char **cmd_line)
+int	exec_builtin(char **cmd_line, t_env_deque *envs)
 {
 	if (cmd_line[0] == NULL)
 		return (1);
@@ -245,7 +245,6 @@ int	exec_commands(t_info *info)
 			parent_process_wait();
 			free_cmd_node(&cmd_line);
 			cmd_line = pop_head_cmd(&(info->cmds->head));
-			close(index.fd[0]);
 			close(index.fd[1]);
 		}
 		index.i += 1;
