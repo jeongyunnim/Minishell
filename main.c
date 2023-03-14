@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/14 15:20:35 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/14 20:25:54 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,14 @@ void	print_cmd_deque(t_info *info)
 int main(int argc, char *argv[], char *envp[])
 {
 	char	*input;
-	int		stdio_fd[2];
+	int		stdio_fd[2]; // stdio 어떻게 보존을 시키는지???
 	t_info	info;
 
 	ft_memset(&info, 0, sizeof(info));
 	info.envs = save_env(envp);
 	info.envp_bash = envp;
+	stdio_fd[0] = dup(STDIN_FILENO);
+	stdio_fd[1] = dup(STDOUT_FILENO);
 	while (1)
 	{
 		info.pipes = 0;
@@ -72,6 +74,8 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		free(input);
 		//free structs
+		dup2(0, stdio_fd[0]);
+		dup2(1, stdio_fd[1]);
 	}
 	return (0);
 }

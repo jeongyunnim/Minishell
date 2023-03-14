@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/14 18:24:48 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/14 20:30:06 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int	handle_redirection(t_arg_deque *redirections)
 	if (redirections == NULL)
 		return (0);
 	red = redirections->head;
+	printf("red 처리\n");
 	while (red != NULL)
 	{
 		fd = -1;
@@ -78,9 +79,10 @@ int	handle_redirection(t_arg_deque *redirections)
 		else if (red->special == REDIRECT_OUT)
 		{
 			fd = open(red->arg, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+			printf("%s fd:%d %d\n", red->arg, fd, red->special);
 			if (fd < 0)
 				break ;
-			dup2(fd, STDIN_FILENO);
+			dup2(fd, STDOUT_FILENO); // 왜 작동하지 않는 것이냐...
 			close(fd);
 		}
 		else if (red->special == APPEND)
@@ -88,6 +90,8 @@ int	handle_redirection(t_arg_deque *redirections)
 			fd = open(red->arg, O_WRONLY|O_CREAT|O_APPEND, 0644);
 			if (fd < 0)
 				break ;
+			dup2(fd, STDOUT_FILENO);
+			close(fd);
 		}
 		if (fd < 0)
 		{
@@ -106,11 +110,11 @@ int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 	stdio_to_pipe(cmd_node, index, info->pipes);
 	handle_redirection(cmd_node->redirections); // command 노드가 NULL이면 어디서 처리가 되는가?
 	printf("exec: %s\n", cmd_node->commands_args[0]);
-	if (exec_builtin(cmd_node->commands_args) == 0)
+	if (exec_builtin(cmd_node->commands_args, info->envs) == 0)
 	{
 		exit(EXIT_SUCCESS);
 	}
-	printf("no빌트\n");
+	printf("명령어 찾아서 실행\n");
 	//command 찾기.
 	execve(cmd_node->commands_args[0], cmd_node->commands_args, info->envp_bash);
 	write(2, "exec 실행 오류.. 어떻게 해야하는데..\n", 49);

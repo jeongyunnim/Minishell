@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/14 17:26:01 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/14 19:44:05 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ int			divide_pipe(t_info *info);
 
 /* exec_commands.c */
 int			exec_commands(t_info *info);
-int			exec_builtin(char **cmd_line); // 정상종료 시 0 반환.
+int			exec_builtin(char **cmd_line, t_env_deque *envs); // 정상종료 시 0 반환.
 
 /* exec_child.c */
 int			child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info);

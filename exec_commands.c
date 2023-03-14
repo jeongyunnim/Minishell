@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/14 19:39:39 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/14 19:43:17 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,7 @@ int	exec_commands(t_info *info)
 		if (info->pipes == 0 && isbuiltin(cmd_line->commands_args) == 1)
 		{
 			//리다이렉션 처리.
-			exec_builtin(cmd_line->commands_args);
+			exec_builtin(cmd_line->commands_args, info->envs);
 			printf("빌트인 이거나 command가 없을 때\n");
 			
 			//포크뜨지 않기.. 그래야 export a=1 같은 것이 저장이 된다..... ㅜㅜ 
