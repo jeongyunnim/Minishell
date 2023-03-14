@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/14 19:43:17 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/14 21:18:09 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	isbuiltin(char **cmd_args)
 {
 	char	*cmd;
 
-	if (cmd_args == NULL)
+	if (cmd_args == NULL || *cmd_args == NULL)
 		return (1);
 	cmd = cmd_args[0];
 	if (ft_strncmp("echo", cmd, 5) == 0)
