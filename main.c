@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/13 21:15:24 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/14 15:20:35 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,13 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		add_history(input);
 		parse(input, &info);
-		if (print_args_deque(&info) != ERROR && divide_pipe(&info) != ERROR)
+		if (args_check(&info) != ERROR && divide_pipe(&info) != ERROR)
 		{
-			print_cmd_deque(&info);
+			//print_cmd_deque(&info);
 			exec_commands(&info);
 		}
 		free(input);
 		//free structs
 	}
-	print_args_deque(&info);
 	return (0);
 }

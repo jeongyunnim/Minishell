@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/13 20:22:09 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/14 17:26:01 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef enum	e_special
 	REDIRECT_OUT='>'
 }				t_special;
 
-typedef struct s_arg
+typedef struct	s_arg
 {
 	struct s_arg	*previous;
 	struct s_arg	*next;
@@ -44,7 +44,7 @@ typedef struct s_arg
 	int				special;
 }	t_arg;
 
-typedef struct s_env
+typedef struct	s_env
 {
 	struct s_env	*previous;
 	struct s_env	*next;
@@ -54,20 +54,20 @@ typedef struct s_env
 	unsigned int	value_len;
 }	t_env;
 
-typedef struct s_arg_deque
+typedef struct	s_arg_deque
 {
 	t_arg	*head;
 	t_arg	*tail;
 }	t_arg_deque;
 
 
-typedef struct s_env_deque
+typedef struct	s_env_deque
 {
 	t_env	*head;
 	t_env	*tail;
 }	t_env_deque;
 
-typedef struct s_cmd
+typedef struct	s_cmd
 {
 	t_arg_deque		*redirections;
 	char			**commands_args;
@@ -75,14 +75,13 @@ typedef struct s_cmd
 	struct s_cmd	*previous;
 }				t_cmd;
 
-typedef struct s_cmd_deque
+typedef struct	s_cmd_deque
 {
 	t_cmd	*head;
 	t_cmd	*tail;
 }	t_cmd_deque;
 
-
-typedef struct s_info
+typedef struct	s_info
 {
 	t_arg_deque	*arguments;
 	t_env_deque	*envs;
@@ -91,6 +90,13 @@ typedef struct s_info
 	int			pipes;
 	int			redirects;
 }	t_info;
+
+typedef struct	s_pipe_index
+{
+	int fd[2];
+	int	i;
+	int	prev_pipe_read;
+}	t_pipe_index;
 
 /* parse.c */
 int		parse(char *input, t_info *info);
@@ -138,13 +144,19 @@ int			enter_quote(char input, char *quote_flag);
 int			meta_len(char *input);
 
 /* parse_divide_pipe */
-int			print_args_deque(t_info *info);
+int			args_check(t_info *info);
 int			divide_pipe(t_info *info);
 
 /* exec_commands.c */
 int			exec_commands(t_info *info);
+int			exec_builtin(char **cmd_line); // 정상종료 시 0 반환.
 
 /* exec_child.c */
-int			child_process_run(t_info *info, int i, int fd[], int temp_fd);
+int			child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info);
+
+/* free_util.c */
+void		free_cmd_node(t_cmd **cmd_node);
+void		free_arg_deque(t_arg_deque **arg_deque);
+void		free_env_deque(t_env_deque **env_deque);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/05 19:39:11 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/14 15:24:40 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ int	parse(char *input, t_info *info)
 		if (*input != '\0')
 		{
 			arg_len = count_arg_len(input, info->envs);
-			printf("arg_len: %d\n", arg_len);
 			if (arg_len == ERROR)
 				return (ERROR);
 			else if (arg_len != 0 || is_quote(*input) == 1)

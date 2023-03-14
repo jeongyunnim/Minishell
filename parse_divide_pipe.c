@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_devide_pipe.c                                :+:      :+:    :+:   */
+/*   parse_divide_pipe.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 18:02:28 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/13 21:12:02 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/14 15:24:17 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int divide_pipe(t_info	*info)
 	return (0);
 }
 
-int	print_args_deque(t_info *info)
+int	args_check(t_info *info)
 {
 	t_arg		*temp;
 	int			heredoc_flag;
@@ -133,7 +133,7 @@ int	print_args_deque(t_info *info)
 				exit(2);
 			}
 		}
-		printf("----------------------\n\n[input]: %s\n[type]: %d\n\n----------------------\n", temp->arg, temp->special);
+		//printf("----------------------\n\n[input]: %s\n[type]: %d\n\n----------------------\n", temp->arg, temp->special);
 		temp = temp->next;
 	}
 	return (0);
