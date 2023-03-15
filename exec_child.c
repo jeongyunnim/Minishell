@@ -104,17 +104,68 @@ int	handle_redirection(t_arg_deque *redirections)
 	return (0);
 }
 
+int	check_cmd_in_path(char **cmd, t_env_deque *envs)
+{
+	t_env	*temp_env;
+	char	**paths;
+	char	*temp_char;
+	int 	i;
+
+	temp_env = envs->head;
+	while (temp_env != NULL)
+	{
+		if (ft_strncmp(temp_env->name, "PATH", 5) == 0)
+			break;
+		temp_env = temp_env->next;
+	}
+	paths = ft_split(temp_env->value, ':');
+	i = 0;
+	while (paths[i] != NULL)
+	{
+		temp_char = paths[i];
+		paths[i] = ft_strjoin(paths[i], "/");
+		free(temp_char);
+		temp_char = paths[i];
+		paths[i] = ft_strjoin(paths[i], *cmd);
+		free(temp_char);
+		printf("path[i]: %s\n", paths[i]);
+		if (access(paths[i], F_OK) == 0)
+		{
+			*cmd = paths[i];
+			i++;
+			while (paths[i] != NULL)
+			{
+				free(paths[i]);
+				i++;
+			}
+			free(paths);
+			return (1);
+		}
+		free(paths[i]);
+		i++;
+	}
+	free(paths);
+	return (0);
+}
 
 int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 {
+	char	*cmd;
+
 	stdio_to_pipe(cmd_node, index, info->pipes);
 	handle_redirection(cmd_node->redirections); // command 노드가 NULL이면 어디서 처리가 되는가?
-	printf("exec: %s\n", cmd_node->commands_args[0]);
 	if (exec_builtin(cmd_node->commands_args, info->envs) == 0)
 	{
 		exit(EXIT_SUCCESS);
 	}
-	printf("명령어 찾아서 실행\n");
+	if (check_cmd_in_path(&(cmd_node->commands_args[0]), info->envs) == 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd_node->commands_args[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		exit(EXIT_FAILURE);
+	}
+	printf("exec: %s\n", cmd_node->commands_args[0]);
 	//command 찾기.
 	execve(cmd_node->commands_args[0], cmd_node->commands_args, info->envp_bash);
 	write(2, "exec 실행 오류.. 어떻게 해야하는데..\n", 49);
