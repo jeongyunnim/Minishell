@@ -1,8 +1,12 @@
-exec: /bin/cat
-명령어 찾아서 실행
-aaaaaaaaaaaaaaaaaaaaaaa
+file_name: a
+
+this is
+test
+file
+
 1
 2
 3
 4
 5
+end/no_nl
