@@ -128,7 +128,6 @@ int	check_cmd_in_path(char **cmd, t_env_deque *envs)
 		temp_char = paths[i];
 		paths[i] = ft_strjoin(paths[i], *cmd);
 		free(temp_char);
-		printf("path[i]: %s\n", paths[i]);
 		if (access(paths[i], F_OK) == 0)
 		{
 			*cmd = paths[i];

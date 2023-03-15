@@ -129,7 +129,7 @@ int	isbuiltin(char **cmd_args)
 		return (0);
 }
 
-void	parent_process_wait(void)
+void	parent_process_wait(pid_t pid)
 {
 	int	status;
 
@@ -229,7 +229,6 @@ int	exec_commands(t_info *info)
 			printf("빌트인 이거나 command가 없을 때\n");
 			
 			//포크뜨지 않기.. 그래야 export a=1 같은 것이 저장이 된다..... ㅜㅜ 
-			//바로 실행
 			return (0);
 		}
 		pid = fork();
@@ -242,12 +241,12 @@ int	exec_commands(t_info *info)
 		}
 		else
 		{
-			parent_process_wait();
 			free_cmd_node(&cmd_line);
 			cmd_line = pop_head_cmd(&(info->cmds->head));
 			close(index.fd[1]);
 		}
 		index.i += 1;
 	}
+	parent_process_wait(pid);
 	return (0);
 }
