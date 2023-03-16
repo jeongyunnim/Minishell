@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/14 21:18:09 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/16 14:13:33 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,19 @@ int	isbuiltin(char **cmd_args)
 		return (0);
 }
 
-void	parent_process_wait(pid_t pid)
+void	parent_process_wait(pid_t pid, int pipes)
 {
 	int	status;
+	int	i;
 
+	i = 0;
 	status = 0;
-	waitpid(-1, &status, 0);
+	while (i <= pipes)
+	{
+		printf("==================실행 횟수/파이프 개수: %d/%d\n", i, pipes);
+		waitpid(-1, &status, 0);
+		i++;
+	}
 	printf("status %d\n", status);
 }
 
@@ -227,8 +234,6 @@ int	exec_commands(t_info *info)
 			//리다이렉션 처리.
 			exec_builtin(cmd_line->commands_args, info->envs);
 			printf("빌트인 이거나 command가 없을 때\n");
-			
-			//포크뜨지 않기.. 그래야 export a=1 같은 것이 저장이 된다..... ㅜㅜ 
 			return (0);
 		}
 		pid = fork();
@@ -247,6 +252,6 @@ int	exec_commands(t_info *info)
 		}
 		index.i += 1;
 	}
-	parent_process_wait(pid);
+	parent_process_wait(pid, info->pipes); // 여기까지 오기 전에 자식 프로세스가 끝이 나버리면...??
 	return (0);
 }

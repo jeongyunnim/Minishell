@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/14 20:30:06 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/16 13:56:04 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 	{
 		exit(EXIT_SUCCESS);
 	}
-	if (check_cmd_in_path(&(cmd_node->commands_args[0]), info->envs) == 0)
+	else if (check_cmd_in_path(&(cmd_node->commands_args[0]), info->envs) == 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd_node->commands_args[0], 2);
@@ -165,7 +165,6 @@ int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 		exit(EXIT_FAILURE);
 	}
 	printf("exec: %s\n", cmd_node->commands_args[0]);
-	//command 찾기.
 	execve(cmd_node->commands_args[0], cmd_node->commands_args, info->envp_bash);
 	write(2, "exec 실행 오류.. 어떻게 해야하는데..\n", 49);
 	//전역변수 에러 코드 변환해주기.
