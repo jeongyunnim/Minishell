@@ -250,7 +250,8 @@ int	exec_commands(t_info *info)
 			cmd_line = pop_head_cmd(&(info->cmds->head));
 			if (index.prev_pipe_read != 0)
 				close(index.prev_pipe_read);
-			close(index.fd[1]);
+			if (index.fd[1] != -1)
+				close(index.fd[1]);
 		}
 		index.i += 1;
 	}
