@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/16 13:56:04 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/16 15:23:35 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,19 @@
 
 int	stdio_to_pipe(t_cmd *cmd_line, t_pipe_index index, int pipes)
 {
+	/* 파일에 fd값 저장하는 부분 */
 	FILE *out;
 	char *temp;
 	static int i;
-
 	i++;
 	temp = ft_itoa(i);
 	out = fopen(temp, "w");
 	fprintf(out, "fd[0]: %d fd[1]: %d\n", index.fd[0], index.fd[1]);
 	fclose(out);
 	free(temp);
+
 	if (pipes == 0)
-	{
 		return (0);
-	}
 	if (index.i == 0)
 	{
 		//첫 번째 커맨드는 입력은 STDIN(0)으로 내버려 둔다.
@@ -35,10 +34,13 @@ int	stdio_to_pipe(t_cmd *cmd_line, t_pipe_index index, int pipes)
 		dup2(index.fd[1], STDOUT_FILENO);
 		close(index.fd[1]);
 	}
-	else if (index.i == pipes)
+	else if (index.i == pipes) // 마지막 거..
 	{
 		//STDIN(0)을 temp(이전 fd[0])으로
-		//마지막 커맨드는 STDOUT(1)을 연결하지 않고 종료.
+		//마지막 커맨드는 STDOUT(1)을 연결하지 않고 종료
+
+		// 안 쓰는 파이프 닫아줘야 함..
+
 		dup2(index.prev_pipe_read, STDIN_FILENO);
 		close(index.prev_pipe_read);
 	}
@@ -46,6 +48,9 @@ int	stdio_to_pipe(t_cmd *cmd_line, t_pipe_index index, int pipes)
 	{
 		//0을 temp(이전 fd[0])으로
 		//1을 pipe의 fd[1]로
+		
+		// 안 쓰는 파이프 닫아줘야 함..
+		
 		dup2(index.prev_pipe_read, STDIN_FILENO);
 		dup2(index.fd[1], STDOUT_FILENO);
 		close(index.prev_pipe_read);
@@ -53,6 +58,19 @@ int	stdio_to_pipe(t_cmd *cmd_line, t_pipe_index index, int pipes)
 	}
 	return (0);
 }
+
+//int	check_access_read(char *file_name, t_special type)
+//{
+//	int		fd;
+
+//	if (access(file_name, F_OK) == 0);
+//	fd = open(red->arg, O_RDONLY); // 어차피 acess 함수에서 리드 권한으로 열 건지 쓰기 권한으로 열 건지 체크를 해야할 것이다.
+//	if (red->special == HEREDOC)
+//		unlink(red->arg);
+//	dup2(fd, STDIN_FILENO);
+//	close(fd);
+//	return (0);
+//}
 
 int	handle_redirection(t_arg_deque *redirections)
 {
@@ -68,13 +86,6 @@ int	handle_redirection(t_arg_deque *redirections)
 		fd = -1;
 		if (red->special == HEREDOC || red->special == REDIRECT_IN)
 		{
-			fd = open(red->arg, O_RDONLY); // 어차피 acess 함수에서 리드 권한으로 열 건지 쓰기 권한으로 열 건지 체크를 해야할 것이다.
-			if (fd < 0)
-				break ;
-			if (red->special == HEREDOC)
-				unlink(red->arg);
-			dup2(fd, STDIN_FILENO);
-			close(fd);
 		}
 		else if (red->special == REDIRECT_OUT)
 		{

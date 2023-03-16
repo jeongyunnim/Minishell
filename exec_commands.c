@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/16 14:13:33 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/16 15:17:43 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,8 @@ int	exec_commands(t_info *info)
 		{
 			free_cmd_node(&cmd_line);
 			cmd_line = pop_head_cmd(&(info->cmds->head));
+			if (index.prev_pipe_read != 0)
+				close(index.prev_pipe_read);
 			close(index.fd[1]);
 		}
 		index.i += 1;

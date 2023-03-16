@@ -1,12 +1,7 @@
-file_name: a
-
-this is
+exec: /bin/cat
+tes
+t
 test
-file
-
-1
-2
-3
-4
-5
-end/no_nl
+test
+si
+bbbbb
