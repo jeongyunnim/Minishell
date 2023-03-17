@@ -75,7 +75,7 @@ int	write_temp_file(t_arg_deque *redirects)
 			while (1)
 			{
 				input = readline("> ");
-				if (ft_strncmp(move_red->arg, input, ft_strlen(input)) == 0)
+				if (ft_strncmp(move_red->arg, input, ft_strlen(move_red->arg)) == 0)
 					break ;
 				write(temp_fd, input, ft_strlen(input));
 				write(temp_fd, "\n", 1);
@@ -217,10 +217,8 @@ int	exec_commands(t_info *info)
 
 	if (heredoc_handler(info))
 		return (ERROR);
-	ft_memset(&index, 0, sizeof(index));
-	index.fd[0] = -1;
-	index.fd[1] = -1;
-	index.prev_pipe_read = -1;
+	ft_memset(&index, 1, sizeof(index));
+	index.i = 0;
 	cmd_line = pop_head_cmd(&info->cmds->head);
 	while (cmd_line != NULL)
 	{
@@ -231,9 +229,9 @@ int	exec_commands(t_info *info)
 		}
 		if (info->pipes == 0 && isbuiltin(cmd_line->commands_args) == 1)
 		{
-			handle_redirection(cmd_line->redirections);
+			if (handle_redirection(cmd_line->redirections) == ERROR)
+				return (ERROR);
 			exec_builtin(cmd_line->commands_args, info->envs);
-			printf("빌트인 이거나 command가 없을 때\n");
 			return (0);
 		}
 		pid = fork();
@@ -248,10 +246,8 @@ int	exec_commands(t_info *info)
 		{
 			free_cmd_node(&cmd_line);
 			cmd_line = pop_head_cmd(&(info->cmds->head));
-			if (index.prev_pipe_read != 0)
-			{
+			if (index.prev_pipe_read != -1)
 				close(index.prev_pipe_read);
-			}
 			if (index.fd[1] != -1)
 				close(index.fd[1]);
 			index.prev_pipe_read = index.fd[0];

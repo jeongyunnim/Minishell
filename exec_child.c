@@ -134,6 +134,7 @@ int	handle_redirection(t_arg_deque *redirections)
 				ft_putstr_fd(red->arg, 2);
 				ft_putstr_fd(": Is a directory\n", 2);
 			}
+			return (ERROR);
 		}
 		red = red->next;
 	}
@@ -190,7 +191,10 @@ int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 	char	*cmd;
 
 	stdio_to_pipe(cmd_node, index, info->pipes);
-	handle_redirection(cmd_node->redirections); // command 노드가 NULL이면 어디서 처리가 되는가?
+	if (handle_redirection(cmd_node->redirections) == ERROR)
+	{
+		exit(EXIT_FAILURE);
+	}
 	if (exec_builtin(cmd_node->commands_args, info->envs) == 0)
 	{
 		exit(EXIT_SUCCESS);
