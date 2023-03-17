@@ -15,6 +15,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <dirent.h>
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -22,8 +23,9 @@
 # include "./libft/libft.h"
 
 # define ERROR -1
-# define PERMISSION_ERROR -1
-# define OPEN_ERROR -2
+# define OPEN_ERROR -1
+# define PERMISSION_ERROR -2
+# define DIRECTORY_ERROR -3
 # define INT_MAX 2147483647
 
 int	g_exit_code;

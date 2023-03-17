@@ -64,9 +64,11 @@ int	check_access_read(char *file_name, t_special type)
 	int		fd;
 
 	if (access(file_name, F_OK) == -1)
-			return (OPEN_ERROR);
+		return (OPEN_ERROR);
 	else if (access(file_name, R_OK) == -1)
+	{
 		return (PERMISSION_ERROR);
+	}
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)
 		return (OPEN_ERROR);
@@ -90,6 +92,8 @@ int	check_access_write(char *file_name, t_special type)
 		if (fd < 0)
 			return (OPEN_ERROR);
 	}
+	else if (opendir(file_name) != NULL)
+		return (DIRECTORY_ERROR);
 	else if (access(file_name, W_OK) == -1)
 	{
 		return (PERMISSION_ERROR);
@@ -122,8 +126,14 @@ int	handle_redirection(t_arg_deque *redirections)
 		{
 			if (fd == PERMISSION_ERROR)
 				write(2, "minishell: Permission denied\n", 29);
-			if (fd == OPEN_ERROR)
+			else if (fd == OPEN_ERROR)
 				write(2, "minishell: No such file or directory\n", 37);
+			else
+			{
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd(red->arg, 2);
+				ft_putstr_fd(": Is a directory\n", 2);
+			}
 		}
 		red = red->next;
 	}
