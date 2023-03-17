@@ -102,7 +102,6 @@ int	check_access_write(char *file_name, t_special type)
 		if (fd < 0)
 			return (OPEN_ERROR);		
 	}
-	printf("filename: %s - fd:%d\n", file_name, fd);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (fd);
