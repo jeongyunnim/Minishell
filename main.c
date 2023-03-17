@@ -54,6 +54,7 @@ int main(int argc, char *argv[], char *envp[])
 	ft_memset(&info, 0, sizeof(info));
 	info.envs = save_env(envp);
 	info.envp_bash = envp;
+	// sigaction(SIGINT);
 	while (1)
 	{
 		stdio_fd[0] = dup(STDIN_FILENO);

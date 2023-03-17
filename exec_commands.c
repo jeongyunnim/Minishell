@@ -145,29 +145,13 @@ void	parent_process_wait(pid_t pid, int pipes)
 	printf("status %d\n", status);
 }
 
-int	my_echo(char **args)
-{
-	int i;
-
-	i = 1;
-	//echo -n 등 옵션 처리
-	while (args[i] != NULL)
-	{
-		write(1, args[i], ft_strlen(args[i]));
-		write(1, " ", 1);
-		i++;
-	}
-	write(1, "\n", 1);
-	return (0);
-}
-
 int	exec_builtin(char **cmd_line, t_env_deque *envs)
 {
 	if (cmd_line[0] == NULL)
 		return (1);
 	if (ft_strncmp("echo", cmd_line[0], 5) == 0)
 	{
-		my_echo(cmd_line);
+		ft_putstr_fd("이 자리에 echo 와야 함\n", 2);
 		return (0);
 	}
 	else if (ft_strncmp("cd", cmd_line[0], 3) == 0)

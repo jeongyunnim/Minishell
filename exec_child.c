@@ -85,19 +85,24 @@ int	check_access_write(char *file_name, t_special type)
 
 	if (access(file_name, F_OK) == -1)
 	{
-		if (type == REDIRECT_OUT)
-			fd = open(file_name, O_WRONLY|O_CREAT|O_TRUNC, 0644);
-		else
-			fd = open(file_name, O_WRONLY|O_CREAT|O_APPEND, 0644);
+		fd = open(file_name, O_WRONLY|O_CREAT, 0644);
 		if (fd < 0)
 			return (OPEN_ERROR);
 	}
 	else if (opendir(file_name) != NULL)
 		return (DIRECTORY_ERROR);
 	else if (access(file_name, W_OK) == -1)
-	{
 		return (PERMISSION_ERROR);
+	else
+	{
+		if (type == REDIRECT_OUT)
+			fd = open(file_name, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+		else
+			fd = open(file_name, O_WRONLY|O_CREAT|O_APPEND, 0644);
+		if (fd < 0)
+			return (OPEN_ERROR);		
 	}
+	printf("filename: %s - fd:%d\n", file_name, fd);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (fd);
@@ -115,13 +120,9 @@ int	handle_redirection(t_arg_deque *redirections)
 	{
 		fd = -1;
 		if (red->special == HEREDOC || red->special == REDIRECT_IN)
-		{
 			fd = check_access_read(red->arg, red->special);
-		}
 		else
-		{
 			fd = check_access_write(red->arg, red->special);
-		}
 		if (fd < 0)
 		{
 			if (fd == PERMISSION_ERROR)
