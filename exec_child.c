@@ -63,12 +63,13 @@ int	check_access_read(char *file_name, t_special type)
 {
 	int		fd;
 
-	if (access(file_name, R_OK) == -1)
-	{
-		dprintf(2, "당신은 무엇입니까. 읽기권한 노\n");
-		return (ERROR);
-	}
+	if (access(file_name, F_OK) == -1)
+			return (OPEN_ERROR);
+	else if (access(file_name, R_OK) == -1)
+		return (PERMISSION_ERROR);
 	fd = open(file_name, O_RDONLY);
+	if (fd < 0)
+		return (OPEN_ERROR);
 	if (type == HEREDOC)
 		unlink(file_name);
 	dup2(fd, STDIN_FILENO);
@@ -83,20 +84,16 @@ int	check_access_write(char *file_name, t_special type)
 	if (access(file_name, F_OK) == -1)
 	{
 		if (type == REDIRECT_OUT)
-		{
 			fd = open(file_name, O_WRONLY|O_CREAT|O_TRUNC, 0644);
-		}
 		else
-		{
 			fd = open(file_name, O_WRONLY|O_CREAT|O_APPEND, 0644);
-		}
+		if (fd < 0)
+			return (OPEN_ERROR);
 	}
 	else if (access(file_name, W_OK) == -1)
 	{
-		return (ERROR);
+		return (PERMISSION_ERROR);
 	}
-	if (fd < 0)
-		return (ERROR);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (fd);
@@ -123,9 +120,10 @@ int	handle_redirection(t_arg_deque *redirections)
 		}
 		if (fd < 0)
 		{
-			//open 에러 마다 exit code 변경시켜주기.
-			write(2, "minishell: Permission denied\n", 29);
-			write(2, "minishell: No such file or directory\n", 37);
+			if (fd == PERMISSION_ERROR)
+				write(2, "minishell: Permission denied\n", 29);
+			if (fd == OPEN_ERROR)
+				write(2, "minishell: No such file or directory\n", 37);
 		}
 		red = red->next;
 	}
@@ -140,6 +138,8 @@ int	check_cmd_in_path(char **cmd, t_env_deque *envs)
 	int 	i;
 
 	temp_env = envs->head;
+	if (ft_strchr((*cmd), '/') != 0)
+		return (1);
 	while (temp_env != NULL)
 	{
 		if (ft_strncmp(temp_env->name, "PATH", 5) == 0)
@@ -194,7 +194,10 @@ int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 	}
 	printf("exec: %s\n", cmd_node->commands_args[0]);
 	execve(cmd_node->commands_args[0], cmd_node->commands_args, info->envp_bash);
-	write(2, "exec 실행 오류.. 어떻게 해야하는데..\n", 49);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd_node->commands_args[0], 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
+	exit(EXIT_FAILURE);
 	//전역변수 에러 코드 변환해주기.
 	return (0);
 }

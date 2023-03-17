@@ -22,6 +22,8 @@
 # include "./libft/libft.h"
 
 # define ERROR -1
+# define PERMISSION_ERROR -1
+# define OPEN_ERROR -2
 # define INT_MAX 2147483647
 
 int	g_exit_code;
