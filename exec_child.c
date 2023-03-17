@@ -59,18 +59,48 @@ int	stdio_to_pipe(t_cmd *cmd_line, t_pipe_index index, int pipes)
 	return (0);
 }
 
-//int	check_access_read(char *file_name, t_special type)
-//{
-//	int		fd;
+int	check_access_read(char *file_name, t_special type)
+{
+	int		fd;
 
-//	if (access(file_name, F_OK) == 0);
-//	fd = open(red->arg, O_RDONLY); // 어차피 acess 함수에서 리드 권한으로 열 건지 쓰기 권한으로 열 건지 체크를 해야할 것이다.
-//	if (red->special == HEREDOC)
-//		unlink(red->arg);
-//	dup2(fd, STDIN_FILENO);
-//	close(fd);
-//	return (0);
-//}
+	if (access(file_name, R_OK) == -1)
+	{
+		dprintf(2, "당신은 무엇입니까. 읽기권한 노\n");
+		return (ERROR);
+	}
+	fd = open(file_name, O_RDONLY);
+	if (type == HEREDOC)
+		unlink(file_name);
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	return (fd);
+}
+
+int	check_access_write(char *file_name, t_special type)
+{
+	int fd;
+
+	if (access(file_name, F_OK) == -1)
+	{
+		if (type == REDIRECT_OUT)
+		{
+			fd = open(file_name, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+		}
+		else
+		{
+			fd = open(file_name, O_WRONLY|O_CREAT|O_APPEND, 0644);
+		}
+	}
+	else if (access(file_name, W_OK) == -1)
+	{
+		return (ERROR);
+	}
+	if (fd < 0)
+		return (ERROR);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+	return (fd);
+}
 
 int	handle_redirection(t_arg_deque *redirections)
 {
@@ -85,23 +115,11 @@ int	handle_redirection(t_arg_deque *redirections)
 		fd = -1;
 		if (red->special == HEREDOC || red->special == REDIRECT_IN)
 		{
+			fd = check_access_read(red->arg, red->special);
 		}
-		else if (red->special == REDIRECT_OUT)
+		else
 		{
-			fd = open(red->arg, O_WRONLY|O_CREAT|O_TRUNC, 0644);
-			printf("%s fd:%d %d\n", red->arg, fd, red->special);
-			if (fd < 0)
-				break ;
-			dup2(fd, STDOUT_FILENO); // 왜 작동하지 않는 것이냐...
-			close(fd);
-		}
-		else if (red->special == APPEND)
-		{
-			fd = open(red->arg, O_WRONLY|O_CREAT|O_APPEND, 0644);
-			if (fd < 0)
-				break ;
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
+			fd = check_access_write(red->arg, red->special);
 		}
 		if (fd < 0)
 		{

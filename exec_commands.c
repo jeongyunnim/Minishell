@@ -220,6 +220,7 @@ int	exec_commands(t_info *info)
 	ft_memset(&index, 0, sizeof(index));
 	index.fd[0] = -1;
 	index.fd[1] = -1;
+	index.prev_pipe_read = -1;
 	cmd_line = pop_head_cmd(&info->cmds->head);
 	while (cmd_line != NULL)
 	{
@@ -230,7 +231,7 @@ int	exec_commands(t_info *info)
 		}
 		if (info->pipes == 0 && isbuiltin(cmd_line->commands_args) == 1)
 		{
-			//리다이렉션 처리.
+			handle_redirection(cmd_line->redirections);
 			exec_builtin(cmd_line->commands_args, info->envs);
 			printf("빌트인 이거나 command가 없을 때\n");
 			return (0);

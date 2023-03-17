@@ -153,6 +153,7 @@ int			exec_builtin(char **cmd_line, t_env_deque *envs); // 정상종료 시 0 �
 
 /* exec_child.c */
 int			child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info);
+int			handle_redirection(t_arg_deque *redirections);
 
 /* free_util.c */
 void		free_cmd_node(t_cmd **cmd_node);
