@@ -227,7 +227,6 @@ int	exec_commands(t_info *info)
 		{
 			if (pipe(index.fd) == ERROR)
 				return (ERROR);
-			index.prev_pipe_read = index.fd[0];
 		}
 		if (info->pipes == 0 && isbuiltin(cmd_line->commands_args) == 1)
 		{
@@ -249,9 +248,12 @@ int	exec_commands(t_info *info)
 			free_cmd_node(&cmd_line);
 			cmd_line = pop_head_cmd(&(info->cmds->head));
 			if (index.prev_pipe_read != 0)
+			{
 				close(index.prev_pipe_read);
+			}
 			if (index.fd[1] != -1)
 				close(index.fd[1]);
+			index.prev_pipe_read = index.fd[0];
 		}
 		index.i += 1;
 	}

@@ -54,10 +54,10 @@ int main(int argc, char *argv[], char *envp[])
 	ft_memset(&info, 0, sizeof(info));
 	info.envs = save_env(envp);
 	info.envp_bash = envp;
-	stdio_fd[0] = dup(STDIN_FILENO);
-	stdio_fd[1] = dup(STDOUT_FILENO);
 	while (1)
 	{
+		stdio_fd[0] = dup(STDIN_FILENO);
+		stdio_fd[1] = dup(STDOUT_FILENO);
 		info.pipes = 0;
 		info.redirects = 0;
 		input = readline("minishell$ ");
@@ -74,8 +74,10 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		free(input);
 		//free structs
-		dup2(0, stdio_fd[0]);
-		dup2(1, stdio_fd[1]);
+		dup2(stdio_fd[0], 0);
+		dup2(stdio_fd[1], 1);
+		close(stdio_fd[0]);
+		close(stdio_fd[1]);
 	}
 	return (0);
 }

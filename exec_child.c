@@ -21,7 +21,7 @@ int	stdio_to_pipe(t_cmd *cmd_line, t_pipe_index index, int pipes)
 	i++;
 	temp = ft_itoa(i);
 	out = fopen(temp, "w");
-	fprintf(out, "fd[0]: %d fd[1]: %d\n", index.fd[0], index.fd[1]);
+	fprintf(out, "fd[0]: %d fd[1]: %d prev: %d\n", index.fd[0], index.fd[1], index.prev_pipe_read);
 	fclose(out);
 	free(temp);
 
@@ -50,10 +50,10 @@ int	stdio_to_pipe(t_cmd *cmd_line, t_pipe_index index, int pipes)
 		//1을 pipe의 fd[1]로
 		
 		// 안 쓰는 파이프 닫아줘야 함..
-		
+		close(index.fd[0]);
 		dup2(index.prev_pipe_read, STDIN_FILENO);
-		dup2(index.fd[1], STDOUT_FILENO);
 		close(index.prev_pipe_read);
+		dup2(index.fd[1], STDOUT_FILENO);
 		close(index.fd[1]);
 	}
 	return (0);
@@ -80,7 +80,6 @@ int	handle_redirection(t_arg_deque *redirections)
 	if (redirections == NULL)
 		return (0);
 	red = redirections->head;
-	printf("red 처리\n");
 	while (red != NULL)
 	{
 		fd = -1;
