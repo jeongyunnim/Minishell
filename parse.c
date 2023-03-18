@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/14 15:24:40 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/18 17:35:15 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,17 @@
 int	is_quote(int c)
 {
 	if(c == '\'' || c == '\"')
-	{
 		return (1);
-	}
 	else
-	{
 		return (0);
-	}
 }
 
 int	ft_ismeta(int c)
 {
 	if(c == '>' || c == '<' || c == '|')
-	{
 		return (1);
-	}
 	else
-	{
 		return (0);
-	}
 }
 
 int	count_arg_len(char *input, t_env_deque *envs)
@@ -65,17 +57,8 @@ int	count_arg_len(char *input, t_env_deque *envs)
 		if (quote_flag == 0 && ft_ismeta(input[i]) == 1)
 			return (cnt);
 	}
-
-	if (cnt >= INT_MAX)
-	{
-		write(2, "minishell: Argument too long\n", 29);
-		return (ERROR);
-	}
 	if(quote_flag != 0)
-	{
-		printf("syntax error: 쿼트가 닫히지 않음\n");
-		return (ERROR);
-	}
+		return (QUOTE_ERROR);
 	return (cnt);
 }
 
@@ -95,14 +78,12 @@ int	parse(char *input, t_info *info)
 		arg = NULL;
 		special = 0;
 		while (*input != '\0' && ft_isspace(*input) != 0)
-		{
 			input++;
-		}
 		if (*input != '\0')
 		{
 			arg_len = count_arg_len(input, info->envs);
-			if (arg_len == ERROR)
-				return (ERROR);
+			if (arg_len == QUOTE_ERROR)
+				return (QUOTE_ERROR);
 			else if (arg_len != 0 || is_quote(*input) == 1)
 			{
 				arg = (char *)ft_calloc(arg_len + 1, sizeof(char));
@@ -114,20 +95,5 @@ int	parse(char *input, t_info *info)
 				arg_to_deque(&args, arg, special);
 		}
 	}
-	
-	/* 잘 담겼는지 확인하기 */
-	//t_arg *tmp_arg;
-	//tmp_arg = args->head;
-	//while(tmp_arg != NULL)
-	//{
-	//	printf("%s %d\n", tmp_arg->arg, tmp_arg->special);
-	//	tmp_arg = tmp_arg->next;
-	//}
-	//while(args->head != NULL)
-	//{
-	//	tmp_arg = pop_head_arg(&args->head);
-	//	free(tmp_arg->arg);
-	//	free(tmp_arg);
-	//}
 	return (0);
 }

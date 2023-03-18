@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/16 15:17:43 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/18 17:55:39 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ int	write_temp_file(t_arg_deque *redirects)
 			while (1)
 			{
 				input = readline("> ");
-				if (ft_strncmp(move_red->arg, input, ft_strlen(move_red->arg)) == 0)
+				printf("input: %p\n", input);
+				if (input == NULL || ft_strncmp(move_red->arg, input, ft_strlen(move_red->arg)) == 0)
 					break ;
 				write(temp_fd, input, ft_strlen(input));
 				write(temp_fd, "\n", 1);
@@ -97,7 +98,9 @@ int	heredoc_handler(t_info *info)
 	{
 		if (temp->redirections != NULL)
 		{
+			set_signal_heredoc_mode();
 			write_temp_file(temp->redirections);
+			set_signal_bash_mode();
 		}
 		temp = temp->next;
 	}
@@ -143,6 +146,54 @@ void	parent_process_wait(pid_t pid, int pipes)
 		i++;
 	}
 	printf("status %d\n", status);
+}
+
+int check_echo_flag(char *str)
+{
+	int	i;
+
+	if (str[0] == '-')
+	{
+		i = 1;
+		while (str[i] != '\0')
+		{
+			if (str[i] != 'n')
+				return (0);
+			i++;
+		}
+		return (1);
+	}
+	else
+		return (0);
+}
+
+int	ft_echo(char **argv)
+{
+	int	i;
+	int	n_flag;
+	int	cnt;
+
+	i = 1;
+	cnt = 0;
+	n_flag = (check_echo_flag(argv[1]));
+	while (argv[i] != NULL)
+	{
+		if (n_flag == 1)
+		{
+			i++;
+			cnt++;
+			while (check_echo_flag(argv[i]) != 0)
+				i++;
+			n_flag = 0;
+		}
+		printf("%s", argv[i]);
+		if (argv[i + 1] != NULL)
+			printf(" ");
+		i++;
+	}
+	if (cnt == 0)
+		printf("\n");
+	return (0);
 }
 
 int	exec_builtin(char **cmd_line, t_env_deque *envs)

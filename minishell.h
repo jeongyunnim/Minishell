@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/14 19:44:05 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/18 17:53:51 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <termios.h>
 # include <signal.h>
 # include "./libft/libft.h"
 
 # define ERROR -1
+# define QUOTE_ERROR -1
 # define OPEN_ERROR -1
 # define PERMISSION_ERROR -2
 # define DIRECTORY_ERROR -3
@@ -163,5 +165,11 @@ int			handle_redirection(t_arg_deque *redirections);
 void		free_cmd_node(t_cmd **cmd_node);
 void		free_arg_deque(t_arg_deque **arg_deque);
 void		free_env_deque(t_env_deque **env_deque);
+
+/* signal_handle.c */
+void	set_signal_interactive_mode(void);
+void	set_signal_bash_mode(void);
+void	set_signal_heredoc_mode(void);
+
 
 #endif
