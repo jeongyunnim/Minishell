@@ -42,6 +42,13 @@ typedef enum	e_special
 	REDIRECT_OUT='>'
 }				t_special;
 
+typedef enum	e_mode
+{
+	FORK_CHILD_M,
+	FORK_PARENT_M,
+	INTERACTIVE_M,
+	HEREDOC_M
+}				t_mode;
 typedef struct	s_arg
 {
 	struct s_arg	*previous;
@@ -167,9 +174,6 @@ void		free_arg_deque(t_arg_deque **arg_deque);
 void		free_env_deque(t_env_deque **env_deque);
 
 /* signal_handle.c */
-void	set_signal_interactive_mode(void);
-void	set_signal_bash_mode(void);
-void	set_signal_heredoc_mode(void);
-
+void	set_signal_mode(int flag);
 
 #endif

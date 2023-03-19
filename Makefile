@@ -24,6 +24,7 @@ SRCS			=	./main.c\
 					./env_replace.c\
 					./exec_commands.c\
 					./exec_child.c\
+					./signal_handle.c\
 					./free_util.c\
 
 OBJS			=	$(SRCS:%.c=%.o)

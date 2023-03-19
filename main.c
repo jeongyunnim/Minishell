@@ -66,36 +66,6 @@ void	reset_input_mode(struct termios *org_term)
 
 /* 시그널 처리 */
 
-void	signal_handler_interactive_mode(int signo)
-{
-	if (signo == SIGINT)
-	{
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 1);
-		rl_redisplay();
-	}
-}
-
-void	set_signal_interactive_mode(void)
-{
-	signal(SIGINT, signal_handler_interactive_mode);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	set_signal_bash_mode(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-}
-
-void	set_signal_heredoc_mode(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-
 int main(int argc, char *argv[], char *envp[])
 {
 	char				*input;
@@ -113,7 +83,7 @@ int main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
-		set_signal_interactive_mode();
+		set_signal_mode(INTERACTIVE_M);
 		stdio_fd[0] = dup(STDIN_FILENO);
 		stdio_fd[1] = dup(STDOUT_FILENO);
 		info.pipes = 0;

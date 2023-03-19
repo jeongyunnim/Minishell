@@ -98,9 +98,9 @@ int	heredoc_handler(t_info *info)
 	{
 		if (temp->redirections != NULL)
 		{
-			set_signal_heredoc_mode();
+			set_signal_mode(HEREDOC_M);
 			write_temp_file(temp->redirections);
-			set_signal_bash_mode();
+			set_signal_mode(INTERACTIVE_M);
 		}
 		temp = temp->next;
 	}
@@ -146,54 +146,6 @@ void	parent_process_wait(pid_t pid, int pipes)
 		i++;
 	}
 	printf("status %d\n", status);
-}
-
-int check_echo_flag(char *str)
-{
-	int	i;
-
-	if (str[0] == '-')
-	{
-		i = 1;
-		while (str[i] != '\0')
-		{
-			if (str[i] != 'n')
-				return (0);
-			i++;
-		}
-		return (1);
-	}
-	else
-		return (0);
-}
-
-int	ft_echo(char **argv)
-{
-	int	i;
-	int	n_flag;
-	int	cnt;
-
-	i = 1;
-	cnt = 0;
-	n_flag = (check_echo_flag(argv[1]));
-	while (argv[i] != NULL)
-	{
-		if (n_flag == 1)
-		{
-			i++;
-			cnt++;
-			while (check_echo_flag(argv[i]) != 0)
-				i++;
-			n_flag = 0;
-		}
-		printf("%s", argv[i]);
-		if (argv[i + 1] != NULL)
-			printf(" ");
-		i++;
-	}
-	if (cnt == 0)
-		printf("\n");
-	return (0);
 }
 
 int	exec_builtin(char **cmd_line, t_env_deque *envs)
@@ -274,11 +226,13 @@ int	exec_commands(t_info *info)
 			return (ERROR);
 		else if (pid == 0) // 자식 프로세스
 		{
+			set_signal_mode(FORK_CHILD_M);
 			child_process_run(cmd_line, index, info);
 			exit(EXIT_SUCCESS);
 		}
 		else
 		{
+			set_signal_mode(FORK_PARENT_M);
 			free_cmd_node(&cmd_line);
 			cmd_line = pop_head_cmd(&(info->cmds->head));
 			if (index.prev_pipe_read != -1)
