@@ -55,9 +55,7 @@ void	save_input_mode(struct termios *org_term)
 void	set_input_mode(struct termios *new_term)
 {
 	tcgetattr(STDIN_FILENO, new_term);
-	new_term->c_lflag &= ~(ICANON | ECHO);
-	new_term->c_cc[VMIN] = 1;
-	new_term->c_cc[VTIME] = 0;
+	new_term->c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, new_term);
 }
 
@@ -72,7 +70,9 @@ void	signal_handler_interactive_mode(int signo)
 {
 	if (signo == SIGINT)
 	{
+		write(1, "\n", 1);
 		rl_on_new_line();
+		rl_replace_line("", 1);
 		rl_redisplay();
 	}
 }
@@ -80,7 +80,7 @@ void	signal_handler_interactive_mode(int signo)
 void	set_signal_interactive_mode(void)
 {
 	signal(SIGINT, signal_handler_interactive_mode);
-	signal(SIGQUIT,SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	set_signal_bash_mode(void)
@@ -112,6 +112,7 @@ int main(int argc, char *argv[], char *envp[])
 	set_input_mode(&new_term);
 	while (1)
 	{
+		tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
 		set_signal_interactive_mode();
 		stdio_fd[0] = dup(STDIN_FILENO);
 		stdio_fd[1] = dup(STDOUT_FILENO);
@@ -120,7 +121,9 @@ int main(int argc, char *argv[], char *envp[])
 		input = readline("minishell$ ");
 		if (input == NULL)
 		{
-			ft_putstr_fd("exit\n", 2);
+			ft_putstr_fd("\033[1A", 1);
+			ft_putstr_fd("\033[11C", 1);
+			ft_putstr_fd("exit\n", 1);
 			exit(EXIT_SUCCESS);
 		}
 		add_history(input);

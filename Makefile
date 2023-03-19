@@ -6,10 +6,10 @@ CC			=	cc
 CFLAGS		=	-g3 -fsanitize=address\
 #-Wall -Wextra -Werror
 
-INCLUDES 	=	-I -lreadline \
+INCLUDES 	=	-I /opt/homebrew/opt/readline/include \
  				-I ./libft/ \
  				-I .
-LIBS		=	-lreadline \
+LIBS		=	-L /opt/homebrew/opt/readline/lib -lreadline \
  				-L ./libft/ -lft
 
 SRCS			=	./main.c\
