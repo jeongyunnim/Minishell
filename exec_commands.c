@@ -224,7 +224,7 @@ int	exec_commands(t_info *info)
 		pid = fork();
 		if (pid == -1)
 			return (ERROR);
-		else if (pid == 0) // 자식 프로세스
+		else if (pid == 0)
 		{
 			set_signal_mode(FORK_CHILD_M);
 			child_process_run(cmd_line, index, info);

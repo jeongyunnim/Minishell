@@ -15,7 +15,7 @@
 int	env_special_len(char *input)
 {
 	int	cnt;
-	
+
 	if (*input == '0')
 	{
 		return (9);
@@ -23,13 +23,14 @@ int	env_special_len(char *input)
 	else
 	{
 		if (g_exit_code < 10)
-            return (1);
-        else if (g_exit_code < 100)
-            return (2);
-        else
-            return (3);
+			return (1);
+		else if (g_exit_code < 100)
+			return (2);
+		else
+			return (3);
 	}
 }
+
 void	code_to_arg(char (*code)[4])
 {
 	char	temp;
@@ -78,4 +79,30 @@ int	env_special_replace(char **input, char **arg)
 	}
 	(*input)++;
 	return (0);
+}
+
+void	replace_env(char **input, char **arg, t_env_deque *env, char qflag)
+{	
+	unsigned int	i;
+
+	i = 0;
+	(*input)++;
+	if (ft_isspace(**input) == 1 || **input == '\0' || **input == '$')
+	{
+		**arg = '$';
+		(*arg)++;
+	}
+	else if (is_quote(**input) == 1 && qflag != 0)
+	{
+		**arg = '$';
+		(*arg)++;
+	}
+	else if (ft_isalpha(**input) || is_env_special(**input) || **input == '_')
+		valid_env_name_replace(input, arg, env);
+	else
+	{
+		invalid_env_name(*input, &i);
+		(*input) += i;
+	}
+	(*input)--;
 }

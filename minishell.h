@@ -32,7 +32,7 @@
 
 int	g_exit_code;
 
-typedef enum	e_special
+typedef enum e_special
 {
 	NONE,
 	HEREDOC,
@@ -42,14 +42,14 @@ typedef enum	e_special
 	REDIRECT_OUT='>'
 }				t_special;
 
-typedef enum	e_mode
+typedef enum e_mode
 {
 	FORK_CHILD_M,
 	FORK_PARENT_M,
 	INTERACTIVE_M,
 	HEREDOC_M
 }				t_mode;
-typedef struct	s_arg
+typedef struct s_arg
 {
 	struct s_arg	*previous;
 	struct s_arg	*next;
@@ -57,7 +57,7 @@ typedef struct	s_arg
 	int				special;
 }	t_arg;
 
-typedef struct	s_env
+typedef struct s_env
 {
 	struct s_env	*previous;
 	struct s_env	*next;
@@ -67,20 +67,18 @@ typedef struct	s_env
 	unsigned int	value_len;
 }	t_env;
 
-typedef struct	s_arg_deque
+typedef struct s_arg_deque
 {
 	t_arg	*head;
 	t_arg	*tail;
 }	t_arg_deque;
-
-
-typedef struct	s_env_deque
+typedef struct s_env_deque
 {
 	t_env	*head;
 	t_env	*tail;
 }	t_env_deque;
 
-typedef struct	s_cmd
+typedef struct s_cmd
 {
 	t_arg_deque		*redirections;
 	char			**commands_args;
@@ -88,13 +86,13 @@ typedef struct	s_cmd
 	struct s_cmd	*previous;
 }				t_cmd;
 
-typedef struct	s_cmd_deque
+typedef struct s_cmd_deque
 {
 	t_cmd	*head;
 	t_cmd	*tail;
 }	t_cmd_deque;
 
-typedef struct	s_info
+typedef struct s_info
 {
 	t_arg_deque	*arguments;
 	t_env_deque	*envs;
@@ -104,15 +102,22 @@ typedef struct	s_info
 	int			redirects;
 }	t_info;
 
-typedef struct	s_pipe_index
+typedef struct s_pipe_index
 {
-	int fd[2];
+	int	fd[2];
 	int	i;
 	int	prev_pipe_read;
 }	t_pipe_index;
 
+typedef struct s_parse_index
+{
+	unsigned int	cnt;
+	unsigned int	i;
+	char			quote_flag;	
+}	t_parse_index;
+
 /* parse.c */
-int		parse(char *input, t_info *info);
+int			parse(char *input, t_info *info);
 
 /* deque_arg_util.c */
 t_arg		*lstnew_arg(char *arg);
@@ -145,11 +150,14 @@ int			ft_ismeta(int c);
 /* env_save.c */
 t_env_deque	*save_env(char **env);
 int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env, char quote_flag);
-int			replace_env(char **input, char **arg, t_env_deque *env, char quote_flag);
+void		replace_env(char **input, char **arg, t_env_deque *env, char quote_flag);
 
 /* env_replace.c */
 int			env_special_len(char *input);
 int			env_special_replace(char **input, char **arg);
+int			is_env_special(int c);
+int			invalid_env_name(char *input, unsigned int *i);
+int			valid_env_name_replace(char **input, char **arg, t_env_deque *env);
 
 /* parse_count_len.c */
 int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quote_flag);
@@ -174,6 +182,6 @@ void		free_arg_deque(t_arg_deque **arg_deque);
 void		free_env_deque(t_env_deque **env_deque);
 
 /* signal_handle.c */
-void	set_signal_mode(int flag);
+void		set_signal_mode(int flag);
 
 #endif

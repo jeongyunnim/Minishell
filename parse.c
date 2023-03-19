@@ -30,36 +30,33 @@ int	ft_ismeta(int c)
 
 int	count_arg_len(char *input, t_env_deque *envs)
 {
-	unsigned int	cnt;
-	unsigned int	i;
-	char			quote_flag;
+	t_parse_index	index;
 
-	cnt = 0;
-	i = 0;
-	quote_flag = 0;
-	while (input[i] != '\0') // return 조건 추가하기
+	memset(&index, 0, sizeof(index));
+	while (input[index.i] != '\0')
 	{
-		if (quote_flag == 0 && ft_isspace(input[i]) == 1)
-			return (cnt);
-		else if (is_quote(input[i]) == 1)
-			cnt += enter_quote(input[i], &quote_flag);
-		else if (quote_flag != 1 && input[i] == '$')
+		if (index.quote_flag == 0 && ft_isspace(input[index.i]) == 1)
+			return (index.cnt);
+		else if (is_quote(input[index.i]) == 1)
+			index.cnt += enter_quote(input[index.i], &index.quote_flag);
+		else if (index.quote_flag != 1 && input[index.i] == '$')
 		{
-			cnt += set_env_len(input, &i, envs, quote_flag);
-            if (input[i] == '\0')
-                break ;
+			index.cnt += set_env_len(input, &index.i, envs, index.quote_flag);
+			(index.i)--;
+			if (input[index.i] == '\0')
+				break ;
 		}
-		else if (quote_flag == 0 && ft_ismeta(input[i]) == 1)
+		else if (index.quote_flag == 0 && ft_ismeta(input[index.i]) == 1)
 			return (meta_len(input));
 		else
-			cnt++;
-		i++;
-		if (quote_flag == 0 && ft_ismeta(input[i]) == 1)
-			return (cnt);
+			(index.cnt)++;
+		(index.i)++;
+		if (index.quote_flag == 0 && ft_ismeta(input[index.i]) == 1)
+			return (index.cnt);
 	}
-	if(quote_flag != 0)
+	if (index.quote_flag != 0)
 		return (QUOTE_ERROR);
-	return (cnt);
+	return (index.cnt);
 }
 
 int	parse(char *input, t_info *info)

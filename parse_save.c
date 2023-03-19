@@ -54,18 +54,18 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 		else if (is_quote(**input) == 1)
 		{
 			if (enter_quote(**input, &quote_flag) == 1)
- 				*(arg++) = **input;
+				*(arg++) = **input;
 		}
 		else if (quote_flag != 1 && **input == '$')
 		{
 			replace_env(input, &arg, envs, quote_flag);
-            if (**input == '\0')
-                return (special);
+			if (**input == '\0')
+				return (special);
 		}
 		else if (quote_flag == 0 && ft_ismeta(**input) == 1)
 			return (meet_meta_replace(input, &arg));
 		else
- 			*(arg++) = **input;
+			*(arg++) = **input;
 		(*input)++;
 		if (quote_flag == 0 && ft_ismeta(**input) == 1)
 			return (special);
@@ -81,7 +81,7 @@ int	ft_isupper(int c)
 		return (0);
 }
 
-int	arg_to_deque(t_arg_deque **args, char *arg, int	special)
+int	arg_to_deque(t_arg_deque **args, char *arg, int special)
 {
 	t_arg	*new;
 

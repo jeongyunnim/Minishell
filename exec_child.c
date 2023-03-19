@@ -14,42 +14,21 @@
 
 int	stdio_to_pipe(t_cmd *cmd_line, t_pipe_index index, int pipes)
 {
-	/* 파일에 fd값 저장하는 부분 */
-	FILE *out;
-	char *temp;
-	static int i;
-	i++;
-	temp = ft_itoa(i);
-	out = fopen(temp, "w");
-	fprintf(out, "fd[0]: %d fd[1]: %d prev: %d\n", index.fd[0], index.fd[1], index.prev_pipe_read);
-	fclose(out);
-	free(temp);
-
 	if (pipes == 0)
 		return (0);
 	if (index.i == 0)
 	{
-		//첫 번째 커맨드는 입력은 STDIN(0)으로 내버려 둔다.
 		close(index.fd[0]);
 		dup2(index.fd[1], STDOUT_FILENO);
 		close(index.fd[1]);
 	}
-	else if (index.i == pipes) // 마지막 거..
+	else if (index.i == pipes)
 	{
-		//STDIN(0)을 temp(이전 fd[0])으로
-		//마지막 커맨드는 STDOUT(1)을 연결하지 않고 종료
-
-		// 안 쓰는 파이프 닫아줘야 함..
-
 		dup2(index.prev_pipe_read, STDIN_FILENO);
 		close(index.prev_pipe_read);
 	}
 	else
 	{
-		//0을 temp(이전 fd[0])으로
-		//1을 pipe의 fd[1]로
-		
-		// 안 쓰는 파이프 닫아줘야 함..
 		close(index.fd[0]);
 		dup2(index.prev_pipe_read, STDIN_FILENO);
 		close(index.prev_pipe_read);
@@ -81,11 +60,11 @@ int	check_access_read(char *file_name, t_special type)
 
 int	check_access_write(char *file_name, t_special type)
 {
-	int fd;
+	int	fd;
 
 	if (access(file_name, F_OK) == -1)
 	{
-		fd = open(file_name, O_WRONLY|O_CREAT, 0644);
+		fd = open(file_name, O_WRONLY | O_CREAT, 0644);
 		if (fd < 0)
 			return (OPEN_ERROR);
 	}
@@ -96,11 +75,11 @@ int	check_access_write(char *file_name, t_special type)
 	else
 	{
 		if (type == REDIRECT_OUT)
-			fd = open(file_name, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+			fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else
-			fd = open(file_name, O_WRONLY|O_CREAT|O_APPEND, 0644);
+			fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd < 0)
-			return (OPEN_ERROR);		
+			return (OPEN_ERROR);
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
@@ -141,65 +120,55 @@ int	handle_redirection(t_arg_deque *redirections)
 	return (0);
 }
 
-int	check_cmd_in_path(char **cmd, t_env_deque *envs)
+void	cat_path_cmd(char **paths, char *cmd)
 {
-	t_env	*temp_env;
-	char	**paths;
 	char	*temp_char;
-	int 	i;
 
-	temp_env = envs->head;
-	if (ft_strchr((*cmd), '/') != 0)
-		return (1);
-	while (temp_env != NULL)
-	{
-		if (ft_strncmp(temp_env->name, "PATH", 5) == 0)
-			break;
+	temp_char = *paths;
+	*paths = ft_strjoin(*paths, "/");
+	free(temp_char);
+	temp_char = *paths;
+	*paths = ft_strjoin(*paths, cmd);
+	free(temp_char);
+}
+
+int	check_cmd_in_path(char **cmd, t_env *temp_env)
+{
+	char	**dirs;
+	int		i;
+	int		command_flag;
+
+	while (temp_env != NULL && ft_strncmp("PATH", temp_env->name, 5) != 0)
 		temp_env = temp_env->next;
-	}
-	paths = ft_split(temp_env->value, ':');
+	if (temp_env == NULL)
+		return (0);
+	dirs = ft_split(temp_env->value, ':');
+	command_flag = 0;
 	i = 0;
-	while (paths[i] != NULL)
+	while (dirs[i] != NULL)
 	{
-		temp_char = paths[i];
-		paths[i] = ft_strjoin(paths[i], "/");
-		free(temp_char);
-		temp_char = paths[i];
-		paths[i] = ft_strjoin(paths[i], *cmd);
-		free(temp_char);
-		if (access(paths[i], F_OK) == 0)
+		cat_path_cmd(&dirs[i], *cmd);
+		if (command_flag == 0 && access(dirs[i], F_OK) == 0)
 		{
-			*cmd = paths[i];
-			i++;
-			while (paths[i] != NULL)
-			{
-				free(paths[i]);
-				i++;
-			}
-			free(paths);
-			return (1);
+			free(*cmd);
+			*cmd = dirs[i++];
+			command_flag = 1;
 		}
-		free(paths[i]);
-		i++;
+		free(dirs[i++]);
 	}
-	free(paths);
-	return (0);
+	free(dirs);
+	return (command_flag);
 }
 
 int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 {
-	char	*cmd;
-
 	stdio_to_pipe(cmd_node, index, info->pipes);
 	if (handle_redirection(cmd_node->redirections) == ERROR)
-	{
 		exit(EXIT_FAILURE);
-	}
 	if (exec_builtin(cmd_node->commands_args, info->envs) == 0)
-	{
 		exit(EXIT_SUCCESS);
-	}
-	else if (check_cmd_in_path(&(cmd_node->commands_args[0]), info->envs) == 0)
+	else if (ft_strchr(cmd_node->commands_args[0], '/') == 0 && \
+	check_cmd_in_path(&(cmd_node->commands_args[0]), info->envs->head) == 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd_node->commands_args[0], 2);

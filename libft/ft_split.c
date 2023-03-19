@@ -76,8 +76,6 @@ char	**ft_split(char const *s, char c)
 	else
 		count = word_count(temp, c);
 	splited = (char **)ft_calloc(count + 1, sizeof(char *));
-	if (splited == NULL)
-		return (NULL);
 	while (++i < count)
 	{
 		splited[i] = ret_word(&temp, c);
