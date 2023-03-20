@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 20:03:24 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 21:39:17 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ void	parent_process_wait(pid_t pid, int pipes)
 
 int	exec_builtin(char **cmd_line, t_env_deque *envs)
 {
-	if (cmd_line[0] == NULL)
+	if (cmd_line[0] == NULL || cmd_line[0][0] == '\0')
 		return (0);
 	if (ft_strncmp("echo", cmd_line[0], 5) == 0)
 	{
