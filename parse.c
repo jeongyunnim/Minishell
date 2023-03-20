@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/18 17:35:15 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 17:21:31 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	count_arg_len(char *input, t_env_deque *envs)
 {
 	t_parse_index	index;
 
-	memset(&index, 0, sizeof(index));
+	ft_memset(&index, 0, sizeof(index));
 	while (input[index.i] != '\0')
 	{
 		if (index.quote_flag == 0 && ft_isspace(input[index.i]) == 1)
@@ -89,7 +89,10 @@ int	parse(char *input, t_info *info)
 			}
 			special = save_arg(&input, arg, arg_len, info->envs);
 			if (arg != NULL)
+			{
 				arg_to_deque(&args, arg, special);
+				free(arg);
+			}
 		}
 	}
 	return (0);

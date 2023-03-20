@@ -3,13 +3,24 @@ NAME		=	./minishell
 LIBFTDIR	= ./libft
 
 CC			=	cc
-CFLAGS		=	-g3 -fsanitize=address\
+CFLAGS		=	#-g3 -fsanitize=address\
 #-Wall -Wextra -Werror
 
-INCLUDES 	=	-I /opt/homebrew/opt/readline/include \
+# m1 mac 용
+
+#INCLUDES 	=	-I /opt/homebrew/opt/readline/include \
+# 				-I ./libft/ \
+# 				-I .
+#LIBS		=	-L /opt/homebrew/opt/readline/lib -lreadline \
+# 				-L ./libft/ -lft
+
+# cluster 용 
+
+INCLUDES 	=	-I /goinfre/jeseo/.brew/opt/readline/include \
  				-I ./libft/ \
  				-I .
-LIBS		=	-L /opt/homebrew/opt/readline/lib -lreadline \
+
+LIBS		=	-L /goinfre/jeseo/.brew/opt/readline/lib  -lreadline \
  				-L ./libft/ -lft
 
 SRCS			=	./main.c\

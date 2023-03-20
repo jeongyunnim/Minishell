@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/16 15:23:35 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 16:08:16 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 	if (exec_builtin(cmd_node->commands_args, info->envs) == 0)
 		exit(EXIT_SUCCESS);
 	else if (ft_strchr(cmd_node->commands_args[0], '/') == 0 && \
-	check_cmd_in_path(&(cmd_node->commands_args[0]), info->envs->head) == 0)
+		check_cmd_in_path(&(cmd_node->commands_args[0]), info->envs->head) == 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd_node->commands_args[0], 2);

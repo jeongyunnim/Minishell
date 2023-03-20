@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/07 16:41:25 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 16:51:27 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,19 @@ int	is_env_special(int c)
 
 int	invalid_env_name(char *input, unsigned int *i)
 {
+	int	special;
+
+	special = 0;
 	if (ft_isdigit(input[*i]) != 0)
 		(*i)++;
-	else
+	else if (ft_isalnum(input[*i]) == 1 || input[*i] == '_')
 	{
 		while (ft_isalnum(input[*i]) == 1 || input[*i] == '_')
 			(*i)++;
 	}
-	return (0);
+	else
+		special = 1;
+	return (special);
 }
 
 int	valid_env_name_match(char *input, t_env_deque *env, unsigned int *i)
@@ -95,14 +100,9 @@ int	set_env_len(char *input, unsigned int *i, t_env_deque *env, char qflag)
 
 	cnt = 0;
 	(*i)++;
-	if (input[*i] == '\0' || input[*i] == '$' || ft_isspace(input[*i]) == 1)
-		return (1);
-	else if (is_quote(input[*i]) == 1)
-	{
-		if (qflag != 0)
+	if (input[*i] == '\0' || input[*i] == '$' || ft_isspace(input[*i]) == 1 \
+		|| (is_quote(input[*i]) == 1 && qflag != 0))
 			return (1);
-		return (0);
-	}
 	if (ft_isalpha(input[*i]) || is_env_special(input[*i]) || input[*i] == '_')
 	{
 		cnt = valid_env_name_match(input, env, i);
@@ -110,7 +110,8 @@ int	set_env_len(char *input, unsigned int *i, t_env_deque *env, char qflag)
 	}
 	else
 	{
-		invalid_env_name(input, i);
+		if (invalid_env_name(input, i) == 1)
+			return (1);
 		return (0);
 	}
 }

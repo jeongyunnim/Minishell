@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 19:45:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/05 15:50:07 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 16:59:19 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,8 @@ void	replace_env(char **input, char **arg, t_env_deque *env, char qflag)
 
 	i = 0;
 	(*input)++;
-	if (ft_isspace(**input) == 1 || **input == '\0' || **input == '$')
-	{
-		**arg = '$';
-		(*arg)++;
-	}
-	else if (is_quote(**input) == 1 && qflag != 0)
+	if (**input == '\0' || **input == '$' || ft_isspace(**input) == 1\
+	 || (is_quote(**input) == 1 && qflag != 0))
 	{
 		**arg = '$';
 		(*arg)++;
@@ -101,7 +97,11 @@ void	replace_env(char **input, char **arg, t_env_deque *env, char qflag)
 		valid_env_name_replace(input, arg, env);
 	else
 	{
-		invalid_env_name(*input, &i);
+		if (invalid_env_name(*input, &i) == 1)
+		{
+			**arg = '$';
+			(*arg)++;
+		}
 		(*input) += i;
 	}
 	(*input)--;

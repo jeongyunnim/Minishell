@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/18 17:55:39 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 17:13:03 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,15 @@ int	write_temp_file(t_arg_deque *redirects)
 			while (1)
 			{
 				input = readline("> ");
-				printf("input: %p\n", input);
-				if (input == NULL || ft_strncmp(move_red->arg, input, ft_strlen(move_red->arg)) == 0)
+				if (input == NULL || ft_strncmp(move_red->arg, input, ft_strlen(move_red->arg) + 1) == 0)
 					break ;
 				write(temp_fd, input, ft_strlen(input));
 				write(temp_fd, "\n", 1);
+				free(input);
 			}
+			if (input != NULL)
+				free(input);
+			free(move_red->arg);
 			move_red->arg = ft_strdup(temp_file);
 			close(temp_fd);
 		}
@@ -141,17 +144,16 @@ void	parent_process_wait(pid_t pid, int pipes)
 	status = 0;
 	while (i <= pipes)
 	{
-		printf("==================실행 횟수/파이프 개수: %d/%d\n", i, pipes);
 		waitpid(-1, &status, 0);
 		i++;
 	}
-	printf("status %d\n", status);
+	printf("status %d\n", status); // status 잘 처리하기..
 }
 
 int	exec_builtin(char **cmd_line, t_env_deque *envs)
 {
 	if (cmd_line[0] == NULL)
-		return (1);
+		return (0);
 	if (ft_strncmp("echo", cmd_line[0], 5) == 0)
 	{
 		ft_putstr_fd("이 자리에 echo 와야 함\n", 2);
