@@ -8,6 +8,7 @@ void	signal_handler_interactive_mode(int signo)
 		rl_on_new_line();
 		rl_replace_line("", 1);
 		rl_redisplay();
+		g_exit_code = 130;
 	}
 }
 

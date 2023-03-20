@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 21:31:43 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 21:58:09 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,6 @@ t_env_deque	*save_env(char *env[], char **home)
 		ft_strlcpy(new->name, env[i], name_len + 1);
 		if (*(env[i] + name_len) != '\0')
 			new->value = ft_strdup(env[i] + name_len + 1);
-		//if (ft_strncmp(new->name, "HOME", 5) == 0)
-		//	*home = ft_strdup(new->value);
 		new->name_len = name_len;
 		new->value_len = ft_strlen(env[i] + name_len + 1);
 		append_tail_env(&envs->head, &envs->tail, new);

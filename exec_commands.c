@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 21:39:17 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 22:03:23 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ int	write_temp_file(t_arg_deque *redirects)
 			}
 			if (input != NULL)
 				free(input);
-			dprintf(2, "아그: %s\n", move_red->arg);
 			free(move_red->arg);
 			move_red->arg = ft_strdup(temp_file);
 			close(temp_fd);
@@ -96,6 +95,7 @@ int	write_temp_file(t_arg_deque *redirects)
 int	heredoc_handler(t_info *info)
 {
 	t_cmd	*temp;
+	pid_t	pid;
 
 	temp = info->cmds->head;
 	while (temp != NULL)
