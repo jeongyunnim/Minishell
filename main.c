@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/18 17:56:25 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 20:29:00 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,17 @@ int main(int argc, char *argv[], char *envp[])
 		if (parse(input, &info) == QUOTE_ERROR)
 		{
 			ft_putstr_fd("minishell: syntax error quote is not closed\n", 2);
-			continue ;
 		}
-		if (args_check(&info) != ERROR && divide_pipe(&info) != ERROR)
+		if (args_check(&info) != ERROR)
 		{
-			//print_cmd_deque(&info);
+			divide_pipe(&info);
 			exec_commands(&info);
 		}
+		else
+		{
+			free_arg_deque(&info.arguments);
+		}
 		free(input);
-		//free structs
 		dup2(stdio_fd[0], 0);
 		dup2(stdio_fd[1], 1);
 		close(stdio_fd[0]);

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 17:21:31 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 20:26:30 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,7 @@ int	parse(char *input, t_info *info)
 			if (arg_len == QUOTE_ERROR)
 				return (QUOTE_ERROR);
 			else if (arg_len != 0 || is_quote(*input) == 1)
-			{
 				arg = (char *)ft_calloc(arg_len + 1, sizeof(char));
-				if (arg == NULL)
-					return (ERROR);
-			}
 			special = save_arg(&input, arg, arg_len, info->envs);
 			if (arg != NULL)
 			{

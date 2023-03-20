@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 17:13:03 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 20:03:24 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int	write_temp_file(t_arg_deque *redirects)
 			}
 			if (input != NULL)
 				free(input);
+			dprintf(2, "아그: %s\n", move_red->arg);
 			free(move_red->arg);
 			move_red->arg = ft_strdup(temp_file);
 			close(temp_fd);
@@ -206,7 +207,9 @@ int	exec_commands(t_info *info)
 
 	if (heredoc_handler(info))
 		return (ERROR);
-	ft_memset(&index, 1, sizeof(index));
+	index.fd[0] = -1;
+	index.fd[1] = -1;
+	index.prev_pipe_read = -1;
 	index.i = 0;
 	cmd_line = pop_head_cmd(&info->cmds->head);
 	while (cmd_line != NULL)
@@ -221,6 +224,13 @@ int	exec_commands(t_info *info)
 			if (handle_redirection(cmd_line->redirections) == ERROR)
 				return (ERROR);
 			exec_builtin(cmd_line->commands_args, info->envs);
+			free_cmd_node(&cmd_line);
+			cmd_line = pop_head_cmd(&(info->cmds->head));
+			if (index.prev_pipe_read != -1)
+				close(index.prev_pipe_read);
+			if (index.fd[1] != -1)
+				close(index.fd[1]);
+			index.prev_pipe_read = index.fd[0];
 			return (0);
 		}
 		pid = fork();
@@ -245,6 +255,7 @@ int	exec_commands(t_info *info)
 		}
 		index.i += 1;
 	}
+	free(info->cmds);
 	parent_process_wait(pid, info->pipes); // 여기까지 오기 전에 자식 프로세스가 끝이 나버리면...??
 	return (0);
 }

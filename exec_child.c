@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 16:08:16 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 20:16:55 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,7 @@ int	check_access_read(char *file_name, t_special type)
 	if (access(file_name, F_OK) == -1)
 		return (OPEN_ERROR);
 	else if (access(file_name, R_OK) == -1)
-	{
 		return (PERMISSION_ERROR);
-	}
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)
 		return (OPEN_ERROR);
@@ -175,7 +173,7 @@ int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 		ft_putstr_fd(": command not found\n", 2);
 		exit(EXIT_FAILURE);
 	}
-	printf("exec: %s\n", cmd_node->commands_args[0]);
+	dprintf(2, "exec: %s\n", cmd_node->commands_args[0]);
 	execve(cmd_node->commands_args[0], cmd_node->commands_args, info->envp_bash);
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd_node->commands_args[0], 2);

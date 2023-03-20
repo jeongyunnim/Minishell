@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 18:02:28 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/14 15:24:17 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 19:42:30 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ int	cmd_node_init(t_cmd	**node, t_arg_deque *args)
 	int		cmd_arg_count;
 	int		redirect_flag;
 
-	if (*node == NULL)
-		return (ERROR);
 	cmd_arg_count = 0;
 	redirect_flag = 0;
 	temp = args->head;
@@ -47,19 +45,11 @@ int divide_pipe(t_info	*info)
 	int		i;
 
 	info->cmds = ft_calloc(sizeof(t_cmd_deque), 1);
-	if (info->cmds == NULL)
-	{
-		return (ERROR);
-	}
 	temp = info->arguments->head;
 	while (temp != NULL)
 	{
 		new = lstnew_cmd();
-		if (cmd_node_init(&new, info->arguments) == ERROR)
-		{
-			//지금까지 할당된 다른 노드들 프리.
-			return (ERROR);
-		}
+		cmd_node_init(&new, info->arguments);
 		i = 0;
 		while (info->arguments->head != NULL)
 		{
@@ -99,18 +89,12 @@ int	args_check(t_info *info)
 	
 	heredoc_flag = 0;
 	temp = info->arguments->head;
-	if (temp == NULL)
-	{
-		printf("arg_deque is empty\n");
-	}
 	while (temp != NULL)
 	{
 		if (temp->special == PIPE)
 		{
 			if (temp->next != NULL && temp->previous != NULL)
-			{
 				info->pipes += 1;
-			}
 			else
 			{
 				write(2, "minishell: syntax error near unexpected token `|'\n", 50);
@@ -133,7 +117,6 @@ int	args_check(t_info *info)
 				exit(2);
 			}
 		}
-		//printf("----------------------\n\n[input]: %s\n[type]: %d\n\n----------------------\n", temp->arg, temp->special);
 		temp = temp->next;
 	}
 	return (0);
