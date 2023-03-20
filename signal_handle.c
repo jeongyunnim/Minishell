@@ -31,7 +31,7 @@ void	set_signal_mode(int flag)
 	}
 	else // heredoc
 	{
-		signal(SIGINT, SIG_DFL);
+		signal(SIGINT, SIG_DFL); // minishell 이 꺼져버린다..
 		signal(SIGQUIT, SIG_IGN);
 	}
 }
