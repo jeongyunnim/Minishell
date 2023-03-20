@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/18 17:53:51 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 21:11:11 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ typedef struct s_info
 	t_arg_deque	*arguments;
 	t_env_deque	*envs;
 	t_cmd_deque	*cmds;
-	char		**envp_bash;
+	char		*home_dir;
 	int			pipes;
 	int			redirects;
 }	t_info;
@@ -148,7 +148,7 @@ int			is_quote(int c);
 int			ft_ismeta(int c);
 
 /* env_save.c */
-t_env_deque	*save_env(char **env);
+t_env_deque	*save_env(char **env, char **home);
 int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env, char quote_flag);
 void		replace_env(char **input, char **arg, t_env_deque *env, char quote_flag);
 

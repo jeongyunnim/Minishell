@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 20:38:15 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 21:11:01 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	valid_env_name_match(char *input, t_env_deque *env, unsigned int *i)
 	return (0);
 }
 
-t_env_deque	*save_env(char *env[])
+t_env_deque	*save_env(char *env[], char **home)
 {
 	unsigned int	i;
 	unsigned int	name_len;
@@ -87,6 +87,8 @@ t_env_deque	*save_env(char *env[])
 		ft_strlcpy(new->name, env[i], name_len + 1);
 		if (*(env[i] + name_len) != '\0')
 			new->value = ft_strdup(env[i] + name_len + 1);
+		if (ft_strncmp(new->name, "HOME", 5) == 0)
+			*home = ft_strdup(new->value);
 		new->name_len = name_len;
 		new->value_len = ft_strlen(env[i] + name_len + 1);
 		append_tail_env(&envs->head, &envs->tail, new);

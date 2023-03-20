@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 20:26:30 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 21:05:24 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ int	count_arg_len(char *input, t_env_deque *envs)
 	return (index.cnt);
 }
 
+void	replace_home_path(t_info *info, char **arg)
+{
+	free(*arg);
+	*arg = ft_strdup(info->home_dir);
+}
+
 int	parse(char *input, t_info *info)
 {
 	t_arg_deque	*args;
@@ -86,6 +92,10 @@ int	parse(char *input, t_info *info)
 			special = save_arg(&input, arg, arg_len, info->envs);
 			if (arg != NULL)
 			{
+				if (strncmp(arg, "~", 2) == 0)
+				{
+					replace_home_path(info, &arg);
+				}
 				arg_to_deque(&args, arg, special);
 				free(arg);
 			}

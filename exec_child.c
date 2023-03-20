@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 20:16:55 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 21:07:23 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 		exit(EXIT_FAILURE);
 	}
 	dprintf(2, "exec: %s\n", cmd_node->commands_args[0]);
-	execve(cmd_node->commands_args[0], cmd_node->commands_args, info->envp_bash);
+	execve(cmd_node->commands_args[0], cmd_node->commands_args, NULL);
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd_node->commands_args[0], 2);
 	ft_putstr_fd(": No such file or directory\n", 2);
