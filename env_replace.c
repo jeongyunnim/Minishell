@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 19:45:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 16:59:19 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 20:44:21 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	env_special_len(char *input)
 	{
 		return (9);
 	}
-	else
+	else if (*input == '?')
 	{
 		if (g_exit_code < 10)
 			return (1);
@@ -28,6 +28,10 @@ int	env_special_len(char *input)
 			return (2);
 		else
 			return (3);
+	}
+	else
+	{
+		return (2);
 	}
 }
 
@@ -63,6 +67,7 @@ int	env_special_replace(char **input, char **arg)
 	{
 		ft_memcpy(*arg, "minishell", 9);
 		(*arg) += 9;
+		(*input)++;
 	}
 	else if (**input == '?')
 	{
@@ -76,18 +81,24 @@ int	env_special_replace(char **input, char **arg)
 			len = 3;
 		ft_memcpy(*arg, code, len);
 		*arg += len;
+		(*input)++;
 	}
-	(*input)++;
+	else
+	{
+		ft_memcpy(*arg, "$$", 2);
+		*arg += 2;
+		(*input)++;
+	}
 	return (0);
 }
 
 void	replace_env(char **input, char **arg, t_env_deque *env, char qflag)
-{	
+{
 	unsigned int	i;
 
 	i = 0;
 	(*input)++;
-	if (**input == '\0' || **input == '$' || ft_isspace(**input) == 1\
+	if (**input == '\0' || ft_isspace(**input) == 1\
 	 || (is_quote(**input) == 1 && qflag != 0))
 	{
 		**arg = '$';

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 16:51:27 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/20 20:38:15 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_env_special(int c)
 {
-	if (c == '?' || c == '0')
+	if (c == '?' || c == '0' || c == '$')
 		return (1);
 	else
 		return (0);
@@ -100,7 +100,7 @@ int	set_env_len(char *input, unsigned int *i, t_env_deque *env, char qflag)
 
 	cnt = 0;
 	(*i)++;
-	if (input[*i] == '\0' || input[*i] == '$' || ft_isspace(input[*i]) == 1 \
+	if (input[*i] == '\0' || ft_isspace(input[*i]) == 1 \
 		|| (is_quote(input[*i]) == 1 && qflag != 0))
 			return (1);
 	if (ft_isalpha(input[*i]) || is_env_special(input[*i]) || input[*i] == '_')
