@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 20:54:35 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 21:17:16 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -703,7 +703,9 @@ int	exec_builtin(char **cmd_line, t_env_deque *envs)
 		ft_env(cmd_line, envs);
 	else if (ft_strncmp("exit", cmd_line[0], 5) == 0)
 		ft_exit(cmd_line);
-	return (1);
+	else
+		return (1);
+	return (0);
 }
 
 char	**envlist_to_arry(t_env_deque *envs)
