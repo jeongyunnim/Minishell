@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 20:07:33 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 21:08:46 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,39 @@ void	reset_input_mode(struct termios *org_term)
 
 /* 시그널 처리 */
 
+void	init_oldpwd(t_env_deque *env)
+{
+	t_env	*move;
+	t_env	*oldpwd;
+	int		flag;
+
+	move = env->head;
+	flag = 0;
+	while (move != NULL)
+	{
+		if (ft_strncmp(move->name, "OLDPWD", 7) == 0)
+		{
+			flag = 1;
+			break ;
+		}
+		move = move->next;
+	}
+	if (flag == 1)
+	{
+		free(move->value);
+		move->value = NULL;
+		move->value_len = 0;
+	}
+	else
+	{
+		oldpwd = lstnew_env();
+		oldpwd->name = ft_strdup("OLDPWD");
+		oldpwd->name_len = 6;
+		append_tail_env(&env->head, &env->tail, oldpwd);
+	}
+	return ;
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
 	char				*input;
@@ -78,6 +111,7 @@ int main(int argc, char *argv[], char *envp[])
 	ft_memset(&info, 0, sizeof(info));
 	info.envs = save_env(envp);
 	info.home_dir = getenv("HOME");
+	init_oldpwd(info.envs);
 	save_input_mode(&org_term);
 	set_input_mode(&new_term);
 	while (1)

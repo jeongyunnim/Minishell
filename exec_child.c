@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 20:01:19 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 20:52:51 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,11 +181,19 @@ int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 		ft_putstr_fd(": command not found\n", 2);
 		exit(EXIT_FAILURE);
 	}
-	dprintf(2, "exec: %s\n", cmd_node->commands_args[0]);
 	execve(cmd_node->commands_args[0], cmd_node->commands_args, envlist_to_arry(info->envs));
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd_node->commands_args[0], 2);
-	ft_putstr_fd(": No such file or directory\n", 2);
+	if (access(cmd_node->commands_args[0], F_OK) == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd_node->commands_args[0], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+	}
+	else if (access(cmd_node->commands_args[0], X_OK) == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd_node->commands_args[0], 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+	}
 	exit(EXIT_FAILURE);
 	//전역변수 에러 코드 변환해주기.
 	return (0);

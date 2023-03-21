@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 20:09:40 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 20:54:35 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -682,8 +682,7 @@ void	parent_process_wait(pid_t pid, int pipes)
 	{
 		waitpid(-1, &status, 0);
 		i++;
-	}
-	printf("status %d\n", status); // status 잘 처리하기..
+	} // status 처리
 }
 
 int	exec_builtin(char **cmd_line, t_env_deque *envs)

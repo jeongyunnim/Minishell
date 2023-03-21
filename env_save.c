@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 20:10:23 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 20:59:31 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,10 @@ int	valid_env_name_match(char *input, t_env_deque *env, unsigned int *i)
 
 t_env_deque	*save_env(char *env[])
 {
-	unsigned int	i;
-	unsigned int	name_len;
 	t_env_deque		*envs;
 	t_env			*new;
+	unsigned int	i;
+	unsigned int	name_len;
 
 	i = -1;
 	envs = (t_env_deque *)ft_calloc(1, sizeof(t_env_deque));
@@ -87,7 +87,7 @@ t_env_deque	*save_env(char *env[])
 			return (NULL);
 		new->name = ft_calloc(name_len + 1, sizeof(char));
 		ft_strlcpy(new->name, env[i], name_len + 1);
-		if (*(env[i] + name_len) != '\0' && ft_strncmp(env[i], "OLDPWD=", 7) != 0)
+		if (*(env[i] + name_len) != '\0')
 		{
 			new->value = ft_strdup(env[i] + name_len + 1);
 			new->value_len = ft_strlen(new->value);
