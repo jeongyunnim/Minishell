@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 21:32:09 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 14:38:09 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,27 @@ int	count_arg_len(char *input, t_env_deque *envs)
 
 void	replace_home_path(t_info *info, char **arg)
 {
+	t_env	*move;
+
 	free(*arg);
-	if (info->home_dir == NULL)
-		*arg = ft_strdup("");
+	move = info->envs->head;
+	while (move != NULL)
+	{
+		if (ft_strncmp(move->name, "HOME", 5) == 0)
+			break ;
+		move = move->next;
+	}
+	if (move->value != NULL)
+	{
+		*arg = ft_strdup(move->value);
+	}
 	else
-		*arg = ft_strdup(info->home_dir);
+	{
+		if (info->home_dir == NULL)
+			*arg = ft_strdup("");
+		else
+			*arg = ft_strdup(info->home_dir);
+	}
 }
 
 int	parse(char *input, t_info *info)
@@ -95,7 +111,7 @@ int	parse(char *input, t_info *info)
 			special = save_arg(&input, arg, arg_len, info->envs);
 			if (arg != NULL)
 			{
-				if (strncmp(arg, "~", 2) == 0)
+				if (ft_strncmp(arg, "~", 2) == 0)
 					replace_home_path(info, &arg);
 				arg_to_deque(&args, arg, special);
 				free(arg);
