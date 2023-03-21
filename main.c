@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 16:36:50 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 20:07:33 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int main(int argc, char *argv[], char *envp[])
 	t_info				info;
 
 	ft_memset(&info, 0, sizeof(info));
-	info.envs = save_env(envp, &info.home_dir);
+	info.envs = save_env(envp);
 	info.home_dir = getenv("HOME");
 	save_input_mode(&org_term);
 	set_input_mode(&new_term);

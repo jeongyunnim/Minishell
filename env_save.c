@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 16:57:51 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 20:10:23 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	valid_env_name_match(char *input, t_env_deque *env, unsigned int *i)
 	return (0);
 }
 
-t_env_deque	*save_env(char *env[], char **home)
+t_env_deque	*save_env(char *env[])
 {
 	unsigned int	i;
 	unsigned int	name_len;

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 19:21:14 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 20:07:23 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int			is_quote(int c);
 int			ft_ismeta(int c);
 
 /* env_save.c */
-t_env_deque	*save_env(char **env, char **home);
+t_env_deque	*save_env(char **env);
 int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env, char quote_flag);
 void		replace_env(char **input, char **arg, t_env_deque *env, char quote_flag);
 
@@ -170,8 +170,9 @@ int			divide_pipe(t_info *info);
 
 /* exec_commands.c */
 int			exec_commands(t_info *info);
-int			exec_builtin(char **cmd_line, t_env_deque *envs); // 정상종료 시 0 반환.
+int			exec_builtin(char **cmd_line, t_env_deque *envs);
 char		*gen_temp_file_name(int flag);
+char		**envlist_to_arry(t_env_deque *envs);
 
 /* exec_child.c */
 int			child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info);
