@@ -75,16 +75,12 @@ t_env_deque	*save_env(char *env[])
 
 	i = -1;
 	envs = (t_env_deque *)ft_calloc(1, sizeof(t_env_deque));
-	if (envs == NULL)
-		return (NULL);
 	while (env[++i] != NULL)
 	{
 		if (ft_strncmp(env[i], "_=", 2) == 0)
 			continue ;
 		new = lstnew_env();
 		name_len = ft_strchr(env[i], '=') - env[i];
-		if (name_len == 0)
-			return (NULL);
 		new->name = ft_calloc(name_len + 1, sizeof(char));
 		ft_strlcpy(new->name, env[i], name_len + 1);
 		if (*(env[i] + name_len) != '\0')
@@ -106,7 +102,7 @@ int	set_env_len(char *input, unsigned int *i, t_env_deque *env, char qflag)
 	(*i)++;
 	if (input[*i] == '\0' || ft_isspace(input[*i]) == 1 \
 		|| (is_quote(input[*i]) == 1 && qflag != 0))
-			return (1);
+		return (1);
 	if (ft_isalpha(input[*i]) || is_env_special(input[*i]) || input[*i] == '_')
 	{
 		cnt = valid_env_name_match(input, env, i);

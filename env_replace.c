@@ -35,33 +35,9 @@ int	env_special_len(char *input)
 	}
 }
 
-void	code_to_arg(char (*code)[4])
-{
-	char	temp;
-	int		i;
-
-	temp = g_exit_code;
-	i = 0;
-	while (temp > 0)
-	{
-		temp /= 10;
-		i++;
-	}
-	temp = g_exit_code;
-	if (temp == 0)
-		i++;
-	while (i > 0)
-	{
-		*(code[i - 1]) = temp % 10 + '0';
-		temp /= 10;
-		i--;
-	}
-}
-
 int	env_special_replace(char **input, char **arg)
 {
-	char	code[4];
-	int		len;
+	char	*code;
 
 	if (**input == '0')
 	{
@@ -71,16 +47,10 @@ int	env_special_replace(char **input, char **arg)
 	}
 	else if (**input == '?')
 	{
-		ft_memset(code, 0, 4);
-		code_to_arg(&code);
-		if (g_exit_code < 10)
-			len = 1;
-		else if (g_exit_code < 100)
-			len = 2;
-		else
-			len = 3;
-		ft_memcpy(*arg, code, len);
-		*arg += len;
+		code = ft_itoa(g_exit_code);
+		ft_memcpy(*arg, code, ft_strlen(code));
+		*arg += ft_strlen(code);
+		free(code);
 		(*input)++;
 	}
 	else
@@ -98,8 +68,8 @@ void	replace_env(char **input, char **arg, t_env_deque *env, char qflag)
 
 	i = 0;
 	(*input)++;
-	if (**input == '\0' || ft_isspace(**input) == 1\
-	 || (is_quote(**input) == 1 && qflag != 0))
+	if (**input == '\0' || ft_isspace(**input) == 1 \
+	|| (is_quote(**input) == 1 && qflag != 0))
 	{
 		**arg = '$';
 		(*arg)++;

@@ -14,7 +14,7 @@
 
 int	is_quote(int c)
 {
-	if(c == '\'' || c == '\"')
+	if (c == '\'' || c == '\"')
 		return (1);
 	else
 		return (0);
@@ -22,7 +22,7 @@ int	is_quote(int c)
 
 int	ft_ismeta(int c)
 {
-	if(c == '>' || c == '<' || c == '|')
+	if (c == '>' || c == '<' || c == '|')
 		return (1);
 	else
 		return (0);

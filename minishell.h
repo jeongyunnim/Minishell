@@ -23,11 +23,6 @@
 # include <signal.h>
 # include "./libft/libft.h"
 
-# define ERROR -1
-# define QUOTE_ERROR -1
-# define OPEN_ERROR -1
-# define PERMISSION_ERROR -2
-# define DIRECTORY_ERROR -3
 # define INT_MAX 2147483647
 
 int	g_exit_code;
@@ -49,6 +44,18 @@ typedef enum e_mode
 	INTERACTIVE_M,
 	HEREDOC_M
 }				t_mode;
+
+typedef enum e_error_type
+{
+	PERMISSION_ERROR=-10,
+	OPEN_ERROR,
+	QUOTE_ERROR,
+	DIRECTORY_ERROR,
+	SYNTAX_ERROR,
+	HEREDOC_MAX_ERROR,
+	ERROR=-1
+}				t_error_type;
+
 typedef struct s_arg
 {
 	struct s_arg	*previous;
@@ -185,5 +192,9 @@ void		free_env_deque(t_env_deque **env_deque);
 
 /* signal_handle.c */
 void		set_signal_mode(int flag);
+
+/* error_handle.c */
+void		print_error(int type, char *arg);
+
 
 #endif
