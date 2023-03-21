@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 15:04:53 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 16:22:08 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ int	ft_strcmp(const char *str1, const char *str2)
 
 char	*gen_temp_file_name(void)
 {
-	static char		name[15];
+	static char		name[8];
 	char			name_len;
 	int				i;
 
 	if (name[5] == 0)
 		ft_memcpy(name, "temp/", 5);
-	i = 5;
-	while (i < 10)
+	i = 0;
+	while (i < 16)
 	{
 		if (name[i] == 0)
 			name[i] = '0';
@@ -77,7 +77,11 @@ int	write_temp_file(t_arg_deque *redirects)
 				input = readline("> ");
 				if (input == NULL || ft_strncmp(move_red->arg, input, ft_strlen(move_red->arg) + 1) == 0)
 					break ;
-				write(temp_fd, input, ft_strlen(input));
+				if (write(temp_fd, input, ft_strlen(input)) == ERROR)
+				{
+					free(input);
+					return (HEREDOC);
+				}
 				write(temp_fd, "\n", 1);
 				free(input);
 			}
@@ -228,10 +232,6 @@ int	exec_commands(t_info *info)
 			}
 			free_cmd_node(&cmd_line);
 			free(info->cmds);
-			if (index.prev_pipe_read != -1)
-				close(index.prev_pipe_read);
-			if (index.fd[1] != -1)
-				close(index.fd[1]);
 			return (0);
 		}
 		pid = fork();

@@ -16,11 +16,11 @@ CFLAGS		=	#-g3 -fsanitize=address\
 
 # cluster 용 
 
-INCLUDES 	=	-I /goinfre/jeseo/.brew/opt/readline/include \
+INCLUDES 	=	-I ~/goinfre/.brew/opt/readline/include \
  				-I ./libft/ \
  				-I .
 
-LIBS		=	-L /goinfre/jeseo/.brew/opt/readline/lib  -lreadline \
+LIBS		=	-L ~/goinfre/.brew/opt/readline/lib  -lreadline \
  				-L ./libft/ -lft
 
 SRCS			=	./main.c\

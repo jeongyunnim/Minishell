@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 14:38:09 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 15:55:18 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	replace_home_path(t_info *info, char **arg)
 			break ;
 		move = move->next;
 	}
-	if (move->value != NULL)
+	if (move != NULL && move->value != NULL)
 	{
 		*arg = ft_strdup(move->value);
 	}

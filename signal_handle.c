@@ -12,6 +12,16 @@ void	signal_handler_interactive_mode(int signo)
 	}
 }
 
+void	heredoc_sigint_handler(int signo)
+{
+	static int	signal_flag;
+
+	if (signo == SIGINT)
+		signal_flag = 1;
+	else
+		signal_flag = 0;
+}
+
 void	set_signal_mode(int flag)
 {
 	if (flag == INTERACTIVE_M)

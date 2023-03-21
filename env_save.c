@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 21:58:09 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 16:29:46 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ t_env_deque	*save_env(char *env[], char **home)
 		return (NULL);
 	while (env[++i] != NULL)
 	{
+		if (ft_strncmp(env[i], "OLDPWD=", 7) == 0 || ft_strncmp(env[i], "_=", 2) == 0)
+			continue ;
 		new = lstnew_env();
 		name_len = ft_strchr(env[i], '=') - env[i];
 		if (name_len == 0)

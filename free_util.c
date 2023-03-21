@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 16:34:51 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 20:01:47 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 15:25:10 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	free_env_deque(t_env_deque **env_deque)
 			free(env_node->name);
 		if (env_node->value != NULL)
 			free(env_node->value);
+		free(env_node);
 		env_node = pop_head_env(&((*env_deque)->head));
 	}
 	free(*env_deque);
