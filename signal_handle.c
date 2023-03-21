@@ -32,16 +32,16 @@ void	set_signal_mode(int flag)
 	else if (flag == FORK_CHILD_M)
 	{
 		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
 	}
 	else if (flag == FORK_PARENT_M)
 	{
 		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
 	}
-	else // heredoc
+	else
 	{
-		signal(SIGINT, temp/0 ~ 16); // minishell 이 꺼져버린다..
+		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_IGN);
 	}
 }

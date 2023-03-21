@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 17:07:37 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 19:21:50 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,17 @@ int	ft_strcmp(const char *str1, const char *str2)
 	return (0);
 }
 
-char	*gen_temp_file_name(void)
+char	*gen_temp_file_name(int flag)
 {
 	static char		name[8];
 	static int		i;
 	char			name_len;
 
+	if (flag == 0)
+	{
+		i = 0;
+		return (NULL);
+	}
 	if (i == 0 || i == 16)
 	{
 		ft_memcpy(name, "temp/", 5);
@@ -58,29 +63,25 @@ int	write_temp_file(t_arg_deque *redirects)
 {
 	t_arg	*move_red;
 	char	*temp_file;
-	char	*
-	input;
+	char	*input;
 	int		temp_fd;
 
 	move_red = redirects->head;
+	gen_temp_file_name(0);
 	while (move_red != NULL)
 	{
 		if (move_red->special == HEREDOC)
 		{
-			temp_file = gen_temp_file_name();
+			temp_file = gen_temp_file_name(1);
 			temp_fd = open(temp_file, O_WRONLY|O_CREAT|O_TRUNC, 0600);
 			if (temp_fd < 0)
-				return (ERROR); // temp file open 에러.. 처리는 어떻게 해야할까나?
+				exit(EXIT_FAILURE);
 			while (1)
 			{
 				input = readline("> ");
 				if (input == NULL || ft_strncmp(move_red->arg, input, ft_strlen(move_red->arg) + 1) == 0)
 					break ;
-				if (write(temp_fd, input, ft_strlen(input)) == ERROR)
-				{
-					free(input);
-					return (SIGINT);
-				}
+				write(temp_fd, input, ft_strlen(input));
 				write(temp_fd, "\n", 1);
 				free(input);
 			}
@@ -100,21 +101,31 @@ int	heredoc_handler(t_info *info)
 	t_cmd	*temp;
 	pid_t	pid;
 	int		flag;
+	int		status;
 
 	temp = info->cmds->head;
-	while (temp != NULL)
+	pid  = fork();
+	if (pid == ERROR)
+		return (ERROR);
+	else if (pid == 0)
 	{
-		if (temp->redirections != NULL)
+		while (temp != NULL)
 		{
-			set_signal_mode(HEREDOC_M);
-			flag = write_temp_file(temp->redirections);
-			set_signal_mode(INTERACTIVE_M);
-			if (flag == ERROR)
-				return (ERROR);
-			else if (flag == SIGINT)
-				return (SIGINT);
+			if (temp->redirections != NULL)
+			{
+				set_signal_mode(HEREDOC_M);
+				write_temp_file(temp->redirections);
+			}
+			temp = temp->next;
 		}
-		temp = temp->next;
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		set_signal_mode(FORK_PARENT_M);
+		waitpid(pid, &status, 0);
+		if (status == 2)
+			return (SIGINT);
 	}
 	return (0);
 }
@@ -215,10 +226,8 @@ int	exec_commands(t_info *info)
 	int				flag;
 
 	flag = heredoc_handler(info);
-	if (flag == ERROR)
+	if (flag == 2 || flag == ERROR)
 		return (ERROR);
-	else if (flag == SIGINT)
-		return (SIGINT);
 	index.fd[0] = -1;
 	index.fd[1] = -1;
 	index.prev_pipe_read = -1;
