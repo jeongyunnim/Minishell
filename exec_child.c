@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 20:52:51 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 21:58:07 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,7 @@ int	handle_redirection(t_arg_deque *redirections)
 	{
 		fd = -1;
 		if (red->special == HEREDOC || red->special == REDIRECT_IN)
-		{
-			if (red->special == HEREDOC)
-			{
-				free(red->arg);
-				red->arg = ft_strdup(gen_temp_file_name(1));
-			}
 			fd = check_access_read(red->arg, red->special);
-		}
 		else
 			fd = check_access_write(red->arg, red->special);
 		if (fd < 0)

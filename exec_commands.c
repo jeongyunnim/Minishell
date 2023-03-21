@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 21:17:16 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 22:09:04 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -583,7 +583,6 @@ int	write_temp_file(t_arg_deque *redirects)
 	int		temp_fd;
 
 	move_red = redirects->head;
-	gen_temp_file_name(0);
 	while (move_red != NULL)
 	{
 		if (move_red->special == HEREDOC)
@@ -606,6 +605,27 @@ int	write_temp_file(t_arg_deque *redirects)
 			free(move_red->arg);
 			move_red->arg = ft_strdup(temp_file);
 			close(temp_fd);
+		}
+		move_red = move_red->next;
+	}
+	return (0);
+}
+
+int	name_temp_file(t_arg_deque *redirects)
+{
+	t_arg	*move_red;
+	char	*temp_file;
+	char	*input;
+	int		temp_fd;
+
+	move_red = redirects->head;
+	while (move_red != NULL)
+	{
+		if (move_red->special == HEREDOC)
+		{
+			temp_file = gen_temp_file_name(1);
+			free(move_red->arg);
+			move_red->arg = ft_strdup(temp_file);
 		}
 		move_red = move_red->next;
 	}
@@ -642,6 +662,12 @@ int	heredoc_handler(t_info *info)
 		waitpid(pid, &status, 0);
 		if (status == 2)
 			return (SIGINT);
+		while (temp != NULL)
+		{
+			if (temp->redirections != NULL)
+				name_temp_file(temp->redirections);
+			temp = temp->next;
+		}
 	}
 	return (0);
 }
@@ -750,8 +776,9 @@ int	exec_commands(t_info *info)
 	t_pipe_index	index;
 	int				flag;
 
+	gen_temp_file_name(0);
 	flag = heredoc_handler(info);
-	if (flag == 2 || flag == ERROR)
+	if (flag == SIGINT || flag == ERROR)
 		return (ERROR);
 	index.fd[0] = -1;
 	index.fd[1] = -1;
