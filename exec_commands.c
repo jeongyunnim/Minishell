@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 16:22:08 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 16:45:48 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,21 @@ int	ft_strcmp(const char *str1, const char *str2)
 char	*gen_temp_file_name(void)
 {
 	static char		name[8];
+	static int		i;
 	char			name_len;
-	int				i;
 
 	if (name[5] == 0)
 		ft_memcpy(name, "temp/", 5);
-	i = 0;
-	while (i < 16)
+	if (i == 16)
+		i = 0;
+	if (i > 9)
 	{
-		if (name[i] == 0)
-			name[i] = '0';
-		else if (name[i] == '9')
-		{
-			name[i] = '0';
-			i++;
-		}
-		else
-		{
-			name[i]++;
-			break ;
-		}
+		name[5] = '1';
+		name[6] = i - 10 + '0';
+	}
+	else
+	{
+		name[5] = i + '0';
 	}
 	return (name);
 }
@@ -60,7 +55,8 @@ int	write_temp_file(t_arg_deque *redirects)
 {
 	t_arg	*move_red;
 	char	*temp_file;
-	char	*input;
+	char	*
+	input;
 	int		temp_fd;
 
 	move_red = redirects->head;
@@ -100,6 +96,7 @@ int	heredoc_handler(t_info *info)
 {
 	t_cmd	*temp;
 	pid_t	pid;
+	int		flag;
 
 	temp = info->cmds->head;
 	while (temp != NULL)
@@ -107,9 +104,12 @@ int	heredoc_handler(t_info *info)
 		if (temp->redirections != NULL)
 		{
 			set_signal_mode(HEREDOC_M);
-			if (write_temp_file(temp->redirections) == ERROR)
-				return (ERROR);
+			flag = write_temp_file(temp->redirections);
 			set_signal_mode(INTERACTIVE_M);
+			if (flag == ERROR)
+				return (ERROR);
+			else if (flag == HEREDOC)
+				return (HEREDOC);
 		}
 		temp = temp->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 16:29:46 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 16:57:51 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ t_env_deque	*save_env(char *env[], char **home)
 		return (NULL);
 	while (env[++i] != NULL)
 	{
-		if (ft_strncmp(env[i], "OLDPWD=", 7) == 0 || ft_strncmp(env[i], "_=", 2) == 0)
+		if (ft_strncmp(env[i], "_=", 2) == 0)
 			continue ;
 		new = lstnew_env();
 		name_len = ft_strchr(env[i], '=') - env[i];
@@ -87,10 +87,12 @@ t_env_deque	*save_env(char *env[], char **home)
 			return (NULL);
 		new->name = ft_calloc(name_len + 1, sizeof(char));
 		ft_strlcpy(new->name, env[i], name_len + 1);
-		if (*(env[i] + name_len) != '\0')
+		if (*(env[i] + name_len) != '\0' && ft_strncmp(env[i], "OLDPWD=", 7) != 0)
+		{
 			new->value = ft_strdup(env[i] + name_len + 1);
+			new->value_len = ft_strlen(new->value);
+		}
 		new->name_len = name_len;
-		new->value_len = ft_strlen(env[i] + name_len + 1);
 		append_tail_env(&envs->head, &envs->tail, new);
 	}
 	return (envs);
