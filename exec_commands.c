@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 14:48:34 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 15:04:53 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ int	heredoc_handler(t_info *info)
 		if (temp->redirections != NULL)
 		{
 			set_signal_mode(HEREDOC_M);
-			write_temp_file(temp->redirections);
+			if (write_temp_file(temp->redirections) == ERROR)
+				return (ERROR);
 			set_signal_mode(INTERACTIVE_M);
 		}
 		temp = temp->next;
@@ -221,17 +222,16 @@ int	exec_commands(t_info *info)
 		}
 		if (info->pipes == 0 && isbuiltin(cmd_line->commands_args) == 1)
 		{
-			if (handle_redirection(cmd_line->redirections) == ERROR)
-				return (ERROR);
-			exec_builtin(cmd_line->commands_args, info->envs);
+			if (handle_redirection(cmd_line->redirections) != ERROR)
+			{
+				exec_builtin(cmd_line->commands_args, info->envs);
+			}
 			free_cmd_node(&cmd_line);
 			free(info->cmds);
-			cmd_line = pop_head_cmd(&(info->cmds->head));
 			if (index.prev_pipe_read != -1)
 				close(index.prev_pipe_read);
 			if (index.fd[1] != -1)
 				close(index.fd[1]);
-			index.prev_pipe_read = index.fd[0];
 			return (0);
 		}
 		pid = fork();
