@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 16:45:48 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/21 17:07:37 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ char	*gen_temp_file_name(void)
 	static int		i;
 	char			name_len;
 
-	if (name[5] == 0)
+	if (i == 0 || i == 16)
+	{
 		ft_memcpy(name, "temp/", 5);
-	if (i == 16)
 		i = 0;
+	}
 	if (i > 9)
 	{
 		name[5] = '1';
@@ -47,7 +48,9 @@ char	*gen_temp_file_name(void)
 	else
 	{
 		name[5] = i + '0';
+		name[6] = '\0';
 	}
+	i++;
 	return (name);
 }
 
@@ -76,7 +79,7 @@ int	write_temp_file(t_arg_deque *redirects)
 				if (write(temp_fd, input, ft_strlen(input)) == ERROR)
 				{
 					free(input);
-					return (HEREDOC);
+					return (SIGINT);
 				}
 				write(temp_fd, "\n", 1);
 				free(input);
@@ -108,8 +111,8 @@ int	heredoc_handler(t_info *info)
 			set_signal_mode(INTERACTIVE_M);
 			if (flag == ERROR)
 				return (ERROR);
-			else if (flag == HEREDOC)
-				return (HEREDOC);
+			else if (flag == SIGINT)
+				return (SIGINT);
 		}
 		temp = temp->next;
 	}
@@ -209,9 +212,13 @@ int	exec_commands(t_info *info)
 	pid_t			pid;
 	t_cmd			*cmd_line;
 	t_pipe_index	index;
+	int				flag;
 
-	if (heredoc_handler(info))
+	flag = heredoc_handler(info);
+	if (flag == ERROR)
 		return (ERROR);
+	else if (flag == SIGINT)
+		return (SIGINT);
 	index.fd[0] = -1;
 	index.fd[1] = -1;
 	index.prev_pipe_read = -1;
