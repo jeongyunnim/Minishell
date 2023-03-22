@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 16:22:28 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 17:11:38 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -574,103 +574,6 @@ char	*gen_temp_file_name(int flag)
 	return (name);
 }
 
-int	write_temp_file(t_arg_deque *redirects)
-{
-	t_arg	*move_red;
-	char	*temp_file;
-	char	*input;
-	int		temp_fd;
-
-	move_red = redirects->head;
-	while (move_red != NULL)
-	{
-		if (move_red->special == HEREDOC)
-		{
-			temp_file = gen_temp_file_name(1);
-			temp_fd = open(temp_file, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-			if (temp_fd < 0)
-				exit(EXIT_FAILURE);
-			while (1)
-			{
-				input = readline("> ");
-				if (input == NULL || ft_strncmp(move_red->arg, input, ft_strlen(move_red->arg) + 1) == 0)
-					break ;
-				write(temp_fd, input, ft_strlen(input));
-				write(temp_fd, "\n", 1);
-				free(input);
-			}
-			if (input != NULL)
-				free(input);
-			free(move_red->arg);
-			move_red->arg = ft_strdup(temp_file);
-			close(temp_fd);
-		}
-		move_red = move_red->next;
-	}
-	return (0);
-}
-
-int	name_temp_file(t_arg_deque *redirects)
-{
-	t_arg	*move_red;
-	char	*temp_file;
-	char	*input;
-	int		temp_fd;
-
-	move_red = redirects->head;
-	while (move_red != NULL)
-	{
-		if (move_red->special == HEREDOC)
-		{
-			temp_file = gen_temp_file_name(1);
-			free(move_red->arg);
-			move_red->arg = ft_strdup(temp_file);
-		}
-		move_red = move_red->next;
-	}
-	return (0);
-}
-
-int	heredoc_handler(t_info *info)
-{
-	t_cmd	*temp;
-	pid_t	pid;
-	int		flag;
-	int		status;
-
-	temp = info->cmds->head;
-	pid = fork();
-	if (pid == ERROR)
-		return (ERROR);
-	else if (pid == 0)
-	{
-		while (temp != NULL)
-		{
-			if (temp->redirections != NULL)
-			{
-				set_signal_mode(HEREDOC_M);
-				write_temp_file(temp->redirections);
-			}
-			temp = temp->next;
-		}
-		exit(EXIT_SUCCESS);
-	}
-	else
-	{
-		set_signal_mode(FORK_PARENT_M);
-		waitpid(pid, &status, 0);
-		if (status == 2)
-			return (SIGINT);
-		while (temp != NULL)
-		{
-			if (temp->redirections != NULL)
-				name_temp_file(temp->redirections);
-			temp = temp->next;
-		}
-	}
-	return (0);
-}
-
 int	isbuiltin(char **cmd_args)
 {
 	char	*cmd;
@@ -707,7 +610,7 @@ void	parent_process_wait(pid_t pid, int pipes)
 	{
 		waitpid(-1, &status, 0);
 		i++;
-	} // status 처리
+	}
 }
 
 int	exec_builtin(char **cmd_line, t_env_deque *envs)
@@ -754,9 +657,8 @@ char	**envlist_to_arry(t_env_deque *envs)
 	{
 		if (env->value != NULL)
 		{
-			array[i] = ft_strdup(env->name);
 			temp = array[i];
-			array[i] = ft_strjoin(array[i], "=");
+			array[i] = ft_strjoin(env->name, "=");
 			free(temp);
 			temp = array[i];
 			array[i] = ft_strjoin(array[i], env->value);
@@ -768,21 +670,51 @@ char	**envlist_to_arry(t_env_deque *envs)
 	return (array);
 }
 
+void	exec_one_builtin(t_info *info, t_cmd *cmd_line)
+{
+	if (handle_redirection(cmd_line->redirections) != ERROR)
+		exec_builtin(cmd_line->cmd_args, info->envs);
+	free_cmd_node(&cmd_line);
+	free(info->cmds);
+}
+
+void	init_pipe_index(t_pipe_index *index, int flag)
+{
+	if (flag == 0)
+	{
+		index->fd[0] = -1;
+		index->fd[1] = -1;
+		index->prev_pipe_read = -1;
+		index->i = 0;
+		index->pid = 0;
+	}
+	else
+	{
+		if (index->prev_pipe_read != -1)
+			close(index->prev_pipe_read);
+		if (index->fd[1] != -1)
+			close(index->fd[1]);
+		index->prev_pipe_read = index->fd[0];
+	}
+}
+
+int	parent_process_run(t_cmd **cmd_line, t_pipe_index index, t_info *info)
+{
+	set_signal_mode(FORK_PARENT_M);
+	free_cmd_node(*cmd_line);
+	*cmd_line = pop_head_cmd(&(info->cmds->head));
+	init_pipe_index(&index, 1);
+}
+
 int	exec_commands(t_info *info)
 {
-	pid_t			pid;
 	t_cmd			*cmd_line;
 	t_pipe_index	index;
-	int				flag;
 
+	init_pipe_index(&index, 0);
 	gen_temp_file_name(0);
-	flag = heredoc_handler(info);
-	if (flag == SIGINT || flag == ERROR)
+	if (heredoc_handler(info) != 0)
 		return (ERROR);
-	index.fd[0] = -1;
-	index.fd[1] = -1;
-	index.prev_pipe_read = -1;
-	index.i = 0;
 	cmd_line = pop_head_cmd(&info->cmds->head);
 	while (cmd_line != NULL)
 	{
@@ -793,37 +725,21 @@ int	exec_commands(t_info *info)
 		}
 		if (info->pipes == 0 && isbuiltin(cmd_line->cmd_args) == 1)
 		{
-			if (handle_redirection(cmd_line->redirections) != ERROR)
-			{
-				exec_builtin(cmd_line->cmd_args, info->envs);
-			}
-			free_cmd_node(&cmd_line);
-			free(info->cmds);
+			exec_one_builtin(info, cmd_line);
 			return (0);
 		}
-		pid = fork();
-		if (pid == -1)
+		index.pid = fork();
+		if (index.pid == -1)
 			return (ERROR);
-		else if (pid == 0)
-		{
-			set_signal_mode(FORK_CHILD_M);
+		else if (index.pid == 0)
 			child_process_run(cmd_line, index, info);
-			exit(EXIT_SUCCESS);
-		}
 		else
-		{
-			set_signal_mode(FORK_PARENT_M);
-			free_cmd_node(&cmd_line);
-			cmd_line = pop_head_cmd(&(info->cmds->head));
-			if (index.prev_pipe_read != -1)
-				close(index.prev_pipe_read);
-			if (index.fd[1] != -1)
-				close(index.fd[1]);
-			index.prev_pipe_read = index.fd[0];
-		}
+			parent_process_run(cmd_line, index, info);
 		index.i += 1;
 	}
 	free(info->cmds);
-	parent_process_wait(pid, info->pipes); // 여기까지 오기 전에 자식 프로세스가 끝이 나버리면...??
+	parent_process_wait(pid, info->pipes);
 	return (0);
 }
+
+//exec_commands()에 부모가 기다리기 전에 자식이 끝나버리면 어쩌지?

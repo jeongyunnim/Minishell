@@ -34,6 +34,8 @@ SRCS			=	./main.c\
 					./env_save.c\
 					./env_replace.c\
 					./exec_commands.c\
+					./exec_redirection.c\
+					./exec_heredoc.c\
 					./exec_child.c\
 					./signal_handle.c\
 					./free_util.c\
