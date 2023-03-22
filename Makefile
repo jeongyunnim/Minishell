@@ -8,20 +8,20 @@ CFLAGS		=	-g3 -fsanitize=address\
 
 #m1 mac 용
 
-INCLUDES 	=	-I /opt/homebrew/opt/readline/include \
-				-I ./libft/ \
-				-I .
-LIBS		=	-L /opt/homebrew/opt/readline/lib -lreadline \
-				-L ./libft/ -lft
+#INCLUDES 	=	-I /opt/homebrew/opt/readline/include \
+#				-I ./libft/ \
+#				-I .
+#LIBS		=	-L /opt/homebrew/opt/readline/lib -lreadline \
+#				-L ./libft/ -lft
 
 # cluster 용 
 
-# INCLUDES 	=	-I ~/goinfre/.brew/opt/readline/include \
-#  				-I ./libft/ \
-#  				-I .
+ INCLUDES 	=	-I ~/goinfre/.brew/opt/readline/include \
+  				-I ./libft/ \
+  				-I .
 
-# LIBS		=	-L ~/goinfre/.brew/opt/readline/lib  -lreadline \
-#  				-L ./libft/ -lft
+ LIBS		=	-L ~/goinfre/.brew/opt/readline/lib  -lreadline \
+  				-L ./libft/ -lft
 
 SRCS			=	./main.c\
 					./parse.c\
@@ -38,6 +38,7 @@ SRCS			=	./main.c\
 					./signal_handle.c\
 					./free_util.c\
 					./error_handle.c\
+					./parse_valid_check.c\
 
 OBJS			=	$(SRCS:%.c=%.o)
 

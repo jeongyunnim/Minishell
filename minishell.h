@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 20:07:23 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 16:30:25 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef enum e_error_type
 	DIRECTORY_ERROR,
 	SYNTAX_ERROR,
 	HEREDOC_MAX_ERROR,
+	COMMAND_ERROR,
 	ERROR=-1
 }				t_error_type;
 
@@ -88,7 +89,7 @@ typedef struct s_env_deque
 typedef struct s_cmd
 {
 	t_arg_deque		*redirections;
-	char			**commands_args;
+	char			**cmd_args;
 	struct s_cmd	*next;
 	struct s_cmd	*previous;
 }				t_cmd;
@@ -152,7 +153,7 @@ int			save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);
 int			arg_to_deque(t_arg_deque **args, char *arg, int special);
 int			ft_isupper(int c);
 int			is_quote(int c);
-int			ft_ismeta(int c);
+int			is_meta(int c);
 
 /* env_save.c */
 t_env_deque	*save_env(char **env);
@@ -172,7 +173,6 @@ int			enter_quote(char input, char *quote_flag);
 int			meta_len(char *input);
 
 /* parse_divide_pipe */
-int			args_check(t_info *info);
 int			divide_pipe(t_info *info);
 
 /* exec_commands.c */
@@ -195,6 +195,9 @@ void		set_signal_mode(int flag);
 
 /* error_handle.c */
 void		print_error(int type, char *arg);
+int			redirection_error(int fd, char *arg);
 
+/* parse_valid_check.c */
+int			args_check(t_info *info);
 
 #endif

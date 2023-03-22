@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/12 18:22:48 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 16:14:26 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 			if (**input == '\0')
 				return (special);
 		}
-		else if (quote_flag == 0 && ft_ismeta(**input) == 1)
+		else if (quote_flag == 0 && is_meta(**input) == 1)
 			return (meet_meta_replace(input, &arg));
 		else
 			*(arg++) = **input;
 		(*input)++;
-		if (quote_flag == 0 && ft_ismeta(**input) == 1)
+		if (quote_flag == 0 && is_meta(**input) == 1)
 			return (special);
 	}
 	return (special);

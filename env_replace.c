@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 19:45:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 20:44:21 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 14:36:39 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void	replace_env(char **input, char **arg, t_env_deque *env, char qflag)
 		**arg = '$';
 		(*arg)++;
 	}
+	else if (is_quote(**input) == 1)
+		(*input)++;
 	else if (ft_isalpha(**input) || is_env_special(**input) || **input == '_')
 		valid_env_name_replace(input, arg, env);
 	else

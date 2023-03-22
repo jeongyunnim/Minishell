@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:58 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 20:59:31 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 14:36:40 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ int	set_env_len(char *input, unsigned int *i, t_env_deque *env, char qflag)
 	if (input[*i] == '\0' || ft_isspace(input[*i]) == 1 \
 		|| (is_quote(input[*i]) == 1 && qflag != 0))
 		return (1);
+	else if (is_quote(input[*i]) == 1)
+		return (0);
 	if (ft_isalpha(input[*i]) || is_env_special(input[*i]) || input[*i] == '_')
 	{
 		cnt = valid_env_name_match(input, env, i);

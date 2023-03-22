@@ -6,44 +6,11 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 21:08:46 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 16:12:16 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_cmd_deque(t_info *info)
-{
-	t_cmd	*temp_cmd;
-	t_arg	*temp;
-	int		i;
-	int		j;
-
-	i = 0;
-	temp_cmd = info->cmds->head;
-	while (temp_cmd != NULL)
-	{
-		printf("\n---------------- < %d번째 command line >----------------\n\n", i);
-		if (temp_cmd->redirections != NULL)
-		{
-			temp = temp_cmd->redirections->head;
-			while (temp != NULL)
-			{
-				printf("type:%d | file: %s \n", temp->special, temp->arg);
-				temp = temp->next;
-			}
-		}
-		j = 0;
-		while (temp_cmd->commands_args[j] != NULL)
-		{
-			printf("arg[%d]: %s\n", j, temp_cmd->commands_args[j]);
-			j++;
-		}
-		printf("\n--------------------------------------------------------\n");
-		temp_cmd = temp_cmd->next;
-		i++;
-	}
-}
 
 /* 터미널 모드 설정 */
 
@@ -68,50 +35,50 @@ void	reset_input_mode(struct termios *org_term)
 
 void	init_oldpwd(t_env_deque *env)
 {
-	t_env	*move;
-	t_env	*oldpwd;
+	t_env	*env_temp;
 	int		flag;
 
-	move = env->head;
+	env_temp = env->head;
 	flag = 0;
-	while (move != NULL)
+	while (env_temp != NULL)
 	{
-		if (ft_strncmp(move->name, "OLDPWD", 7) == 0)
+		if (ft_strncmp(env_temp->name, "OLDPWD", 7) == 0)
 		{
 			flag = 1;
 			break ;
 		}
-		move = move->next;
+		env_temp = env_temp->next;
 	}
 	if (flag == 1)
 	{
-		free(move->value);
-		move->value = NULL;
-		move->value_len = 0;
+		free(env_temp->value);
+		env_temp->value = NULL;
+		env_temp->value_len = 0;
+		return ;
 	}
-	else
-	{
-		oldpwd = lstnew_env();
-		oldpwd->name = ft_strdup("OLDPWD");
-		oldpwd->name_len = 6;
-		append_tail_env(&env->head, &env->tail, oldpwd);
-	}
-	return ;
+	env_temp = lstnew_env();
+	env_temp->name = ft_strdup("OLDPWD");
+	env_temp->name_len = 6;
+	append_tail_env(&env->head, &env->tail, env_temp);
+}
+
+void	init_info(t_info *info, char *envp[])
+{
+	ft_memset(info, 0, sizeof(info));
+	info->envs = save_env(envp);
+	info->home_dir = getenv("HOME");
+	init_oldpwd(info->envs);
 }
 
 int main(int argc, char *argv[], char *envp[])
 {
 	char				*input;
 	int					stdio_fd[2];
-	int					ch;
 	struct termios		org_term;
 	struct termios		new_term;
 	t_info				info;
 
-	ft_memset(&info, 0, sizeof(info));
-	info.envs = save_env(envp);
-	info.home_dir = getenv("HOME");
-	init_oldpwd(info.envs);
+	init_info(&info, envp);
 	save_input_mode(&org_term);
 	set_input_mode(&new_term);
 	while (1)

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 21:58:07 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 16:29:57 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ int	handle_redirection(t_arg_deque *redirections)
 	if (redirections == NULL)
 		return (0);
 	red = redirections->head;
-	gen_temp_file_name(0);
 	while (red != NULL)
 	{
 		fd = -1;
@@ -101,19 +100,7 @@ int	handle_redirection(t_arg_deque *redirections)
 		else
 			fd = check_access_write(red->arg, red->special);
 		if (fd < 0)
-		{
-			if (fd == PERMISSION_ERROR)
-				write(2, "minishell: Permission denied\n", 29);
-			else if (fd == OPEN_ERROR)
-				write(2, "minishell: No such file or directory\n", 37);
-			else
-			{
-				ft_putstr_fd("minishell: ", 2);
-				ft_putstr_fd(red->arg, 2);
-				ft_putstr_fd(": Is a directory\n", 2);
-			}
-			return (ERROR);
-		}
+			return (redirection_error(fd, red->arg));
 		red = red->next;
 	}
 	return (0);
@@ -164,30 +151,19 @@ int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 	stdio_to_pipe(cmd_node, index, info->pipes);
 	if (handle_redirection(cmd_node->redirections) == ERROR)
 		exit(EXIT_FAILURE);
-	if (exec_builtin(cmd_node->commands_args, info->envs) == 0)
+	if (exec_builtin(cmd_node->cmd_args, info->envs) == 0)
 		exit(EXIT_SUCCESS);
-	else if (ft_strchr(cmd_node->commands_args[0], '/') == 0 && \
-		check_cmd_in_path(&(cmd_node->commands_args[0]), info->envs->head) == 0)
+	else if (ft_strchr(cmd_node->cmd_args[0], '/') == 0 && \
+		check_cmd_in_path(&(cmd_node->cmd_args[0]), info->envs->head) == 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd_node->commands_args[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
+		print_error(COMMAND_ERROR, cmd_node->cmd_args[0]);
 		exit(EXIT_FAILURE);
 	}
-	execve(cmd_node->commands_args[0], cmd_node->commands_args, envlist_to_arry(info->envs));
-	if (access(cmd_node->commands_args[0], F_OK) == -1)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd_node->commands_args[0], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-	}
-	else if (access(cmd_node->commands_args[0], X_OK) == -1)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd_node->commands_args[0], 2);
-		ft_putstr_fd(": Permission denied\n", 2);
-	}
+	execve(cmd_node->cmd_args[0], cmd_node->cmd_args, envlist_to_arry(info->envs));
+	if (access(cmd_node->cmd_args[0], F_OK) == -1)
+		print_error(OPEN_ERROR, cmd_node->cmd_args[0]);
+	else if (access(cmd_node->cmd_args[0], X_OK) == -1)
+		print_error(PERMISSION_ERROR, cmd_node->cmd_args[0]);
 	exit(EXIT_FAILURE);
-	//전역변수 에러 코드 변환해주기.
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 15:55:18 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 16:14:40 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_quote(int c)
 		return (0);
 }
 
-int	ft_ismeta(int c)
+int	is_meta(int c)
 {
 	if (c == '>' || c == '<' || c == '|')
 		return (1);
@@ -46,12 +46,12 @@ int	count_arg_len(char *input, t_env_deque *envs)
 			if (input[index.i] == '\0')
 				break ;
 		}
-		else if (index.quote_flag == 0 && ft_ismeta(input[index.i]) == 1)
+		else if (index.quote_flag == 0 && is_meta(input[index.i]) == 1)
 			return (meta_len(input));
 		else
 			(index.cnt)++;
 		(index.i)++;
-		if (index.quote_flag == 0 && ft_ismeta(input[index.i]) == 1)
+		if (index.quote_flag == 0 && is_meta(input[index.i]) == 1)
 			return (index.cnt);
 	}
 	if (index.quote_flag != 0)
@@ -92,8 +92,6 @@ int	parse(char *input, t_info *info)
 	int			special;
 
 	args = (t_arg_deque *)ft_calloc(1, sizeof(t_arg_deque));
-	if (args == NULL)
-		return (ERROR);
 	info->arguments = args;
 	while (*input != '\0')
 	{

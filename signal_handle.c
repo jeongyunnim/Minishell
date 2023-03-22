@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal_handle.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/22 16:03:07 by jeseo             #+#    #+#             */
+/*   Updated: 2023/03/22 16:03:08 by jeseo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	signal_handler_interactive_mode(int signo)
@@ -32,7 +44,7 @@ void	set_signal_mode(int flag)
 	else if (flag == FORK_CHILD_M)
 	{
 		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_IGN);
+		signal(SIGQUIT, SIG_DFL);
 	}
 	else if (flag == FORK_PARENT_M)
 	{

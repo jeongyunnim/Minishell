@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 22:09:04 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 16:22:28 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -549,7 +549,6 @@ char	*gen_temp_file_name(int flag)
 {
 	static char		name[8];
 	static int		i;
-	char			name_len;
 
 	if (flag == 0)
 	{
@@ -588,7 +587,7 @@ int	write_temp_file(t_arg_deque *redirects)
 		if (move_red->special == HEREDOC)
 		{
 			temp_file = gen_temp_file_name(1);
-			temp_fd = open(temp_file, O_WRONLY|O_CREAT|O_TRUNC, 0600);
+			temp_fd = open(temp_file, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 			if (temp_fd < 0)
 				exit(EXIT_FAILURE);
 			while (1)
@@ -640,7 +639,7 @@ int	heredoc_handler(t_info *info)
 	int		status;
 
 	temp = info->cmds->head;
-	pid  = fork();
+	pid = fork();
 	if (pid == ERROR)
 		return (ERROR);
 	else if (pid == 0)
@@ -792,11 +791,11 @@ int	exec_commands(t_info *info)
 			if (pipe(index.fd) == ERROR)
 				return (ERROR);
 		}
-		if (info->pipes == 0 && isbuiltin(cmd_line->commands_args) == 1)
+		if (info->pipes == 0 && isbuiltin(cmd_line->cmd_args) == 1)
 		{
 			if (handle_redirection(cmd_line->redirections) != ERROR)
 			{
-				exec_builtin(cmd_line->commands_args, info->envs);
+				exec_builtin(cmd_line->cmd_args, info->envs);
 			}
 			free_cmd_node(&cmd_line);
 			free(info->cmds);
