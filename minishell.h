@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 20:28:35 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 21:32:28 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,15 @@ typedef struct s_cmd_deque
 
 typedef struct s_info
 {
-	t_arg_deque	*arguments;
-	t_env_deque	*envs;
-	t_cmd_deque	*cmds;
-	char		*home_dir;
-	int			pipes;
-	int			redirects;
+	struct termios		org_term;
+	struct termios		new_term;
+	t_arg_deque			*arguments;
+	t_env_deque			*envs;
+	t_cmd_deque			*cmds;
+	char				*home_dir;
+	int					pipes;
+	int					redirects;
+
 }	t_info;
 
 typedef struct s_pipe_index
@@ -124,6 +127,15 @@ typedef struct s_parse_index
 	unsigned int	i;
 	char			quote_flag;
 }	t_parse_index;
+
+/* init_info */
+void		init_oldpwd(t_env_deque *env);
+void		init_info(t_info *info, char *envp[]);
+
+/* init_terminal */
+void		save_original_mode(struct termios *org_term);
+void		set_input_mode(struct termios *new_term);
+void		reset_input_mode(struct termios *org_term);
 
 /* parse.c */
 int			parse(char *input, t_info *info);

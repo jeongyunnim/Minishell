@@ -25,6 +25,8 @@ CFLAGS		=	-g3 -fsanitize=address\
 
 SRCS			=	./main.c\
 					./parse.c\
+					./init_info.c\
+					./init_terminal.c\
 					./deque_arg_util.c\
 					./deque_env_util.c\
 					./deque_cmd_util.c\
