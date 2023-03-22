@@ -38,24 +38,37 @@ void	meet_eof_exit(void)
 	exit(EXIT_SUCCESS);
 }
 
+void	ready_for_input(t_info *info)
+{
+	preserve_stdio(0);
+	tcsetattr(STDIN_FILENO, TCSANOW, &info->new_term);
+	set_signal_mode(INTERACTIVE_M);
+	info->pipes = 0;
+	info->redirects = 0;
+}
+
+void	after_exec_commands(t_info *info, char **input)
+{
+	if (is_only_white_space(*input) == 0)
+		add_history(*input);
+	free(*input);
+	preserve_stdio(1);
+	reset_input_mode(&info->org_term);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
-	char				*input;
-	t_info				info;
+	char	*input;
+	t_info	info;
 
 	init_info(&info, envp);
 	while (1)
 	{
-		preserve_stdio(0);
-		tcsetattr(STDIN_FILENO, TCSANOW, &info.new_term);
-		set_signal_mode(INTERACTIVE_M);
-		info.pipes = 0;
-		info.redirects = 0;
+		ready_for_input(&info);
 		input = readline("minishell$ ");
 		if (input == NULL)
 			meet_eof_exit();
-		add_history(input);
-		if (parse(input, &info) == QUOTE_ERROR)
+		if (parse(input, &info) < 0)
 		{
 			ft_putstr_fd("minishell: syntax error quote is not closed\n", 2);
 			continue ;
@@ -64,9 +77,7 @@ int	main(int argc, char *argv[], char *envp[])
 			exec_commands(&info);
 		else
 			free_arg_deque(&info.arguments);
-		free(input);
-		preserve_stdio(1);
-		reset_input_mode(&info.org_term);
+		after_exec_commands(&info, &input);
 	}
 	return (0);
 }

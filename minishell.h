@@ -140,6 +140,14 @@ void		reset_input_mode(struct termios *org_term);
 /* parse.c */
 int			parse(char *input, t_info *info);
 
+
+/* parse_count_len.c */
+int			is_only_white_space(char *input);
+int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quote_flag);
+int			enter_quote(char input, char *quote_flag);
+int			meta_len(char *input);
+int			count_arg_len(char *input, t_parse_index index, t_env_deque *envs);
+
 /* deque_arg_util.c */
 t_arg		*lstnew_arg(char *arg);
 t_arg		*pop_head_arg(t_arg **head);
@@ -183,11 +191,6 @@ int			valid_env_name_match(char *input, t_env_deque *env, unsigned int *i);
 int			env_special_len(char *input);
 int			env_special_replace(char **input, char **arg);
 int			valid_env_name_replace(char **input, char **arg, t_env_deque *env);
-
-/* parse_count_len.c */
-int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quote_flag);
-int			enter_quote(char input, char *quote_flag);
-int			meta_len(char *input);
 
 /* parse_divide_pipe */
 int			divide_pipe(t_info *info);

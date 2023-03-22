@@ -12,33 +12,6 @@
 
 #include "minishell.h"
 
-int	count_arg_len(char *input, t_parse_index index, t_env_deque *envs)
-{
-	while (input[index.i] != '\0')
-	{
-		if (index.quote_flag == 0 && ft_isspace(input[index.i]) == 1)
-			return (index.cnt);
-		else if (is_quote(input[index.i]) == 1)
-			index.cnt += enter_quote(input[index.i], &index.quote_flag);
-		else if (index.quote_flag != 1 && input[index.i] == '$')
-		{
-			index.cnt += set_env_len(input, &index.i, envs, index.quote_flag);
-			(index.i)--;
-		}
-		else if (index.quote_flag == 0 && is_meta(input[index.i]) == 1)
-			return (meta_len(input));
-		else
-			(index.cnt)++;
-		if (input[index.i] != '\0')
-			(index.i)++;
-		if (index.quote_flag == 0 && is_meta(input[index.i]) == 1)
-			return (index.cnt);
-	}
-	if (index.quote_flag != 0)
-		return (QUOTE_ERROR);
-	return (index.cnt);
-}
-
 void	replace_home_path(t_info *info, char **arg)
 {
 	t_env	*move;
@@ -93,13 +66,13 @@ int	parse(char *input, t_info *info)
 		{
 			ft_memset(&index, 0, sizeof(index));
 			arg_len = count_arg_len(input, index, info->envs);
-			if (arg_len == QUOTE_ERROR)
-				return (QUOTE_ERROR);
+			if (arg_len < 0)
+				return (arg_len);
 			else if (arg_len != 0 || is_quote(*input) == 1)
 				arg = (char *)ft_calloc(arg_len + 1, sizeof(char));
 			if (arg != NULL)
 				handle_valid_input(info, &input, &arg, arg_len);
 		}
 	}
-	return (0);
+	return (arg_len);
 }
