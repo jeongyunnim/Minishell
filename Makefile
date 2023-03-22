@@ -33,6 +33,7 @@ SRCS			=	./main.c\
 					./parse_divide_pipe.c\
 					./env_save.c\
 					./env_replace.c\
+					./env_valid_check.c\
 					./exec_commands.c\
 					./exec_redirection.c\
 					./exec_heredoc.c\

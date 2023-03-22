@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:32:09 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 16:40:26 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 19:19:01 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,3 @@ int	handle_redirection(t_arg_deque *redirections)
 	}
 	return (0);
 }
-

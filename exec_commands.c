@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 17:11:38 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 18:55:01 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -670,12 +670,13 @@ char	**envlist_to_arry(t_env_deque *envs)
 	return (array);
 }
 
-void	exec_one_builtin(t_info *info, t_cmd *cmd_line)
+int	exec_one_builtin(t_info *info, t_cmd *cmd_line)
 {
 	if (handle_redirection(cmd_line->redirections) != ERROR)
 		exec_builtin(cmd_line->cmd_args, info->envs);
 	free_cmd_node(&cmd_line);
 	free(info->cmds);
+	return (0);
 }
 
 void	init_pipe_index(t_pipe_index *index, int flag)
@@ -698,12 +699,23 @@ void	init_pipe_index(t_pipe_index *index, int flag)
 	}
 }
 
-int	parent_process_run(t_cmd **cmd_line, t_pipe_index index, t_info *info)
+void	parent_process_run(t_cmd **cmd_line, t_pipe_index *index, t_info *info)
 {
 	set_signal_mode(FORK_PARENT_M);
-	free_cmd_node(*cmd_line);
+	free_cmd_node(cmd_line);
 	*cmd_line = pop_head_cmd(&(info->cmds->head));
-	init_pipe_index(&index, 1);
+	init_pipe_index(index, 1);
+}
+
+int	fork_and_run(t_info *info, t_pipe_index *index, t_cmd **cmd_line)
+{
+	if (index->pid == -1)
+		return (ERROR);
+	else if (index->pid == 0)
+		child_process_run(*cmd_line, *index, info);
+	else
+		parent_process_run(cmd_line, index, info);
+	return (0);
 }
 
 int	exec_commands(t_info *info)
@@ -724,21 +736,14 @@ int	exec_commands(t_info *info)
 				return (ERROR);
 		}
 		if (info->pipes == 0 && isbuiltin(cmd_line->cmd_args) == 1)
-		{
-			exec_one_builtin(info, cmd_line);
-			return (0);
-		}
+			return (exec_one_builtin(info, cmd_line));
 		index.pid = fork();
-		if (index.pid == -1)
+		if (fork_and_run(info, &index, &cmd_line) == ERROR)
 			return (ERROR);
-		else if (index.pid == 0)
-			child_process_run(cmd_line, index, info);
-		else
-			parent_process_run(cmd_line, index, info);
 		index.i += 1;
 	}
 	free(info->cmds);
-	parent_process_wait(pid, info->pipes);
+	parent_process_wait(index.pid, info->pipes);
 	return (0);
 }
 

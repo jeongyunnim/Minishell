@@ -6,17 +6,34 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:39:29 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 16:40:19 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 19:18:31 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	write_temp_file(t_arg_deque *redirects)
+void	write_temp_file(t_arg *red, int fd)
+{
+	char	*input;
+
+	while (1)
+	{
+		input = readline("> ");
+		if (input == NULL || \
+		ft_strncmp(red->arg, input, ft_strlen(red->arg) + 1) == 0)
+			break ;
+		write(fd, input, ft_strlen(input));
+		write(fd, "\n", 1);
+		free(input);
+	}
+	if (input != NULL)
+		free(input);
+}
+
+int	open_and_write_temp_file(t_arg_deque *redirects)
 {
 	t_arg	*move_red;
 	char	*temp_file;
-	char	*input;
 	int		temp_fd;
 
 	move_red = redirects->head;
@@ -28,17 +45,7 @@ int	write_temp_file(t_arg_deque *redirects)
 			temp_fd = open(temp_file, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 			if (temp_fd < 0)
 				exit(EXIT_FAILURE);
-			while (1)
-			{
-				input = readline("> ");
-				if (input == NULL || ft_strncmp(move_red->arg, input, ft_strlen(move_red->arg) + 1) == 0)
-					break ;
-				write(temp_fd, input, ft_strlen(input));
-				write(temp_fd, "\n", 1);
-				free(input);
-			}
-			if (input != NULL)
-				free(input);
+			write_temp_file(move_red, temp_fd);
 			free(move_red->arg);
 			move_red->arg = ft_strdup(temp_file);
 			close(temp_fd);
@@ -69,6 +76,20 @@ int	name_temp_file(t_arg_deque *redirects)
 	return (0);
 }
 
+static void	child_run_for_heredoc(t_cmd *temp)
+{
+	while (temp != NULL)
+	{
+		if (temp->redirections != NULL)
+		{
+			set_signal_mode(HEREDOC_M);
+			open_and_write_temp_file(temp->redirections);
+		}
+		temp = temp->next;
+	}
+	exit(EXIT_SUCCESS);
+}
+
 int	heredoc_handler(t_info *info)
 {
 	t_cmd	*temp;
@@ -81,18 +102,7 @@ int	heredoc_handler(t_info *info)
 	if (pid == ERROR)
 		return (ERROR);
 	else if (pid == 0)
-	{
-		while (temp != NULL)
-		{
-			if (temp->redirections != NULL)
-			{
-				set_signal_mode(HEREDOC_M);
-				write_temp_file(temp->redirections);
-			}
-			temp = temp->next;
-		}
-		exit(EXIT_SUCCESS);
-	}
+		child_run_for_heredoc(temp);
 	else
 	{
 		set_signal_mode(FORK_PARENT_M);

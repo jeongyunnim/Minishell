@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:05:24 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 16:30:11 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 18:37:04 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	print_error(int type, char *arg)
 		ft_putstr_fd("'\n", 2);
 	else if (type == HEREDOC_MAX_ERROR)
 	{
-		ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);	
+		ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
 		exit(2);
 	}
 	else if (type == COMMAND_ERROR)

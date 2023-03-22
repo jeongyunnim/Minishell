@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 17:07:36 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 19:28:11 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,16 +112,16 @@ typedef struct s_info
 
 typedef struct s_pipe_index
 {
-	int	fd[2];
-	int	i;
-	int	prev_pipe_read;
+	int		fd[2];
+	int		i;
+	int		prev_pipe_read;
+	pid_t	pid;
 }	t_pipe_index;
 
 typedef struct s_parse_index
 {
 	unsigned int	cnt;
 	unsigned int	i;
-	pid_t			pid;
 	char			quote_flag;
 }	t_parse_index;
 
@@ -161,11 +161,14 @@ t_env_deque	*save_env(char **env);
 int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env, char quote_flag);
 void		replace_env(char **input, char **arg, t_env_deque *env, char quote_flag);
 
+/* env_valid_check.c */
+int			is_env_special(int c);
+int			invalid_env_name(char *input, unsigned int *i);
+int			valid_env_name_match(char *input, t_env_deque *env, unsigned int *i);
+
 /* env_replace.c */
 int			env_special_len(char *input);
 int			env_special_replace(char **input, char **arg);
-int			is_env_special(int c);
-int			invalid_env_name(char *input, unsigned int *i);
 int			valid_env_name_replace(char **input, char **arg, t_env_deque *env);
 
 /* parse_count_len.c */
