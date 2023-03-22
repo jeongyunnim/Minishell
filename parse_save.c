@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 16:14:26 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 20:14:26 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,43 +42,30 @@ char	meet_meta_replace(char **input, char **arg)
 
 int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
 {
-	char	special;
 	char	quote_flag;
 
 	quote_flag = 0;
-	special = 0;
 	while (**input != '\0')
 	{
 		if (quote_flag == 0 && ft_isspace(**input) == 1)
-			return (special);
+			return (0);
 		else if (is_quote(**input) == 1)
 		{
 			if (enter_quote(**input, &quote_flag) == 1)
 				*(arg++) = **input;
 		}
 		else if (quote_flag != 1 && **input == '$')
-		{
 			replace_env(input, &arg, envs, quote_flag);
-			if (**input == '\0')
-				return (special);
-		}
 		else if (quote_flag == 0 && is_meta(**input) == 1)
 			return (meet_meta_replace(input, &arg));
 		else
 			*(arg++) = **input;
-		(*input)++;
+		if (**input != '\0')
+			(*input)++;
 		if (quote_flag == 0 && is_meta(**input) == 1)
-			return (special);
+			return (0);
 	}
-	return (special);
-}
-
-int	ft_isupper(int c)
-{
-	if ('A' <= c && c <= 'Z')
-		return (1);
-	else
-		return (0);
+	return (0);
 }
 
 int	arg_to_deque(t_arg_deque **args, char *arg, int special)
@@ -86,10 +73,6 @@ int	arg_to_deque(t_arg_deque **args, char *arg, int special)
 	t_arg	*new;
 
 	new = lstnew_arg(arg);
-	if (new == NULL)
-	{
-		return (ERROR);
-	}
 	new->special = special;
 	append_tail_arg(args, new);
 	return (0);

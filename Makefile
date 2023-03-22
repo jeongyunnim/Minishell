@@ -31,6 +31,7 @@ SRCS			=	./main.c\
 					./parse_save.c\
 					./parse_count_len.c\
 					./parse_divide_pipe.c\
+					./parse_util.c\
 					./env_save.c\
 					./env_replace.c\
 					./env_valid_check.c\

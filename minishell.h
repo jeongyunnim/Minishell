@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 19:28:11 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 20:28:35 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,12 +149,14 @@ t_cmd		*pop_tail_cmd(t_cmd **tail);
 void		append_head_cmd(t_cmd_deque **deque, t_cmd *new);
 void		append_tail_cmd(t_cmd_deque **deque, t_cmd *new);
 
+/* parse_util.c */
+int			is_quote(int c);
+int			is_meta(int c);
+int			is_env_special(int c);
+
 /* parse_save.c */
 int			save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);
 int			arg_to_deque(t_arg_deque **args, char *arg, int special);
-int			ft_isupper(int c);
-int			is_quote(int c);
-int			is_meta(int c);
 
 /* env_save.c */
 t_env_deque	*save_env(char **env);
@@ -162,7 +164,6 @@ int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env, char quote_f
 void		replace_env(char **input, char **arg, t_env_deque *env, char quote_flag);
 
 /* env_valid_check.c */
-int			is_env_special(int c);
 int			invalid_env_name(char *input, unsigned int *i);
 int			valid_env_name_match(char *input, t_env_deque *env, unsigned int *i);
 

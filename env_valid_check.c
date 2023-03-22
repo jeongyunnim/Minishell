@@ -6,19 +6,11 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 19:22:33 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 19:24:23 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 21:04:07 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_env_special(int c)
-{
-	if (c == '?' || c == '0' || c == '$')
-		return (1);
-	else
-		return (0);
-}
 
 int	valid_env_name_replace(char **input, char **arg, t_env_deque *env)
 {
