@@ -4,7 +4,7 @@ LIBFTDIR	= ./libft
 
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror \
-#-g3 -fsanitize=address 
+-g3 -fsanitize=address 
 
 #m1 mac 용
 

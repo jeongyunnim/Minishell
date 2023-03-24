@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 22:51:15 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/25 01:23:28 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ void	ready_for_input(t_info *info)
 
 void	after_exec_commands(t_info *info, char **input)
 {
-	if (is_only_white_space(*input) == 0)
-		add_history(*input);
 	free(*input);
 	preserve_stdio(1);
 	reset_input_mode(&info->org_term);
@@ -69,6 +67,8 @@ int	main(int argc, char *argv[], char *envp[])
 		input = readline("minishell$ ");
 		if (input == NULL)
 			meet_eof_exit();
+		if (is_only_white_space(input) == 0)
+			add_history(input);
 		if (parse(input, &info) < 0)
 		{
 			ft_putstr_fd("minishell: syntax error quote is not closed\n", 2);

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 23:07:01 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/25 01:38:11 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,9 @@ void	handle_input(t_info *info, char **input, char **arg)
 {
 	char	special;
 
-	if (*arg == NULL)
-	{
-		if (**input != '\0')
-			**input = '\0';
-		return ;
-	}
 	special = save_arg(input, *arg, info->envs);
+	if (*arg == NULL)
+		return ;
 	if (ft_strncmp(*arg, "~", 2) == 0)
 		replace_home_path(info, arg);
 	arg_to_deque(&info->arguments, *arg, special);
