@@ -204,7 +204,6 @@ int			divide_pipe(t_info *info);
 
 /* exec_commands.c */
 int			exec_commands(t_info *info);
-int			exec_builtin(char **cmd_line, t_env_deque *envs);
 char		**envlist_to_arry(t_env_deque *envs);
 void		init_pipe_index(t_pipe_index *index, int flag);
 
@@ -231,6 +230,57 @@ char		*gen_temp_file_name(int flag);
 int			exec_one_builtin(t_info *info, t_cmd *cmd_line);
 int			isbuiltin(char **cmd_args);
 int			exec_builtin(char **cmd_line, t_env_deque *envs);
+
+/*ft_pwd.c*/
+char		*ft_oldpwd(t_env_deque *envs);
+int			ft_pwd(t_env_deque *envs);
+
+/*ft_cd.c*/
+void		change_env(t_env_deque *envs, char *name, char *value);
+int			change_dir(char *path, t_env_deque *envs);
+int			ft_cd_oldpwd(t_env_deque *envs);
+int			ft_cd_home(t_env *target, t_env_deque *envs);
+int			ft_cd(char **argv, t_env_deque *envs);
+
+/*ft_echo.c*/
+void		print_echo(char **argv, int i);
+int			check_echo_flag(char *str);
+int			ft_echo(char **argv);
+
+/*ft_env.c*/
+t_env		*find_target(char *str, t_env_deque *envs);
+t_env_deque	*dup_env(t_env_deque *envs);
+int			ft_env(char **argv, t_env_deque *envs);
+
+/*ft_exit.c*/
+int			check_numeric(char *str);
+void		ft_exit(char **argv);
+
+/*ft_export.c*/
+void		set_export(char **argv, t_env_deque *envs);
+void		print_export(t_env_deque *sort);
+void		swap_list(t_env *a, t_env *b);
+t_env_deque	*sort_env(t_env_deque *envs);
+int			ft_export(char **argv, t_env_deque *envs);
+
+/*ft_export_utils.c*/
+void		add_export_env(t_env_deque *envs, char *name, char *value);
+void		update_env(t_env *env, char *value);
+int			find_env(t_env_deque *envs, char *name, char *value);
+int			check_export_name(char *str);
+
+/*ft_unset.c*/
+void		del_env(t_env **head, t_env **tail, t_env *target);
+int			check_unset_valid(char *str);
+int			ft_unset(char **argv, t_env_deque *envs);
+
+/*error_builtin.c*/
+void		print_builtin_error(char *arg, char *str);
+void		fail_getcwd(t_env_deque *envs, char *path, char *oldpwd);
+
+/*asciiart.c*/
+void		print_openningment(void);
+void		print_line(void);
 
 /* free_util.c */
 void		free_cmd_node(t_cmd **cmd_node);

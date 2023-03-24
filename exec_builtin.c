@@ -54,18 +54,18 @@ int	exec_builtin(char **cmd_line, t_env_deque *envs)
 	if (cmd_line[0] == NULL)
 		return (0);
 	if (ft_strncmp("echo", cmd_line[0], 5) == 0)
-		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
+		exit_code = ft_echo(cmd_line);
 	else if (ft_strncmp("cd", cmd_line[0], 3) == 0)
-		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
+		exit_code = ft_cd(cmd_line, envs);
 	else if (ft_strncmp("pwd", cmd_line[0], 4) == 0)
-		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
+		exit_code = ft_pwd(envs);
 	else if (ft_strncmp("export", cmd_line[0], 7) == 0)
-		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
+		exit_code = ft_export(cmd_line, envs);
 	else if (ft_strncmp("unset", cmd_line[0], 6) == 0)
-		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
+		exit_code = ft_unset(cmd_line, envs);
 	else if (ft_strncmp("env", cmd_line[0], 4) == 0)
-		exit_code = write(1, envs->head->name, ft_strlen(envs->head->name));
+		exit_code = ft_env(cmd_line, envs);
 	else if (ft_strncmp("exit", cmd_line[0], 5) == 0)
-		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
+		ft_exit(cmd_line);
 	return (exit_code);
 }
