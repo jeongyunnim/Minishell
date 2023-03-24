@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 14:10:13 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 17:33:20 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,16 @@ typedef enum e_mode
 
 typedef enum e_error_type
 {
-	PERMISSION_ERROR=-10,
+	PERMISSION_ERROR=-20,
 	OPEN_ERROR,
 	QUOTE_ERROR,
 	DIRECTORY_ERROR,
 	SYNTAX_ERROR,
 	HEREDOC_MAX_ERROR,
 	COMMAND_ERROR,
+	FORK_ERROR,
+	PIPE_ERROR,
+	ALLOCATE_ERROR,
 	ERROR=-1
 }				t_error_type;
 
@@ -225,6 +228,7 @@ void		exited_by_signal(t_info *info, int siganl);
 
 /* error_handle.c */
 void		print_error(int type, char *arg);
+void		print_system_error(int type);
 int			redirection_error(int fd, char *arg);
 
 /* parse_valid_check.c */

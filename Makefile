@@ -45,6 +45,7 @@ SRCS			=	./main.c\
 					./free_util.c\
 					./error_handle.c\
 					./parse_valid_check.c\
+					./exec_builtin.c\
 
 OBJS			=	$(SRCS:%.c=%.o)
 
