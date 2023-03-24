@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:16:44 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/25 01:30:05 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/25 05:45:36 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	args_check(t_info *info)
 	temp = info->arguments->head;
 	while (temp != NULL)
 	{
-		dprintf(2, "----------[list]----------\ncontents: %s\n--------------------------\n", temp->arg);
 		if (temp->special == PIPE)
 		{
 			if (is_valid_pipe(temp) == 0)
