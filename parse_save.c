@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 20:14:26 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:46:59 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	meet_meta_replace(char **input, char **arg)
 	}
 }
 
-int	save_arg(char **input, char *arg, int arg_len, t_env_deque *envs)
+int	save_arg(char **input, char *arg, t_env_deque *envs)
 {
 	char	quote_flag;
 

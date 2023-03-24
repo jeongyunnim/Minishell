@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 20:20:21 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:57:55 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ typedef struct s_parse_index
 
 /* init_info */
 void		init_oldpwd(t_env_deque *env);
-void		init_info(t_info *info, char *envp[]);
+void		init_info(t_info *info, char *envp[], int argc, char *argv[]);
 
 /* init_terminal */
 void		save_original_mode(struct termios *org_term);
@@ -146,7 +146,8 @@ int			parse(char *input, t_info *info);
 
 /* parse_count_len.c */
 int			is_only_white_space(char *input);
-int			inside_quote_cnt(char *input, t_env_deque *env, unsigned int *cnt, char *quote_flag);
+int			inside_quote_cnt(char *input, t_env_deque *env, \
+							unsigned int *cnt, char *quote_flag);
 int			enter_quote(char input, char *quote_flag);
 int			meta_len(char *input);
 int			count_arg_len(char *input, t_parse_index index, t_env_deque *envs);
@@ -178,17 +179,20 @@ int			is_meta(int c);
 int			is_env_special(int c);
 
 /* parse_save.c */
-int			save_arg(char **input, char *arg, int arg_len, t_env_deque *envs);
+int			save_arg(char **input, char *arg, t_env_deque *envs);
 int			arg_to_deque(t_arg_deque **args, char *arg, int special);
 
 /* env_save.c */
 t_env_deque	*save_env(char **env);
-int			set_env_len(char *input, unsigned int *cnt, t_env_deque *env, char quote_flag);
-void		replace_env(char **input, char **arg, t_env_deque *env, char quote_flag);
+int			set_env_len(char *input, unsigned int *cnt, \
+						t_env_deque *env, char quote_flag);
+void		replace_env(char **input, char **arg, \
+						t_env_deque *env, char quote_flag);
 
 /* env_valid_check.c */
 int			invalid_env_name(char *input, unsigned int *i);
-int			valid_env_name_match(char *input, t_env_deque *env, unsigned int *i);
+int			valid_env_name_match(char *input, \
+								t_env_deque *env, unsigned int *i);
 
 /* env_replace.c */
 int			env_special_len(char *input);
@@ -205,11 +209,13 @@ char		**envlist_to_arry(t_env_deque *envs);
 void		init_pipe_index(t_pipe_index *index, int flag);
 
 /* exec_child.c */
-void		child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info);
+void		child_process_run(t_cmd *cmd_node, \
+								t_pipe_index index, t_info *info);
 
 /* exec_parent.c */
-void		parent_process_wait(t_info *info, pid_t pid, int pipes);
-void		parent_process_run(t_cmd **cmd_line, t_pipe_index *index, t_info *info);
+void		parent_process_wait(pid_t pid, int pipes);
+void		parent_process_run(t_cmd **cmd_line, \
+								t_pipe_index *index, t_info *info);
 int			parent_run_for_heredoc(t_cmd *temp, pid_t pid);
 
 /* exec_redirection.c */
@@ -233,7 +239,7 @@ void		free_env_deque(t_env_deque **env_deque);
 
 /* signal_handle.c */
 void		set_signal_mode(int flag);
-void		exited_by_signal(t_info *info, int siganl);
+void		exited_by_signal(int siganl);
 
 /* error_handle.c */
 void		print_error(int type, char *arg);

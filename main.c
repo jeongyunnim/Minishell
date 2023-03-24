@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 19:19:55 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:44:38 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	main(int argc, char *argv[], char *envp[])
 	t_info	info;
 
 	ft_putstr_fd("--- wellcome! ---\n", 1);
-	init_info(&info, envp);
+	init_info(&info, envp, argc, argv);
 	while (1)
 	{
 		ready_for_input(&info);

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 21:09:47 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 21:34:02 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 21:11:30 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@ void	init_oldpwd(t_env_deque *env)
 	append_tail_env(&env->head, &env->tail, env_temp);
 }
 
-void	init_info(t_info *info, char *envp[])
+void	init_info(t_info *info, char *envp[], int argc, char *argv[])
 {
+	if (argc != 1 || argv[1] != NULL)
+		exit(EXIT_FAILURE);
 	ft_memset(info, 0, sizeof(info));
 	info->envs = save_env(envp);
 	info->home_dir = getenv("HOME");

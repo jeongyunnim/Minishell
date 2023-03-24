@@ -6,13 +6,13 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 19:31:01 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 20:34:37 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:55:19 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	parent_process_wait(t_info *info, pid_t pid, int pipes)
+void	parent_process_wait(pid_t pid, int pipes)
 {
 	int	status;
 	int	last_pid_status;
@@ -30,15 +30,13 @@ void	parent_process_wait(t_info *info, pid_t pid, int pipes)
 	if (WIFEXITED(last_pid_status) == 1)
 		g_exit_code = WEXITSTATUS(last_pid_status);
 	else if (WIFSIGNALED(last_pid_status) == 1)
-		exited_by_signal(info, last_pid_status);
+		exited_by_signal(last_pid_status);
 }
 
 int	name_temp_file(t_arg_deque *redirects)
 {
 	t_arg	*move_red;
 	char	*temp_file;
-	char	*input;
-	int		temp_fd;
 
 	move_red = redirects->head;
 	while (move_red != NULL)

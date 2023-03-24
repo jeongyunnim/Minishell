@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:03:07 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 20:29:25 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:54:47 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,7 @@ static void	signal_handler_interactive_mode(int signo)
 	}
 }
 
-static void	heredoc_sigint_handler(int signo)
-{
-	static int	signal_flag;
-
-	if (signo == SIGINT)
-		signal_flag = 1;
-	else
-		signal_flag = 0;
-}
-
-void	exited_by_signal(t_info *info, int signal)
+void	exited_by_signal(int signal)
 {
 	char	*temp;
 

@@ -6,13 +6,13 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:16:44 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 16:22:42 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:56:15 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	is_valid_pipe(t_arg *temp, t_info *info)
+static int	is_valid_pipe(t_arg *temp)
 {
 	if (temp->next == NULL || temp->previous == NULL)
 	{
@@ -23,7 +23,7 @@ static int	is_valid_pipe(t_arg *temp, t_info *info)
 	return (1);
 }
 
-static int	is_valid_special(t_arg *temp, t_info *info)
+static int	is_valid_special(t_arg *temp)
 {
 	if (temp->next == NULL || temp->next->special != 0)
 	{
@@ -45,11 +45,11 @@ int	args_check(t_info *info)
 	{
 		if (temp->special == PIPE)
 		{
-			if (is_valid_pipe(temp, info) == 0)
+			if (is_valid_pipe(temp) == 0)
 				return (ERROR);
 			info->pipes += 1;
 		}
-		else if (temp->special != 0 && is_valid_special(temp, info) == 0)
+		else if (temp->special != 0 && is_valid_special(temp) == 0)
 			return (ERROR);
 		else if (temp->special == HEREDOC)
 			heredoc_flag++;

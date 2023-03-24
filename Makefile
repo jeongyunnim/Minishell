@@ -3,8 +3,8 @@ NAME		=	./minishell
 LIBFTDIR	= ./libft
 
 CC			=	cc
-CFLAGS		=	-g3 -fsanitize=address\
-#-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror
+#-g3 -fsanitize=address 
 
 #m1 mac 용
 

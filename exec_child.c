@@ -6,13 +6,13 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 19:04:26 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 21:31:54 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	stdio_to_pipe(t_cmd *cmd_line, t_pipe_index index, int pipes)
+int	stdio_to_pipe(t_pipe_index index, int pipes)
 {
 	if (pipes == 0)
 		return (0);
@@ -81,11 +81,11 @@ int	check_cmd_in_path(char **cmd, t_env *temp_env)
 void	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 {
 	set_signal_mode(FORK_CHILD_M);
-	stdio_to_pipe(cmd_node, index, info->pipes);
+	stdio_to_pipe(index, info->pipes);
 	if (handle_redirection(cmd_node->redirections) == ERROR)
 		exit(EXIT_FAILURE);
-	if (exec_builtin(cmd_node->cmd_args, info->envs) == 0)
-		exit(EXIT_SUCCESS);
+	if (isbuiltin(cmd_node->cmd_args) == 1)
+		exit(exec_builtin(cmd_node->cmd_args, info->envs));
 	else if (ft_strchr(cmd_node->cmd_args[0], '/') == 0 && \
 		check_cmd_in_path(&(cmd_node->cmd_args[0]), info->envs->head) == 0)
 	{

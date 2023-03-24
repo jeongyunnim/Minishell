@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 17:10:47 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 18:50:53 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 21:32:51 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	exec_one_builtin(t_info *info, t_cmd *cmd_line)
 {
 	if (handle_redirection(cmd_line->redirections) != ERROR)
-		exec_builtin(cmd_line->cmd_args, info->envs);
+		g_exit_code = exec_builtin(cmd_line->cmd_args, info->envs);
 	free_cmd_node(&cmd_line);
 	free(info->cmds);
 	return (0);
@@ -48,23 +48,24 @@ int	isbuiltin(char **cmd_args)
 
 int	exec_builtin(char **cmd_line, t_env_deque *envs)
 {
+	int	exit_code;
+
+	exit_code = 0;
 	if (cmd_line[0] == NULL)
 		return (0);
 	if (ft_strncmp("echo", cmd_line[0], 5) == 0)
-		ft_putstr_fd(*cmd_line, 1);
+		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
 	else if (ft_strncmp("cd", cmd_line[0], 3) == 0)
-		ft_putstr_fd(*cmd_line, 1);
+		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
 	else if (ft_strncmp("pwd", cmd_line[0], 4) == 0)
-		ft_putstr_fd(*cmd_line, 1);
+		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
 	else if (ft_strncmp("export", cmd_line[0], 7) == 0)
-		ft_putstr_fd(*cmd_line, 1);
+		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
 	else if (ft_strncmp("unset", cmd_line[0], 6) == 0)
-		ft_putstr_fd(*cmd_line, 1);
+		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
 	else if (ft_strncmp("env", cmd_line[0], 4) == 0)
-		ft_putstr_fd(*cmd_line, 1);
+		exit_code = write(1, envs->head->name, ft_strlen(envs->head->name));
 	else if (ft_strncmp("exit", cmd_line[0], 5) == 0)
-		ft_putstr_fd(*cmd_line, 1);
-	else
-		return (1);
-	return (0);
+		exit_code = write(1, *cmd_line, ft_strlen(*cmd_line));
+	return (exit_code);
 }

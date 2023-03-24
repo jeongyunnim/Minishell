@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 20:01:08 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 21:11:54 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char	**envlist_to_arry(t_env_deque *envs)
 	int		cnt;
 	int		i;
 
+	cnt = 0;
 	env = envs->head;
 	while (env != NULL)
 	{
@@ -111,6 +112,6 @@ int	exec_commands(t_info *info)
 		index.i += 1;
 	}
 	free(info->cmds);
-	parent_process_wait(info, index.pid, info->pipes);
+	parent_process_wait(index.pid, info->pipes);
 	return (0);
 }

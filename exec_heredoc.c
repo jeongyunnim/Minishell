@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:39:29 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 20:22:05 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:52:45 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int	heredoc_handler(t_info *info)
 {
 	t_cmd	*temp;
 	pid_t	pid;
-	int		flag;
 
 	temp = info->cmds->head;
 	pid = fork();
