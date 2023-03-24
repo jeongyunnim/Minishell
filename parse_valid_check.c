@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:16:44 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/25 01:30:05 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/25 04:40:54 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,22 @@ static int	is_valid_pipe(t_arg *temp)
 
 static int	is_valid_special(t_arg *temp)
 {
-	if (temp->next == NULL || temp->next->special != 0)
+	t_arg	*next;
+
+	next = temp->next;
+	if (next == NULL || next->special != 0)
 	{
-		g_exit_code = 258;
-		print_error(SYNTAX_ERROR, temp->arg);
+		if (next->special == NO_ENV)
+		{
+			g_exit_code = 258;
+			print_error(SYNTAX_ERROR, temp->arg);
+		}
+		else
+		{
+			g_exit_code = 1;
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd("ambiguous redirect\n", 2);
+		}
 		return (0);
 	}
 	return (1);
@@ -43,14 +55,14 @@ int	args_check(t_info *info)
 	temp = info->arguments->head;
 	while (temp != NULL)
 	{
-		dprintf(2, "----------[list]----------\ncontents: %s\n--------------------------\n", temp->arg);
 		if (temp->special == PIPE)
 		{
 			if (is_valid_pipe(temp) == 0)
 				return (ERROR);
 			info->pipes += 1;
 		}
-		else if (temp->special != 0 && is_valid_special(temp) == 0)
+		else if ((temp->special != NONE && temp->special != NO_ENV) \
+					&& is_valid_special(temp) == 0)
 			return (ERROR);
 		else if (temp->special == HEREDOC)
 			heredoc_flag++;

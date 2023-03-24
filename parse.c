@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/25 01:38:11 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/25 04:17:08 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,19 @@ void	replace_home_path(t_info *info, char **arg)
 	}
 }
 
-void	handle_input(t_info *info, char **input, char **arg)
+void	handle_input(t_info *info, char **input, char **arg, int arg_len)
 {
 	char	special;
+	int		env_flag;
 
+	env_flag = 0;
+	if (**input == '$')
+		env_flag = 1;
 	special = save_arg(input, *arg, info->envs);
 	if (*arg == NULL)
 		return ;
+	if (env_flag == 1 && arg_len == 0)
+		special = NO_ENV;
 	if (ft_strncmp(*arg, "~", 2) == 0)
 		replace_home_path(info, arg);
 	arg_to_deque(&info->arguments, *arg, special);
@@ -70,9 +76,10 @@ int	parse(char *input, t_info *info)
 			arg_len = count_arg_len(input, index, info->envs);
 			if (arg_len < 0)
 				return (arg_len);
-			else if (arg_len != 0 || (arg_len == 0 && is_quote(*input) == 1))
+			else if (arg_len != 0 || (arg_len == 0 && \
+					(is_quote(*input) == 1 || *input == '$')))
 				arg = (char *)ft_calloc(arg_len + 1, sizeof(char));
-			handle_input(info, &input, &arg);
+			handle_input(info, &input, &arg, arg_len);
 		}
 	}
 	return (arg_len);

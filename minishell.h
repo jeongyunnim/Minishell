@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/25 01:25:46 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/25 04:52:48 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef enum e_special
 	NONE,
 	HEREDOC,
 	APPEND,
+	NO_ENV,
 	PIPE='|',
 	REDIRECT_IN='<',
 	REDIRECT_OUT='>'
@@ -83,6 +84,7 @@ typedef struct s_arg_deque
 	t_arg	*head;
 	t_arg	*tail;
 }	t_arg_deque;
+
 typedef struct s_env_deque
 {
 	t_env	*head;
@@ -111,7 +113,6 @@ typedef struct s_info
 	t_env_deque			*envs;
 	t_cmd_deque			*cmds;
 	char				*home_dir;
-	int					exit_code;
 	int					pipes;
 	int					redirects;
 
