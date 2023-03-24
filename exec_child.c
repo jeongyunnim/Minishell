@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 16:54:28 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 18:53:18 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int	check_cmd_in_path(char **cmd, t_env *temp_env)
 	int		i;
 	int		command_flag;
 
+	if (**cmd == '\0')
+		return (0);
 	while (temp_env != NULL && ft_strncmp("PATH", temp_env->name, 5) != 0)
 		temp_env = temp_env->next;
 	if (temp_env == NULL)
@@ -78,7 +80,7 @@ int	check_cmd_in_path(char **cmd, t_env *temp_env)
 	return (command_flag);
 }
 
-int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
+void	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 {
 	set_signal_mode(FORK_CHILD_M);
 	stdio_to_pipe(cmd_node, index, info->pipes);
@@ -90,14 +92,18 @@ int	child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info)
 		check_cmd_in_path(&(cmd_node->cmd_args[0]), info->envs->head) == 0)
 	{
 		print_error(COMMAND_ERROR, cmd_node->cmd_args[0]);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 	execve(cmd_node->cmd_args[0], cmd_node->cmd_args, \
 		envlist_to_arry(info->envs));
 	if (access(cmd_node->cmd_args[0], F_OK) == -1)
+	{
 		print_error(OPEN_ERROR, cmd_node->cmd_args[0]);
+		exit(127);
+	}
 	else if (access(cmd_node->cmd_args[0], X_OK) == -1)
+	{
 		print_error(PERMISSION_ERROR, cmd_node->cmd_args[0]);
-	exit(EXIT_FAILURE);
-	return (0);
+		exit(126);
+	}
 }
