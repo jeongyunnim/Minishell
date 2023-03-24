@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:39:29 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 19:18:31 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 15:27:46 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,12 @@ int	heredoc_handler(t_info *info)
 	{
 		set_signal_mode(FORK_PARENT_M);
 		waitpid(pid, &status, 0);
-		if (status == 2)
-			return (SIGINT);
+		if (WIFEXITED(status) == 0)
+			info->exit_code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status) != 0)
+			exited_by_signal(info, status);
+		if (WIFSIGNALED(status) != 0)
+			info->exit_code = 1;
 		while (temp != NULL)
 		{
 			if (temp->redirections != NULL)

@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 18:55:01 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 14:55:43 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -599,7 +599,7 @@ int	isbuiltin(char **cmd_args)
 		return (0);
 }
 
-void	parent_process_wait(pid_t pid, int pipes)
+void	parent_process_wait(t_info *info, pid_t pid, int pipes)
 {
 	int	status;
 	int	i;
@@ -611,6 +611,11 @@ void	parent_process_wait(pid_t pid, int pipes)
 		waitpid(-1, &status, 0);
 		i++;
 	}
+	if (WIFEXITED(status) == 1)
+		info->exit_code = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status) != 0)
+		exited_by_signal(info, status);
+	return ;
 }
 
 int	exec_builtin(char **cmd_line, t_env_deque *envs)
@@ -743,7 +748,7 @@ int	exec_commands(t_info *info)
 		index.i += 1;
 	}
 	free(info->cmds);
-	parent_process_wait(index.pid, info->pipes);
+	parent_process_wait(info, index.pid, info->pipes);
 	return (0);
 }
 

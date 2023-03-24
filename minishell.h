@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/22 21:32:28 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 14:10:13 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ typedef struct s_info
 	t_env_deque			*envs;
 	t_cmd_deque			*cmds;
 	char				*home_dir;
+	int					exit_code;
 	int					pipes;
 	int					redirects;
 
@@ -220,6 +221,7 @@ void		free_env_deque(t_env_deque **env_deque);
 
 /* signal_handle.c */
 void		set_signal_mode(int flag);
+void		exited_by_signal(t_info *info, int siganl);
 
 /* error_handle.c */
 void		print_error(int type, char *arg);

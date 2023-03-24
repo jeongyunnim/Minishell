@@ -1,5 +1,11 @@
 {
 	"files.associations": {
-		"complex": "c"
+		"complex": "c",
+		"minishell.h": "c",
+		"unistd.h": "c",
+		"libft.h": "c",
+		"termios.h": "c",
+		"readline.h": "c",
+		"history.h": "c"
 	}
 }
