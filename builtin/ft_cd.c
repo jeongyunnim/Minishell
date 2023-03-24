@@ -53,6 +53,7 @@ int	change_dir(char *path, t_env_deque *envs)
 int	ft_cd_oldpwd(t_env_deque *envs)
 {
 	char	*path;
+	int		ret_flag;
 	t_env	*target;
 
 	target = find_target("OLDPWD", envs);
@@ -65,10 +66,15 @@ int	ft_cd_oldpwd(t_env_deque *envs)
 	{
 		path = ft_strdup(target->value);
 		if (change_dir(path, envs) == 0)
+		{
 			printf ("%s\n", path);
+			ret_flag = 0;
+		}
+		else
+			ret_flag = 1;
 	}
 	free(path);
-	return (0);
+	return (ret_flag);
 }
 
 int	ft_cd_home(t_env *target, t_env_deque *envs)
