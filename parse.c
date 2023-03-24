@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:28:52 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 21:01:07 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 23:07:01 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,16 @@ void	replace_home_path(t_info *info, char **arg)
 	}
 }
 
-void	handle_valid_input(t_info *info, char **input, char **arg)
+void	handle_input(t_info *info, char **input, char **arg)
 {
 	char	special;
 
+	if (*arg == NULL)
+	{
+		if (**input != '\0')
+			**input = '\0';
+		return ;
+	}
 	special = save_arg(input, *arg, info->envs);
 	if (ft_strncmp(*arg, "~", 2) == 0)
 		replace_home_path(info, arg);
@@ -70,8 +76,7 @@ int	parse(char *input, t_info *info)
 				return (arg_len);
 			else if (arg_len != 0 || (arg_len == 0 && is_quote(*input) == 1))
 				arg = (char *)ft_calloc(arg_len + 1, sizeof(char));
-			if (arg != NULL)
-				handle_valid_input(info, &input, &arg);
+			handle_input(info, &input, &arg);
 		}
 	}
 	return (arg_len);
