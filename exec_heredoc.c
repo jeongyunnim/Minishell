@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:39:29 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 16:42:28 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:22:05 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,27 +55,6 @@ int	open_and_write_temp_file(t_arg_deque *redirects)
 	return (0);
 }
 
-int	name_temp_file(t_arg_deque *redirects)
-{
-	t_arg	*move_red;
-	char	*temp_file;
-	char	*input;
-	int		temp_fd;
-
-	move_red = redirects->head;
-	while (move_red != NULL)
-	{
-		if (move_red->special == HEREDOC)
-		{
-			temp_file = gen_temp_file_name(1);
-			free(move_red->arg);
-			move_red->arg = ft_strdup(temp_file);
-		}
-		move_red = move_red->next;
-	}
-	return (0);
-}
-
 static void	child_run_for_heredoc(t_cmd *temp)
 {
 	while (temp != NULL)
@@ -95,7 +74,6 @@ int	heredoc_handler(t_info *info)
 	t_cmd	*temp;
 	pid_t	pid;
 	int		flag;
-	int		status;
 
 	temp = info->cmds->head;
 	pid = fork();
@@ -105,19 +83,8 @@ int	heredoc_handler(t_info *info)
 		child_run_for_heredoc(temp);
 	else
 	{
-		set_signal_mode(FORK_PARENT_M);
-		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status) == 1)
-		{
-			g_exit_code = 1;
+		if (parent_run_for_heredoc(temp, pid) == ERROR)
 			return (ERROR);
-		}
-		while (temp != NULL)
-		{
-			if (temp->redirections != NULL)
-				name_temp_file(temp->redirections);
-			temp = temp->next;
-		}
 	}
 	return (0);
 }

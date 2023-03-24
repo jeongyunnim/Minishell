@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 18:35:30 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:20:21 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,9 +202,15 @@ int			divide_pipe(t_info *info);
 int			exec_commands(t_info *info);
 int			exec_builtin(char **cmd_line, t_env_deque *envs);
 char		**envlist_to_arry(t_env_deque *envs);
+void		init_pipe_index(t_pipe_index *index, int flag);
 
 /* exec_child.c */
 void		child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info);
+
+/* exec_parent.c */
+void		parent_process_wait(t_info *info, pid_t pid, int pipes);
+void		parent_process_run(t_cmd **cmd_line, t_pipe_index *index, t_info *info);
+int			parent_run_for_heredoc(t_cmd *temp, pid_t pid);
 
 /* exec_redirection.c */
 int			check_access_read(char *file_name, t_special type);
@@ -231,7 +237,7 @@ void		exited_by_signal(t_info *info, int siganl);
 
 /* error_handle.c */
 void		print_error(int type, char *arg);
-void		print_system_error(int type);
+int			print_system_error(int type);
 int			redirection_error(int fd, char *arg);
 
 /* parse_valid_check.c */

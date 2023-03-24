@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:03:07 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 16:44:29 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:29:25 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ static void	heredoc_sigint_handler(int signo)
 
 void	exited_by_signal(t_info *info, int signal)
 {
+	char	*temp;
+
 	g_exit_code = signal + 128;
 	if (signal == 15)
 		ft_putstr_fd("Terminated: 15\n", 1);
@@ -46,9 +48,11 @@ void	exited_by_signal(t_info *info, int signal)
 		ft_putstr_fd("Killed: 9\n", 1);
 	else
 	{
-		ft_putstr_fd("Process got signal stop: ", 1);
-		ft_putstr_fd(ft_itoa(signal), 1);
+		temp = ft_itoa(signal);
+		ft_putstr_fd("Process interupted by signal: ", 1);
+		ft_putstr_fd(temp, 1);
 		ft_putstr_fd("\n", 1);
+		free(temp);
 	}
 }
 

@@ -41,6 +41,7 @@ SRCS			=	./main.c\
 					./exec_redirection.c\
 					./exec_heredoc.c\
 					./exec_child.c\
+					./exec_parent.c\
 					./signal_handle.c\
 					./free_util.c\
 					./error_handle.c\

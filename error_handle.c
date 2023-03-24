@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:05:24 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 17:32:12 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 19:21:48 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,14 @@ void	print_error(int type, char *arg)
 		ft_putstr_fd(": command not found\n", 2);
 }
 
-void	print_system_error(int type)
+int	print_system_error(int type)
 {
 	ft_putstr_fd("minishell: ", 2);
 	if (type == FORK_ERROR)
 		ft_putstr_fd("fork: Cannot allocate memory\n", 2);
 	else if (type == PIPE_ERROR)
 		perror("pipe");
-	else if (type == ALLOCATE_ERROR)
-		ft_putstr_fd("malloc: Cannot allocate memory\n", 2);
+	return (ERROR);
 }
 
 int	redirection_error(int fd, char *arg)
