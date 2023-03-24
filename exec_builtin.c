@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 17:10:47 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 18:18:24 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 18:50:53 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	isbuiltin(char **cmd_args)
 
 int	exec_builtin(char **cmd_line, t_env_deque *envs)
 {
-	if (cmd_line[0] == NULL || cmd_line[0][0] == '\0')
+	if (cmd_line[0] == NULL)
 		return (0);
 	if (ft_strncmp("echo", cmd_line[0], 5) == 0)
 		ft_putstr_fd(*cmd_line, 1);

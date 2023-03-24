@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:40:48 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 18:36:38 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 18:53:18 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int	check_cmd_in_path(char **cmd, t_env *temp_env)
 	int		i;
 	int		command_flag;
 
+	if (**cmd == '\0')
+		return (0);
 	while (temp_env != NULL && ft_strncmp("PATH", temp_env->name, 5) != 0)
 		temp_env = temp_env->next;
 	if (temp_env == NULL)

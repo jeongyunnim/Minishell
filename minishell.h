@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 18:36:52 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 18:35:30 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,6 @@ void		reset_input_mode(struct termios *org_term);
 
 /* parse.c */
 int			parse(char *input, t_info *info);
-
 
 /* parse_count_len.c */
 int			is_only_white_space(char *input);
