@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 19:31:01 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 20:29:14 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:34:37 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	parent_process_wait(t_info *info, pid_t pid, int pipes)
 
 	i = 0;
 	status = 0;
+	last_pid_status = 0;
 	while (i <= pipes)
 	{
 		if (waitpid(-1, &status, 0) == pid)
