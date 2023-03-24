@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 17:33:20 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 18:16:47 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,10 @@ int			handle_redirection(t_arg_deque *redirections);
 int			heredoc_handler(t_info *info);
 char		*gen_temp_file_name(int flag);
 
+/* exec_builtin.c */
+int			exec_one_builtin(t_info *info, t_cmd *cmd_line);
+int			isbuiltin(char **cmd_args);
+int			exec_builtin(char **cmd_line, t_env_deque *envs);
 
 /* free_util.c */
 void		free_cmd_node(t_cmd **cmd_node);
