@@ -29,6 +29,7 @@ int		ft_isdigit(int c);
 int		ft_isprint(int c);
 int		ft_memcmp(const void *str1, const void *str2, size_t count);
 int		ft_strncmp(const char *str1, const char *str2, size_t n);
+int		ft_strcmp(const char *str1, const char *str2);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
 int		ft_isspace(int c);

@@ -47,6 +47,16 @@ SRCS			=	./main.c\
 					./error_handle.c\
 					./parse_valid_check.c\
 					./exec_builtin.c\
+					asciiart.c\
+					builtin/ft_cd.c\
+					builtin/ft_echo.c\
+					builtin/ft_env.c\
+					builtin/ft_exit.c\
+					builtin/ft_export.c\
+					builtin/ft_export_utils.c\
+					builtin/ft_pwd.c\
+					builtin/ft_unset.c\
+					builtin/error_builtin.c\
 
 OBJS			=	$(SRCS:%.c=%.o)
 
