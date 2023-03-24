@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 16:34:51 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 15:25:10 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 19:19:22 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,29 +24,29 @@ void	free_cmd_node(t_cmd **cmd_node)
 	{
 		free_arg_deque(&((*cmd_node)->redirections));
 	}
-	if ((*cmd_node)->commands_args != NULL)
+	if ((*cmd_node)->cmd_args != NULL)
 	{
 		i = 0;
-		args = (*cmd_node)->commands_args[i];
+		args = (*cmd_node)->cmd_args[i];
 		while (args != NULL)
 		{
 			free(args);
 			i++;
-			args = (*cmd_node)->commands_args[i];
+			args = (*cmd_node)->cmd_args[i];
 		}
-		free((*cmd_node)->commands_args);
+		free((*cmd_node)->cmd_args);
 	}
 	free(*cmd_node);
 }
 
 void	free_arg_deque(t_arg_deque **arg_deque)
 {
-	t_arg *arg_node;
+	t_arg	*arg_node;
 
 	if (*arg_deque == NULL)
 		return ;
 	arg_node = pop_head_arg(&((*arg_deque)->head));
-	while(arg_node != NULL)
+	while (arg_node != NULL)
 	{
 		free(arg_node->arg);
 		free(arg_node);

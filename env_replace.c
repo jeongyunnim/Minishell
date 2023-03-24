@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 19:45:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/20 20:44:21 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/22 19:24:30 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,33 +35,9 @@ int	env_special_len(char *input)
 	}
 }
 
-void	code_to_arg(char (*code)[4])
-{
-	char	temp;
-	int		i;
-
-	temp = g_exit_code;
-	i = 0;
-	while (temp > 0)
-	{
-		temp /= 10;
-		i++;
-	}
-	temp = g_exit_code;
-	if (temp == 0)
-		i++;
-	while (i > 0)
-	{
-		*(code[i - 1]) = temp % 10 + '0';
-		temp /= 10;
-		i--;
-	}
-}
-
 int	env_special_replace(char **input, char **arg)
 {
-	char	code[4];
-	int		len;
+	char	*code;
 
 	if (**input == '0')
 	{
@@ -71,16 +47,10 @@ int	env_special_replace(char **input, char **arg)
 	}
 	else if (**input == '?')
 	{
-		ft_memset(code, 0, 4);
-		code_to_arg(&code);
-		if (g_exit_code < 10)
-			len = 1;
-		else if (g_exit_code < 100)
-			len = 2;
-		else
-			len = 3;
-		ft_memcpy(*arg, code, len);
-		*arg += len;
+		code = ft_itoa(g_exit_code);
+		ft_memcpy(*arg, code, ft_strlen(code));
+		*arg += ft_strlen(code);
+		free(code);
 		(*input)++;
 	}
 	else
@@ -98,12 +68,14 @@ void	replace_env(char **input, char **arg, t_env_deque *env, char qflag)
 
 	i = 0;
 	(*input)++;
-	if (**input == '\0' || ft_isspace(**input) == 1\
-	 || (is_quote(**input) == 1 && qflag != 0))
+	if (**input == '\0' || ft_isspace(**input) == 1 \
+	|| (is_quote(**input) == 1 && qflag != 0))
 	{
 		**arg = '$';
 		(*arg)++;
 	}
+	else if (is_quote(**input) == 1)
+		(*input)++;
 	else if (ft_isalpha(**input) || is_env_special(**input) || **input == '_')
 		valid_env_name_replace(input, arg, env);
 	else
@@ -116,4 +88,28 @@ void	replace_env(char **input, char **arg, t_env_deque *env, char qflag)
 		(*input) += i;
 	}
 	(*input)--;
+}
+
+int	set_env_len(char *input, unsigned int *i, t_env_deque *env, char qflag)
+{
+	int	cnt;
+
+	cnt = 0;
+	(*i)++;
+	if (input[*i] == '\0' || ft_isspace(input[*i]) == 1 \
+		|| (is_quote(input[*i]) == 1 && qflag != 0))
+		return (1);
+	else if (is_quote(input[*i]) == 1)
+		return (0);
+	if (ft_isalpha(input[*i]) || is_env_special(input[*i]) || input[*i] == '_')
+	{
+		cnt = valid_env_name_match(input, env, i);
+		return (cnt);
+	}
+	else
+	{
+		if (invalid_env_name(input, i) == 1)
+			return (1);
+		return (0);
+	}
 }

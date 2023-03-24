@@ -1,28 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   parse_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/09 16:30:19 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 18:16:01 by jeseo            ###   ########.fr       */
+/*   Created: 2023/03/22 20:27:18 by jeseo             #+#    #+#             */
+/*   Updated: 2023/03/22 20:28:11 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	*ft_calloc(size_t n, size_t size)
+int	is_quote(int c)
 {
-	void	*p;
+	if (c == '\'' || c == '\"')
+		return (1);
+	else
+		return (0);
+}
 
-	p = (void *)malloc(n * size);
-	if (p == NULL)
-	{
-		write(2, "Insufficient memory\n", 20);
-		
-		exit(EXIT_FAILURE);
-	}
-	ft_bzero(p, n * size);
-	return (p);
+int	is_meta(int c)
+{
+	if (c == '>' || c == '<' || c == '|')
+		return (1);
+	else
+		return (0);
+}
+
+int	is_env_special(int c)
+{
+	if (c == '?' || c == '0' || c == '$')
+		return (1);
+	else
+		return (0);
 }

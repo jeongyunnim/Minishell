@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   init_terminal.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/09 16:30:19 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 18:16:01 by jeseo            ###   ########.fr       */
+/*   Created: 2023/03/22 21:08:14 by jeseo             #+#    #+#             */
+/*   Updated: 2023/03/22 21:14:31 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	*ft_calloc(size_t n, size_t size)
+void	save_original_mode(struct termios *org_term)
 {
-	void	*p;
+	tcgetattr(STDIN_FILENO, org_term);
+}
 
-	p = (void *)malloc(n * size);
-	if (p == NULL)
-	{
-		write(2, "Insufficient memory\n", 20);
-		
-		exit(EXIT_FAILURE);
-	}
-	ft_bzero(p, n * size);
-	return (p);
+void	set_input_mode(struct termios *new_term)
+{
+	tcgetattr(STDIN_FILENO, new_term);
+	new_term->c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, new_term);
+}
+
+void	reset_input_mode(struct termios *org_term)
+{
+	tcsetattr(STDIN_FILENO, TCSANOW, org_term);
 }

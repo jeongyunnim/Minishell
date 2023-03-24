@@ -6,116 +6,79 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:56 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/21 16:36:50 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 15:18:13 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_cmd_deque(t_info *info)
+void	preserve_stdio(int flag)
 {
-	t_cmd	*temp_cmd;
-	t_arg	*temp;
-	int		i;
-	int		j;
+	static int	stdio_fd[2];
 
-	i = 0;
-	temp_cmd = info->cmds->head;
-	while (temp_cmd != NULL)
+	if (flag == 0)
 	{
-		printf("\n---------------- < %d번째 command line >----------------\n\n", i);
-		if (temp_cmd->redirections != NULL)
-		{
-			temp = temp_cmd->redirections->head;
-			while (temp != NULL)
-			{
-				printf("type:%d | file: %s \n", temp->special, temp->arg);
-				temp = temp->next;
-			}
-		}
-		j = 0;
-		while (temp_cmd->commands_args[j] != NULL)
-		{
-			printf("arg[%d]: %s\n", j, temp_cmd->commands_args[j]);
-			j++;
-		}
-		printf("\n--------------------------------------------------------\n");
-		temp_cmd = temp_cmd->next;
-		i++;
-	}
-}
-
-/* 터미널 모드 설정 */
-
-void	save_input_mode(struct termios *org_term)
-{
-	tcgetattr(STDIN_FILENO, org_term);
-}
-
-void	set_input_mode(struct termios *new_term)
-{
-	tcgetattr(STDIN_FILENO, new_term);
-	new_term->c_lflag &= ~(ECHOCTL);
-	tcsetattr(STDIN_FILENO, TCSANOW, new_term);
-}
-
-void	reset_input_mode(struct termios *org_term)
-{
-	tcsetattr(STDIN_FILENO, TCSANOW, org_term);
-}
-
-/* 시그널 처리 */
-
-int main(int argc, char *argv[], char *envp[])
-{
-	char				*input;
-	int					stdio_fd[2];
-	int					ch;
-	struct termios		org_term;
-	struct termios		new_term;
-	t_info				info;
-
-	ft_memset(&info, 0, sizeof(info));
-	info.envs = save_env(envp, &info.home_dir);
-	info.home_dir = getenv("HOME");
-	save_input_mode(&org_term);
-	set_input_mode(&new_term);
-	while (1)
-	{
-		tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
-		set_signal_mode(INTERACTIVE_M);
 		stdio_fd[0] = dup(STDIN_FILENO);
 		stdio_fd[1] = dup(STDOUT_FILENO);
-		info.pipes = 0;
-		info.redirects = 0;
-		input = readline("minishell$ ");
-		if (input == NULL)
-		{
-			ft_putstr_fd("\033[1A", 1);
-			ft_putstr_fd("\033[11C", 1);
-			ft_putstr_fd("exit\n", 1);
-			exit(EXIT_SUCCESS);
-		}
-		add_history(input);
-		if (parse(input, &info) == QUOTE_ERROR)
-		{
-			ft_putstr_fd("minishell: syntax error quote is not closed\n", 2);
-		}
-		if (args_check(&info) != ERROR)
-		{
-			divide_pipe(&info);
-			exec_commands(&info);
-		}
-		else
-		{
-			free_arg_deque(&info.arguments);
-		}
-		free(input);
+	}
+	else
+	{
 		dup2(stdio_fd[0], 0);
 		dup2(stdio_fd[1], 1);
 		close(stdio_fd[0]);
 		close(stdio_fd[1]);
-		reset_input_mode(&org_term);
+	}
+}
+
+void	meet_eof_exit(void)
+{
+	ft_putstr_fd("\033[1A", 1);
+	ft_putstr_fd("\033[11C", 1);
+	ft_putstr_fd("exit\n", 1);
+	exit(EXIT_SUCCESS);
+}
+
+void	ready_for_input(t_info *info)
+{
+	preserve_stdio(0);
+	tcsetattr(STDIN_FILENO, TCSANOW, &info->new_term);
+	set_signal_mode(INTERACTIVE_M);
+	info->pipes = 0;
+	info->redirects = 0;
+}
+
+void	after_exec_commands(t_info *info, char **input)
+{
+	if (is_only_white_space(*input) == 0)
+		add_history(*input);
+	free(*input);
+	preserve_stdio(1);
+	reset_input_mode(&info->org_term);
+}
+
+int	main(int argc, char *argv[], char *envp[])
+{
+	char	*input;
+	t_info	info;
+
+	ft_putstr_fd("--- wellcome! ---\n", 1);
+	init_info(&info, envp);
+	while (1)
+	{
+		ready_for_input(&info);
+		input = readline("minishell$ ");
+		if (input == NULL)
+			meet_eof_exit();
+		if (parse(input, &info) < 0)
+		{
+			ft_putstr_fd("minishell: syntax error quote is not closed\n", 2);
+			continue ;
+		}
+		if (args_check(&info) != ERROR && divide_pipe(&info) == 0)
+			exec_commands(&info);
+		else
+			free_arg_deque(&info.arguments);
+		after_exec_commands(&info, &input);
 	}
 	return (0);
 }
