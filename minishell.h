@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:09:54 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 18:16:47 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 18:36:52 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,7 @@ int			exec_builtin(char **cmd_line, t_env_deque *envs);
 char		**envlist_to_arry(t_env_deque *envs);
 
 /* exec_child.c */
-int			child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info);
+void		child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info);
 
 /* exec_redirection.c */
 int			check_access_read(char *file_name, t_special type);
