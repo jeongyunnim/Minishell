@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:53:12 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 14:55:43 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 16:39:33 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -612,10 +612,9 @@ void	parent_process_wait(t_info *info, pid_t pid, int pipes)
 		i++;
 	}
 	if (WIFEXITED(status) == 1)
-		info->exit_code = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status) != 0)
+		g_exit_code = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status) == 1)
 		exited_by_signal(info, status);
-	return ;
 }
 
 int	exec_builtin(char **cmd_line, t_env_deque *envs)

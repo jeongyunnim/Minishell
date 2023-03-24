@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:03:07 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 14:35:32 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 16:44:29 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static void	signal_handler_interactive_mode(int signo)
 		rl_on_new_line();
 		rl_replace_line("", 1);
 		rl_redisplay();
-		g_exit_code = 130;
 	}
 }
 
@@ -36,14 +35,14 @@ static void	heredoc_sigint_handler(int signo)
 
 void	exited_by_signal(t_info *info, int signal)
 {
-	info->exit_code = signal + 128;
+	g_exit_code = signal + 128;
 	if (signal == 15)
 		ft_putstr_fd("Terminated: 15\n", 1);
 	else if (signal == 2)
 		ft_putstr_fd("\n", 1);
 	else if (signal == 3)
 		ft_putstr_fd("Quit: 3\n", 1);
-	else if (signal == 15)
+	else if (signal == 9)
 		ft_putstr_fd("Killed: 9\n", 1);
 	else
 	{

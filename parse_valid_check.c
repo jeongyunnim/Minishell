@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:16:44 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 13:21:17 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/24 16:22:42 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	is_valid_pipe(t_arg *temp, t_info *info)
 {
 	if (temp->next == NULL || temp->previous == NULL)
 	{
-		info->exit_code = 258;
+		g_exit_code = 258;
 		print_error(SYNTAX_ERROR, temp->arg);
 		return (0);
 	}
@@ -27,7 +27,7 @@ static int	is_valid_special(t_arg *temp, t_info *info)
 {
 	if (temp->next == NULL || temp->next->special != 0)
 	{
-		info->exit_code = 258;
+		g_exit_code = 258;
 		print_error(SYNTAX_ERROR, temp->arg);
 		return (0);
 	}
