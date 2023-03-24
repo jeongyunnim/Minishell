@@ -61,7 +61,7 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*input;
 	t_info	info;
 
-	ft_putstr_fd("--- wellcome! ---\n", 1);
+	print_openningment();
 	init_info(&info, envp);
 	while (1)
 	{

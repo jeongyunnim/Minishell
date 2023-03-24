@@ -250,6 +250,10 @@ void		ft_unset(char **argv, t_env_deque *envs);
 void		print_builtin_error(char *arg, char *str);
 void		fail_getcwd(t_env_deque *envs, char *path, char *oldpwd);
 
+/*asciiart.c*/
+void		print_openningment(void);
+void		print_line(void);
+
 /* exec_child.c */
 int			child_process_run(t_cmd *cmd_node, t_pipe_index index, t_info *info);
 
@@ -261,7 +265,6 @@ int			handle_redirection(t_arg_deque *redirections);
 /* exec_heredoc.c */
 int			heredoc_handler(t_info *info);
 char		*gen_temp_file_name(int flag);
-
 
 /* free_util.c */
 void		free_cmd_node(t_cmd **cmd_node);

@@ -45,6 +45,7 @@ SRCS			=	./main.c\
 					./free_util.c\
 					./error_handle.c\
 					./parse_valid_check.c\
+					asciiart.c\
 					builtin/ft_cd.c\
 					builtin/ft_echo.c\
 					builtin/ft_env.c\
