@@ -270,7 +270,7 @@ int			find_env(t_env_deque *envs, char *name, char *value);
 int			check_export_name(char *str);
 
 /*ft_unset.c*/
-void		del_env(t_env **head, t_env **tail, t_env *target);
+void		del_env(t_env **head, t_env **tail, t_env **target);
 int			check_unset_valid(char *str);
 int			ft_unset(char **argv, t_env_deque *envs);
 

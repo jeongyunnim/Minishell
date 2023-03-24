@@ -17,14 +17,12 @@ char	*ft_oldpwd(t_env_deque *envs)
 	char	*tmp;
 	t_env	*target;
 
-	tmp = getcwd(NULL, 0);
-	if (tmp == NULL)
-	{
-		target = find_target("PWD", envs);
-		if (!target || target->value == NULL)
-			return (0);
-		tmp = ft_strdup(target->value);
-	}
+//	tmp = getcwd(NULL, 0);
+//	if (tmp == NULL)
+	target = find_target("PWD", envs);
+	if (!target || target->value == NULL)
+		return (0);
+	tmp = ft_strdup(target->value);
 	return (tmp);
 }
 

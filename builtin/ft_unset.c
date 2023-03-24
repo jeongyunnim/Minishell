@@ -12,21 +12,21 @@
 
 #include "../minishell.h"
 
-void	del_env(t_env **head, t_env **tail, t_env *target)
+void	del_env(t_env **head, t_env **tail, t_env **target)
 {
-	if (target == NULL)
+	if (*target == NULL)
 		return ;
-	if (*head == target)
-		*head = target->next;
-	if (*tail == target)
-		*tail = target->previous;
-	if (target->previous != NULL)
-		target->previous->next = target->next;
-	if (target->next != NULL)
-		target->next->previous = target->previous;
-	free(target->name);
-	free(target->value);
-	free(target);
+	if (*head == (*target))
+		*head = (*target)->next;
+	if (*tail == (*target))
+		*tail = (*target)->previous;
+	if ((*target)->previous != NULL)
+		(*target)->previous->next = (*target)->next;
+	if ((*target)->next != NULL)
+		(*target)->next->previous = (*target)->previous;
+	free((*target)->name);
+	free((*target)->value);
+	free(*target);
 }
 
 int	check_unset_valid(char *str)
@@ -63,7 +63,7 @@ int	ft_unset(char **argv, t_env_deque *envs)
 		else
 		{
 			target = find_target(argv[i], envs);
-			del_env(&envs->head, &envs->tail, target);
+			del_env(&envs->head, &envs->tail, &target);
 		}
 		i++;
 	}
