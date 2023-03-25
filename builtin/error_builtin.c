@@ -49,6 +49,8 @@ void	fail_getcwd(t_env_deque *envs, char *path, char *oldpwd)
 	tmp = ft_strjoin(target->value, "/");
 	pwd = ft_strjoin(tmp, path);
 	free (tmp);
+	if (oldpwd == 0)
+		oldpwd = ft_strdup(target->value);
 	change_env(envs, "OLDPWD", oldpwd);
 	change_env(envs, "PWD", pwd);
 	free(oldpwd);

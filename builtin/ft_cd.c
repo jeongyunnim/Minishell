@@ -27,8 +27,10 @@ int	change_dir(char *path, t_env_deque *envs)
 {
 	char	*pwd;
 	char	*oldpwd;
+	char	*oldpwd2;
 
 	oldpwd = ft_oldpwd(envs);
+	oldpwd2 = getcwd(NULL, 0);
 	if (chdir(path) == -1)
 	{
 		print_builtin_error("cd", path);
@@ -39,7 +41,7 @@ int	change_dir(char *path, t_env_deque *envs)
 	if (pwd == NULL)
 	{
 		print_builtin_error("cd", path);
-		fail_getcwd(envs, path, oldpwd);
+		fail_getcwd(envs, path, oldpwd2);
 		free(pwd);
 		return (1);
 	}
