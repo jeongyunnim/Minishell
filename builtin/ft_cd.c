@@ -42,13 +42,13 @@ int	change_dir(char *path, t_env_deque *envs)
 	{
 		print_builtin_error("cd", path);
 		fail_getcwd(envs, path, oldpwd2);
+		free(oldpwd);
 		free(pwd);
 		return (1);
 	}
 	change_env(envs, "OLDPWD", oldpwd);
 	change_env(envs, "PWD", pwd);
-	free(pwd);
-	free(oldpwd);
+	free_all(pwd, oldpwd, oldpwd2);
 	return (0);
 }
 

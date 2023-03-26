@@ -56,3 +56,10 @@ void	fail_getcwd(t_env_deque *envs, char *path, char *oldpwd)
 	free(oldpwd);
 	free(pwd);
 }
+
+void	free_all(char *s1, char *s2, char *s3)
+{
+	free(s1);
+	free(s2);
+	free(s3);
+}

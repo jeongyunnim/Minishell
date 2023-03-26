@@ -17,8 +17,6 @@ char	*ft_oldpwd(t_env_deque *envs)
 	char	*tmp;
 	t_env	*target;
 
-//	tmp = getcwd(NULL, 0);
-//	if (tmp == NULL)
 	target = find_target("PWD", envs);
 	if (target)
 		tmp = ft_strdup(target->value);

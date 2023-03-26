@@ -277,6 +277,7 @@ int			ft_unset(char **argv, t_env_deque *envs);
 /*error_builtin.c*/
 void		print_builtin_error(char *arg, char *str);
 void		fail_getcwd(t_env_deque *envs, char *path, char *oldpwd);
+void		free_all(char *s1, char *s2, char *s3);
 
 /*asciiart.c*/
 void		print_openningment(void);
