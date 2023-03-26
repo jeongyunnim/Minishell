@@ -47,11 +47,10 @@ void	ready_for_input(t_info *info)
 	info->redirects = 0;
 }
 
-void	after_exec_commands(t_info *info, char **input)
+void	after_exec_commands(char **input)
 {
 	free(*input);
 	preserve_stdio(1);
-	reset_input_mode(&info->org_term);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -78,7 +77,7 @@ int	main(int argc, char *argv[], char *envp[])
 			exec_commands(&info);
 		else
 			free_arg_deque(&info.arguments);
-		after_exec_commands(&info, &input);
+		after_exec_commands(&input);
 	}
 	return (0);
 }

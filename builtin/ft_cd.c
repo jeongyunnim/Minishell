@@ -27,8 +27,10 @@ int	change_dir(char *path, t_env_deque *envs)
 {
 	char	*pwd;
 	char	*oldpwd;
+	char	*oldpwd2;
 
 	oldpwd = ft_oldpwd(envs);
+	oldpwd2 = getcwd(NULL, 0);
 	if (chdir(path) == -1)
 	{
 		print_builtin_error("cd", path);
@@ -39,20 +41,21 @@ int	change_dir(char *path, t_env_deque *envs)
 	if (pwd == NULL)
 	{
 		print_builtin_error("cd", path);
-		fail_getcwd(envs, path, oldpwd);
+		fail_getcwd(envs, path, oldpwd2);
+		free(oldpwd);
 		free(pwd);
 		return (1);
 	}
 	change_env(envs, "OLDPWD", oldpwd);
 	change_env(envs, "PWD", pwd);
-	free(pwd);
-	free(oldpwd);
+	free_all(pwd, oldpwd, oldpwd2);
 	return (0);
 }
 
 int	ft_cd_oldpwd(t_env_deque *envs)
 {
 	char	*path;
+	int		ret_flag;
 	t_env	*target;
 
 	target = find_target("OLDPWD", envs);
@@ -65,10 +68,15 @@ int	ft_cd_oldpwd(t_env_deque *envs)
 	{
 		path = ft_strdup(target->value);
 		if (change_dir(path, envs) == 0)
+		{
 			printf ("%s\n", path);
+			ret_flag = 0;
+		}
+		else
+			ret_flag = 1;
 	}
 	free(path);
-	return (0);
+	return (ret_flag);
 }
 
 int	ft_cd_home(t_env *target, t_env_deque *envs)

@@ -56,7 +56,7 @@ SRCS			=	./main.c\
 					builtin/ft_export_utils.c\
 					builtin/ft_pwd.c\
 					builtin/ft_unset.c\
-					builtin/error_builtin.c\
+					builtin/builtin_utils.c\
 
 OBJS			=	$(SRCS:%.c=%.o)
 

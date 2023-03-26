@@ -54,6 +54,8 @@ int	name_temp_file(t_arg_deque *redirects)
 
 void	parent_process_run(t_cmd **cmd_line, t_pipe_index *index, t_info *info)
 {
+
+	reset_input_mode(&info->org_term);
 	set_signal_mode(FORK_PARENT_M);
 	free_cmd_node(cmd_line);
 	*cmd_line = pop_head_cmd(&(info->cmds->head));
