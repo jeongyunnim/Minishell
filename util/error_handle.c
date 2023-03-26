@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:05:24 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/26 18:35:36 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/26 20:18:09 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	quote_error(t_info *info, char **input)
 {
+	g_exit_code = 258;
 	ft_putstr_fd("minishell: syntax error quote is not closed\n", 2);
 	free_arg_deque(&info->arguments);
 	free(*input);

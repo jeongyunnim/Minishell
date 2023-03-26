@@ -6,7 +6,7 @@
 /*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:30:19 by jeseo             #+#    #+#             */
-/*   Updated: 2023/03/24 19:00:42 by jeseo            ###   ########.fr       */
+/*   Updated: 2023/03/26 20:26:16 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*ft_calloc(size_t n, size_t size)
 	if (p == NULL)
 	{
 		ft_putstr_fd("malloc: Cannot allocate memory\n", 2);
-		exit(EXIT_FAILURE);
+		exit(12);
 	}
 	ft_bzero(p, n * size);
 	return (p);
