@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyecheon <hyecheon@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:45:57 by hyecheon          #+#    #+#             */
-/*   Updated: 2023/03/22 15:46:11 by hyecheon         ###   ########.fr       */
+/*   Updated: 2023/03/26 15:47:50 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 int	check_numeric(char *str)
 {
@@ -50,7 +50,6 @@ void	ft_exit(char **argv)
 		else if (argv[2] != NULL)
 		{
 			ft_putendl_fd("minishell: exit: too many arguments", 2);
-			g_exit_code = 1;
 			return ;
 		}
 		exit(tmp);

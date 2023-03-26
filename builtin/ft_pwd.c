@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyecheon <hyecheon@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:41:13 by hyecheon          #+#    #+#             */
-/*   Updated: 2023/03/22 15:41:34 by hyecheon         ###   ########.fr       */
+/*   Updated: 2023/03/26 18:31:57 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 char	*ft_oldpwd(t_env_deque *envs)
 {
@@ -21,7 +21,7 @@ char	*ft_oldpwd(t_env_deque *envs)
 	if (target)
 		tmp = ft_strdup(target->value);
 	else
-		return (0);
+		return (NULL);
 	return (tmp);
 }
 
@@ -37,7 +37,6 @@ int	ft_pwd(t_env_deque *envs)
 		if (!target)
 			return (0);
 		printf("%s\n", target->value);
-		free(tmp);
 		return (0);
 	}
 	printf("%s\n", tmp);

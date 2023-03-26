@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyecheon <hyecheon@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 15:56:04 by hyecheon          #+#    #+#             */
-/*   Updated: 2023/03/22 15:56:07 by hyecheon         ###   ########.fr       */
+/*   Updated: 2023/03/26 15:13:12 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 void	add_export_env(t_env_deque *envs, char *name, char *value)
 {

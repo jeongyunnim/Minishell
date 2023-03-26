@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_builtin.c                                    :+:      :+:    :+:   */
+/*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyecheon <hyecheon@student.42seoul.kr      +#+  +:+       +#+        */
+/*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 17:39:41 by hyecheon          #+#    #+#             */
-/*   Updated: 2023/03/23 17:39:44 by hyecheon         ###   ########.fr       */
+/*   Updated: 2023/03/26 18:09:23 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 void	print_builtin_error(char *arg, char *str)
 {
@@ -57,9 +57,12 @@ void	fail_getcwd(t_env_deque *envs, char *path, char *oldpwd)
 	free(pwd);
 }
 
-void	free_all(char *s1, char *s2, char *s3)
+void	free_three_string(char *s1, char *s2, char *s3)
 {
-	free(s1);
-	free(s2);
-	free(s3);
+	if (s1 != NULL)
+		free(s1);
+	if (s2 != NULL)
+		free(s2);
+	if (s3 != NULL)
+		free(s3);
 }

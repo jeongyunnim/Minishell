@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyecheon <hyecheon@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: jeseo <jeseo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 16:12:25 by hyecheon          #+#    #+#             */
-/*   Updated: 2023/03/22 16:12:34 by hyecheon         ###   ########.fr       */
+/*   Updated: 2023/03/26 18:10:25 by jeseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 void	change_env(t_env_deque *envs, char *name, char *value)
 {
@@ -34,7 +34,7 @@ int	change_dir(char *path, t_env_deque *envs)
 	if (chdir(path) == -1)
 	{
 		print_builtin_error("cd", path);
-		free(oldpwd);
+		free_three_string(oldpwd, oldpwd2, NULL);
 		return (1);
 	}
 	pwd = getcwd(NULL, 0);
@@ -42,13 +42,12 @@ int	change_dir(char *path, t_env_deque *envs)
 	{
 		print_builtin_error("cd", path);
 		fail_getcwd(envs, path, oldpwd2);
-		free(oldpwd);
-		free(pwd);
+		free_three_string(oldpwd, pwd, NULL);
 		return (1);
 	}
 	change_env(envs, "OLDPWD", oldpwd);
 	change_env(envs, "PWD", pwd);
-	free_all(pwd, oldpwd, oldpwd2);
+	free_three_string(pwd, oldpwd, oldpwd2);
 	return (0);
 }
 
